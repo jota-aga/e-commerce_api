@@ -7,8 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Entity
 @Table
+@Entity
 public class Category {
 	
 	@Id
@@ -21,7 +21,6 @@ public class Category {
 
 	public Category(String name) {
 		super();
-		this.id = id;
 		this.name = name;
 	}
 

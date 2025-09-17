@@ -1,12 +1,12 @@
 package com.api_ecommerce.e_commerce.enums;
 
-public enum Role {
+public enum UserRole {
 	ADMIN("admin"),
 	CLIENT("client");
 	
 	private String role;
 	
-	Role(String role) {
+	UserRole(String role) {
 		this.role = role;
 	}
 

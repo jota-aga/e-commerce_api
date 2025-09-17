@@ -1,33 +1,35 @@
 package com.api_ecommerce.e_commerce.models.user;
 
-import com.api_ecommerce.e_commerce.enums.Role;
+import com.api_ecommerce.e_commerce.enums.UserRole;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
+	
 	@NotBlank
-	private String username;
+	private String login;
+	
 	@NotBlank
 	@Size(min = 8, max = 32)
 	private String password;
+	
 	@NotBlank
-	private Role role;
+	private UserRole role;
 
-	public RegisterRequest(String username, String password, Role role) {
+	public RegisterRequest(String login, String password, UserRole role) {
 		super();
-		this.username = username;
+		this.login = login;
 		this.password = password;
-
 		this.role = role;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getLogin() {
+		return login;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public String getPassword() {
@@ -38,11 +40,11 @@ public class RegisterRequest {
 		this.password = password;
 	}
 
-	public Role getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 }

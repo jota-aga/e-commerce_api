@@ -2,23 +2,28 @@ package com.api_ecommerce.e_commerce.models.order;
 
 import java.math.BigDecimal;
 
+
 import com.api_ecommerce.e_commerce.models.cart.Cart;
 import com.api_ecommerce.e_commerce.models.product.Product;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
+@Table(name="orders")
+@Entity
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToMany
+	@ManyToOne
 	@JoinColumn(name="product_id", nullable = false)
 	private Product product;
 	
@@ -28,16 +33,12 @@ public class Order {
 	
 	@Column
 	private int quantity;
-	
-	@Column
-	private BigDecimal totalValue;
 
-	public Order( Product product, Cart cart, int quantity, BigDecimal totalValue) {
+	public Order(Product product, Cart cart, int quantity) {
 		super();
 		this.product = product;
 		this.cart = cart;
 		this.quantity = quantity;
-		this.totalValue = totalValue;
 	}
 
 	public Order() {
@@ -74,13 +75,5 @@ public class Order {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public BigDecimal getTotalValue() {
-		return totalValue;
-	}
-
-	public void setTotalValue(BigDecimal totalValue) {
-		this.totalValue = totalValue;
 	}
 }

@@ -1,7 +1,9 @@
+
 package com.api_ecommerce.e_commerce.models.product;
 
 import java.math.BigDecimal;
-import java.util.Locale.Category;
+
+import com.api_ecommerce.e_commerce.models.category.Category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,21 +14,25 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-@Entity
 @Table
+@Entity
 public class Product {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@Column(unique = true)
 	private String name;
 	
 	@Column
 	private String descricao;
 	
-	@Column BigDecimal price;
+	@Column 
+	private BigDecimal price;
+	
+	@Column
+	private int quantity;
 	
 	@ManyToOne
 	@JoinColumn(name="category_id")
@@ -36,9 +42,11 @@ public class Product {
 		super();
 	}
 
-	public Product(String name, String descricao, Category category) {
+	public Product(String name, String descricao, int quantity, BigDecimal price, Category category) {
 		this.name = name;
 		this.descricao = descricao;
+		this.quantity = quantity;
+		this.price = price;
 		this.category = category;
 	}
 
@@ -80,7 +88,13 @@ public class Product {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	} 	
-	
-	
 }

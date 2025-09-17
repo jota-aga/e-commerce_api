@@ -1,19 +1,20 @@
 package com.api_ecommerce.e_commerce.models.cart;
 
-import java.math.BigDecimal;
 import java.util.List;
 
+import com.api_ecommerce.e_commerce.models.order.Order;
 import com.api_ecommerce.e_commerce.models.user.User;
-
-import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.criteria.Order;
+import jakarta.persistence.Table;
 
+@Entity
+@Table
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,16 +24,13 @@ public class Cart {
 	@JoinColumn(name="user_id", nullable = false)
 	private User user;
 	
-	@OneToMany
+	@OneToMany(mappedBy="cart")
 	private List<Order> orders;
 	
-	@Column
-	private BigDecimal totalValue;
 
-	public Cart(User user, BigDecimal totalValue) {
+	public Cart(User user) {
 		super();
 		this.user = user;
-		this.totalValue = totalValue;
 	}
 
 	public Cart() {
@@ -61,13 +59,5 @@ public class Cart {
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
-	}
-
-	public BigDecimal getTotalValue() {
-		return totalValue;
-	}
-
-	public void setTotalValue(BigDecimal totalValue) {
-		this.totalValue = totalValue;
 	}
 }

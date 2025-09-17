@@ -1,13 +1,14 @@
 package com.api_ecommerce.e_commerce.models.user;
 
 import java.util.Collection;
+
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.api_ecommerce.e_commerce.enums.Role;
+import com.api_ecommerce.e_commerce.enums.UserRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name="users")
 public class User implements UserDetails {
 	/**
 	 * 
@@ -29,35 +30,35 @@ public class User implements UserDetails {
 	private Long id;
 	
 	@Column
-	private String username;
+	private String login;
 	
 	@Column
 	private String password;
 	
 	@Column
-	private Role role;
+	private UserRole role;
 	
 	public User() {
 		super();
 	}
 	
-	public User(String username, String password, Role role) {
+	public User(String login, String password, UserRole role) {
 		super();
-		this.username = username;
+		this.login = login;
 		this.password = password;
 		this.role = role;
 	}
 	
-	public Role getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 
-	public void setRole(Role role) {
+	public void setRole(UserRole role) {
 		this.role = role;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 	public void setPassword(String password) {
@@ -74,7 +75,7 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if(role == Role.ADMIN) {
+		if(role == UserRole.ADMIN) {
 			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
 		}
 		else {
@@ -90,6 +91,6 @@ public class User implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.username;
+		return this.login;
 	}
 }

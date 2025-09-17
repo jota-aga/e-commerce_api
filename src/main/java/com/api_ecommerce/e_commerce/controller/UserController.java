@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.models.cart.Cart;
-import com.api_ecommerce.e_commerce.models.cart.CartDTO;
+import com.api_ecommerce.e_commerce.models.cart.CartRequest;
 import com.api_ecommerce.e_commerce.models.user.RegisterRequest;
 import com.api_ecommerce.e_commerce.models.user.User;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
 @RestController
-@RequestMapping("User")
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
@@ -27,14 +27,9 @@ public class UserController {
 	
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody RegisterRequest register){
-		User user = new User(register.getUsername(), register.getPassword(), register.getRole());
-		CartDTO cartDTO = new CartDTO(user);
-		
-		Cart cart = new Cart(cartDTO.getUser(), cartDTO.getTotalValue());
-		
+		User user = new User(register.getLogin(), register.getPassword(), register.getRole());
 		userService.saveUser(user);
-		cartService.saveCart(cart);
-		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}	
+	
 }

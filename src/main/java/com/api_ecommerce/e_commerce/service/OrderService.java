@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.models.order.Order;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
 
 @Service
@@ -17,23 +17,24 @@ public class OrderService {
 	@Autowired
 	OrderRepository orderRepository;
 	
-	public void saveOrder(Order order) {
+	public void saveOrder(CartItem order) {
 		
 		orderRepository.save(order);
 	}
 	
-	public List<Order> findOrdersByCartId(Long id){
-		List<Order> orders = orderRepository.findAllByCartId(id);
+	public List<CartItem> findOrdersByCartId(Long id){
+		List<CartItem> orders = orderRepository.findAllByCartId(id);
 		
 		return orders;
 	}
 	
-	public Order findOrderById(Long id) {
-		Optional<Order> order = orderRepository.findById(id);
+	public CartItem findOrderById(Long id) {
+		Optional<CartItem> order = orderRepository.findById(id);
 	
 		return order.orElseThrow(() -> new IdNotFoundException("Order"));
 	}
 	
-	public void deleteOrderById(Order order) {
-		orderRepository.delete(order);	}
+	public void deleteOrderById(CartItem order) {
+		orderRepository.delete(order);	
+	}
 }

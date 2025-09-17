@@ -2,12 +2,12 @@ package com.api_ecommerce.e_commerce.models.cart;
 
 import java.util.List;
 
-import com.api_ecommerce.e_commerce.models.order.Order;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.models.user.User;
 
 public class CartRequest {
 	private User user;
-	private List<Order> orders;
+	private List<CartItem> orders;
 	
 	public CartRequest(User user) {
 		super();
@@ -22,11 +22,11 @@ public class CartRequest {
 		this.user = user;
 	}
 
-	public List<Order> getOrders() {
+	public List<CartItem> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Order> orders) {
+	public void setOrders(List<CartItem> orders) {
 		this.orders = orders;
 	}
 }

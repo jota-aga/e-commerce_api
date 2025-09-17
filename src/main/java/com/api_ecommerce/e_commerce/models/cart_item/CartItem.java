@@ -1,7 +1,4 @@
-package com.api_ecommerce.e_commerce.models.order;
-
-import java.math.BigDecimal;
-
+package com.api_ecommerce.e_commerce.models.cart_item;
 
 import com.api_ecommerce.e_commerce.models.cart.Cart;
 import com.api_ecommerce.e_commerce.models.product.Product;
@@ -12,36 +9,35 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-@Table(name="orders")
 @Entity
-public class Order {
+@Table(name="item")
+public class CartItem {
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="product_id", nullable = false)
+	@JoinColumn(name="product_id")
 	private Product product;
-	
-	@ManyToOne
-	@JoinColumn(name="cart_id", nullable = false)
-	private Cart cart;
 	
 	@Column
 	private int quantity;
+	
+	@ManyToOne
+	@JoinColumn(name="cart_id", nullable = true)
+	private Cart cart;
 
-	public Order(Product product, Cart cart, int quantity) {
+	public CartItem(Product product, int quantity) {
 		super();
 		this.product = product;
-		this.cart = cart;
 		this.quantity = quantity;
 	}
 
-	public Order() {
+	public CartItem() {
 		super();
 	}
 
@@ -61,14 +57,6 @@ public class Order {
 		this.product = product;
 	}
 
-	public Cart getCart() {
-		return cart;
-	}
-
-	public void setCart(Cart cart) {
-		this.cart = cart;
-	}
-
 	public int getQuantity() {
 		return quantity;
 	}
@@ -76,4 +64,7 @@ public class Order {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	
+	
+	
 }

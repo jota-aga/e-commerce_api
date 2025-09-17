@@ -2,7 +2,7 @@ package com.api_ecommerce.e_commerce.models.cart;
 
 import java.util.List;
 
-import com.api_ecommerce.e_commerce.models.order.Order;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.models.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,8 +24,8 @@ public class Cart {
 	@JoinColumn(name="user_id", nullable = false)
 	private User user;
 	
-	@OneToMany(mappedBy="cart")
-	private List<Order> orders;
+	@OneToMany(mappedBy = "item", orphanRemoval = false)
+	private List<CartItem> orders;
 	
 
 	public Cart(User user) {
@@ -53,11 +53,11 @@ public class Cart {
 		this.user = user;
 	}
 
-	public List<Order> getOrders() {
+	public List<CartItem> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<Order> orders) {
+	public void setOrders(List<CartItem> orders) {
 		this.orders = orders;
 	}
 }

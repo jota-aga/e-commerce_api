@@ -1,14 +1,17 @@
 package com.api_ecommerce.e_commerce.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.exceptions.ProductAlreadyExistsException;
+import com.api_ecommerce.e_commerce.models.category.Category;
 import com.api_ecommerce.e_commerce.models.product.Product;
+import com.api_ecommerce.e_commerce.models.product.ProductRequest;
+import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
 @Service
@@ -16,15 +19,26 @@ public class ProductService {
 	@Autowired
 	ProductRepository productRepository;
 	
+	@Autowired
+	CategoryRepository categoryRepository;
+	
 	public void saveProduct(Product product) {
 		
-		if(product.getId() != null) {
-			Optional<Product> productRepeat = productRepository.findByName(product.getName());
-			if(productRepeat.isPresent()) {
-				throw new ProductAlreadyExistsException();
-			}
-		}
 		productRepository.save(product);
+	}
+	
+	public Product editProduct(Product product, ProductRequest productDTO) {
+		
+		product.setName(productDTO.getName());
+		product.setDescricao(productDTO.getDescription());
+		product.setPrice(productDTO.getPrice());
+		product.setQuantity(productDTO.getQuantity());
+		
+		Optional<Category> category = categoryRepository.findById(productDTO.getCategoryId());
+		
+		product.setCategory(category.get());
+		
+		return product;
 	}
 	
 	public Product findProductById(Long id) {
@@ -43,5 +57,11 @@ public class ProductService {
 	
 	public List<Product> findAllByCategory(Long categoryId){
 		return productRepository.findAllByCategoryId(categoryId);
+	}
+	
+	public void deleteProduct(Long id){
+		Product product = this.findProductById(id);
+		
+		productRepository.delete(product);
 	}
 }

@@ -1,29 +1,29 @@
 package com.api_ecommerce.e_commerce.models.cart;
 
 import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.api_ecommerce.e_commerce.models.order.Order;
-import com.api_ecommerce.e_commerce.models.order.OrderResponse;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.models.user.User;
 
 public class CartResponse {
 	private User user;
-	private List<OrderResponse> ordersResponse;
+	private List<CartItem> orders;
 	private BigDecimal totalValue;
 	
-	public CartResponse(User user, List<Order> orders) {
+	public CartResponse(User user, List<CartItem> orders) {
 		super();
 		this.user = user;
 		this.totalValue = BigDecimal.ZERO;
-		this.ordersResponse = new ArrayList<>();
-		for(Order order : orders) {
+		this.orders = new ArrayList<>();
+		for(CartItem order : orders) {
 			BigDecimal quantity = BigDecimal.valueOf(order.getQuantity());
 			BigDecimal value = quantity.multiply(order.getProduct().getPrice());
 			this.totalValue = this.totalValue.add(value);
 			
-			ordersResponse.add(new OrderResponse(order.getProduct(), order.getQuantity()));
+
 		}
 	}
 
@@ -35,12 +35,12 @@ public class CartResponse {
 		this.user = user;
 	}
 
-	public List<OrderResponse> getOrdersReponse() {
-		return this.ordersResponse;
+	public List<CartItem> getOrder() {
+		return this.orders;
 	}
 
-	public void setOrders(List<OrderResponse> ordersResponse) {
-		this.ordersResponse = ordersResponse;
+	public void setOrders(List<CartItem> orders) {
+		this.orders = orders;
 	}
 
 	public BigDecimal getTotalValue() {

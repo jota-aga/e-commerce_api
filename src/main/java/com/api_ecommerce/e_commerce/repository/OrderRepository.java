@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.api_ecommerce.e_commerce.models.order.Order;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 
-public interface OrderRepository extends JpaRepository<Order, Long>{
-	List<Order> findAllByCartId(Long id);
+public interface OrderRepository extends JpaRepository<CartItem, Long>{
+	List<CartItem> findAllByCartId(Long id);
 }

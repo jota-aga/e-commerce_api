@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.models.cart.Cart;
 import com.api_ecommerce.e_commerce.models.cart.CartResponse;
-import com.api_ecommerce.e_commerce.models.order.Order;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
 
@@ -30,7 +30,7 @@ public class CartController {
 	@GetMapping("/{id}")
 	public ResponseEntity<CartResponse> findCartById(@PathVariable Long id){
 		Cart cart = cartService.findCartById(id);
-		List<Order> orders = orderService.findOrdersByCartId(cart.getId());
+		List<CartItem> orders = orderService.findOrdersByCartId(cart.getId());
 		CartResponse cartResponse = new CartResponse(cart.getUser(), orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartResponse);

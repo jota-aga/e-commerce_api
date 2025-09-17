@@ -1,13 +1,15 @@
 package com.api_ecommerce.e_commerce.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +30,7 @@ public class ProductController {
 	@Autowired
 	CategoryService categoryService;
 	
-	@PostMapping("/save")
+	@PostMapping()
 	public ResponseEntity<String> saveProduct(@RequestBody ProductRequest productRequest){
 		
 		Category category = categoryService.findCategoryById(productRequest.getCategoryId());
@@ -58,6 +60,24 @@ public class ProductController {
 		List<Product> products = productService.findAllByCategory(categoryId);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(products);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteProductById(@PathVariable Long id){
+		productService.deleteProduct(id);
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<String> editProductById(@PathVariable Long id,  @RequestBody ProductRequest productDTO){
+		Product product = productService.findProductById(id);
+		
+		product = productService.editProduct(product, productDTO);
+		
+		productService.saveProduct(product);
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 }

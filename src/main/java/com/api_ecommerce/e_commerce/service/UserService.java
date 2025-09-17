@@ -1,8 +1,11 @@
 package com.api_ecommerce.e_commerce.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.models.cart.Cart;
 import com.api_ecommerce.e_commerce.models.user.RegisterRequest;
 import com.api_ecommerce.e_commerce.models.user.User;
@@ -21,5 +24,11 @@ public class UserService {
 		repo.save(user);
 		Cart cart = new Cart(user);
 		cartRepository.save(cart);
+	}
+	
+	public User findUserById(Long id) {
+		Optional<User> user = repo.findById(id);
+		
+		return user.orElseThrow(() -> new IdNotFoundException("User"));
 	}
 }

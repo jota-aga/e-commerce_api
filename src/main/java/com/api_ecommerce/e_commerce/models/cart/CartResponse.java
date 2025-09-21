@@ -6,25 +6,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
+import com.api_ecommerce.e_commerce.models.cart_item.CartItemResponse;
 import com.api_ecommerce.e_commerce.models.user.User;
 
 public class CartResponse {
 	private User user;
-	private List<CartItem> orders;
+	private List<CartItemResponse> cartItems;
 	private BigDecimal totalValue;
 	
-	public CartResponse(User user, List<CartItem> orders) {
+	public CartResponse(User user, List<CartItem> cartItems) {
+		this.user = user;
+		this.cartItems = cartItems.stream()	
+						.map(cartItem -> new CartItemResponse(cartItem.getProduct(), cartItem.getQuantity()))
+						.toList();
+		this.totalValue = cartItems.stream()
+						.map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
+						.reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
+	public CartResponse(User user, List<CartItemResponse> cartItems, BigDecimal totalValue) {
 		super();
 		this.user = user;
-		this.totalValue = BigDecimal.ZERO;
-		this.orders = new ArrayList<>();
-		for(CartItem order : orders) {
-			BigDecimal quantity = BigDecimal.valueOf(order.getQuantity());
-			BigDecimal value = quantity.multiply(order.getProduct().getPrice());
-			this.totalValue = this.totalValue.add(value);
-			
-
-		}
+		this.cartItems = cartItems;
+		this.totalValue = totalValue;
 	}
 
 	public User getUser() {
@@ -35,12 +39,12 @@ public class CartResponse {
 		this.user = user;
 	}
 
-	public List<CartItem> getOrder() {
-		return this.orders;
+	public List<CartItemResponse> getCartItems() {
+		return cartItems;
 	}
 
-	public void setOrders(List<CartItem> orders) {
-		this.orders = orders;
+	public void setCartItems(List<CartItemResponse> cartItems) {
+		this.cartItems = cartItems;
 	}
 
 	public BigDecimal getTotalValue() {

@@ -49,15 +49,16 @@ public class ProductController {
 	}
 	
 	@GetMapping("/search-name")
-	public ResponseEntity<List<Product>> findAllProductsByName(@RequestParam String name){
+	public ResponseEntity<List<Product>> findAllProductsByName(@RequestParam("name") String name){
 		List<Product> products = productService.findAllByName(name);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(products);
 	}
 	
 	@GetMapping("/search-category")
-	public ResponseEntity<List<Product>> findAllProductsByCategory(@RequestParam Long categoryId){
-		List<Product> products = productService.findAllByCategory(categoryId);
+	public ResponseEntity<List<Product>> findAllProductsByCategory(@RequestParam String categoryName){
+		Category category = categoryService.findCategoryByName(categoryName);
+		List<Product> products = productService.findAllByCategory(category.getId());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(products);
 	}

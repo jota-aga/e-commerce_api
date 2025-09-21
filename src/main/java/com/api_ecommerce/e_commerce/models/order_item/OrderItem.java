@@ -1,6 +1,6 @@
-package com.api_ecommerce.e_commerce.models.cart_item;
+package com.api_ecommerce.e_commerce.models.order_item;
 
-import com.api_ecommerce.e_commerce.models.cart.Cart;
+import com.api_ecommerce.e_commerce.models.order.Order;
 import com.api_ecommerce.e_commerce.models.product.Product;
 
 import jakarta.persistence.Column;
@@ -13,11 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cart_item")
-public class CartItem {
-	
+@Table
+public class OrderItem {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
@@ -28,18 +27,14 @@ public class CartItem {
 	private int quantity;
 	
 	@ManyToOne
-	@JoinColumn(name="cart_id", nullable = true)
-	private Cart cart;
+	@JoinColumn(name="order_id")
+	private Order order;
 
-	public CartItem(Product product, int quantity, Cart cart) {
+	public OrderItem(Product product, int quantity, Order order) {
 		super();
 		this.product = product;
 		this.quantity = quantity;
-		this.cart = cart;
-	}
-
-	public CartItem() {
-		super();
+		this.order = order;
 	}
 
 	public Long getId() {
@@ -66,11 +61,15 @@ public class CartItem {
 		this.quantity = quantity;
 	}
 
-	public Cart getCart() {
-		return cart;
+	public Order getOrder() {
+		return order;
 	}
 
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
+	
+	
+	
+	
 }

@@ -24,4 +24,10 @@ public class CategoryService {
 		
 		return category.orElseThrow(() -> new IdNotFoundException("Category"));
 	}
+	
+	public Category findCategoryByName(String name) {
+		Optional<Category> category = categoryRepository.findByName(name);
+		
+		return category.orElseThrow(() -> new RuntimeException("Category not found"));
+	}
 }

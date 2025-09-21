@@ -1,9 +1,12 @@
 package com.api_ecommerce.e_commerce.models.cart;
 
+
 import java.util.List;
 
 import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
 import com.api_ecommerce.e_commerce.models.user.User;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,8 +27,8 @@ public class Cart {
 	@JoinColumn(name="user_id", nullable = false)
 	private User user;
 	
-	@OneToMany(mappedBy = "item", orphanRemoval = false)
-	private List<CartItem> orders;
+	@OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, orphanRemoval = true)
+	private List<CartItem> cartItems;
 	
 
 	public Cart(User user) {
@@ -53,11 +56,11 @@ public class Cart {
 		this.user = user;
 	}
 
-	public List<CartItem> getOrders() {
-		return orders;
+	public List<CartItem> getCartItems() {
+		return cartItems;
 	}
 
-	public void setOrders(List<CartItem> orders) {
-		this.orders = orders;
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItems = cartItems;
 	}
 }

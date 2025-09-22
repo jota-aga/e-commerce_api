@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.models.user;
+package com.api_ecommerce.e_commerce.entity;
 
 import java.util.Collection;
 

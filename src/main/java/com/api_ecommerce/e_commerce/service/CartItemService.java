@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
+import com.api_ecommerce.e_commerce.entity.CartItem;
+import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
-import com.api_ecommerce.e_commerce.models.cart_item.CartItemRequest;
-import com.api_ecommerce.e_commerce.models.product.Product;
 import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 
 @Service

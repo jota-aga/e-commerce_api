@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
+import com.api_ecommerce.e_commerce.entity.Category;
+import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.models.category.Category;
-import com.api_ecommerce.e_commerce.models.product.Product;
-import com.api_ecommerce.e_commerce.models.product.ProductRequest;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 

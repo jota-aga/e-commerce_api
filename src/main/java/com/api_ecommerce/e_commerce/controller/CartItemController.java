@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.models.cart.Cart;
-import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
-import com.api_ecommerce.e_commerce.models.cart_item.CartItemRequest;
-import com.api_ecommerce.e_commerce.models.product.Product;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
+import com.api_ecommerce.e_commerce.entity.Cart;
+import com.api_ecommerce.e_commerce.entity.CartItem;
+import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.service.CartItemService;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.ProductService;

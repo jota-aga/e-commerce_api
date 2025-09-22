@@ -1,10 +1,14 @@
-package com.api_ecommerce.e_commerce.models.category;
+package com.api_ecommerce.e_commerce.entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table
@@ -17,6 +21,9 @@ public class Category {
 	
 	@Column
 	private String name;
+	
+	@OneToMany(mappedBy="category", cascade = CascadeType.ALL, orphanRemoval = false)
+	private List<Product> products;
 	
 
 	public Category(String name) {
@@ -44,4 +51,11 @@ public class Category {
 		this.name = name;
 	}
 
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
 }

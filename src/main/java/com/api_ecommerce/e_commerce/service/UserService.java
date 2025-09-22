@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api_ecommerce.e_commerce.dto.user.RegisterRequest;
+import com.api_ecommerce.e_commerce.entity.Cart;
+import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.models.cart.Cart;
-import com.api_ecommerce.e_commerce.models.user.RegisterRequest;
-import com.api_ecommerce.e_commerce.models.user.User;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.models.category.Category;
-import com.api_ecommerce.e_commerce.models.product.Product;
-import com.api_ecommerce.e_commerce.models.product.ProductRequest;
+import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
+import com.api_ecommerce.e_commerce.entity.Category;
+import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 

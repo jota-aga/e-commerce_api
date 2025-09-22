@@ -1,11 +1,8 @@
-package com.api_ecommerce.e_commerce.models.order;
+package com.api_ecommerce.e_commerce.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-
-import com.api_ecommerce.e_commerce.models.order_item.OrderItem;
-import com.api_ecommerce.e_commerce.models.user.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

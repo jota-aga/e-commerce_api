@@ -1,10 +1,7 @@
-package com.api_ecommerce.e_commerce.models.cart;
+package com.api_ecommerce.e_commerce.entity;
 
 
 import java.util.List;
-
-import com.api_ecommerce.e_commerce.models.cart_item.CartItem;
-import com.api_ecommerce.e_commerce.models.user.User;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -1,9 +1,7 @@
 
-package com.api_ecommerce.e_commerce.models.product;
+package com.api_ecommerce.e_commerce.entity;
 
 import java.math.BigDecimal;
-
-import com.api_ecommerce.e_commerce.models.category.Category;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

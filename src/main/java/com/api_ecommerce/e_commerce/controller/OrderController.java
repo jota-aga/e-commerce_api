@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api_ecommerce.e_commerce.dto.order.OrderDTO;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.ProductService;
@@ -31,9 +33,12 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<String> findOrdersByUserId(@PathVariable Long id){
+	public ResponseEntity<List<OrderDTO>> findOrdersByUserId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByUserId(id);
 		
-		return ResponseEntity.status(HttpStatus.OK).build();
+		List<OrderDTO> orderResponse = Mappers.toListOrderDTO(orders);
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
 	}
 }

@@ -1,5 +1,7 @@
 package com.api_ecommerce.e_commerce.entity;
 
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +29,7 @@ public class CartItem {
 	@ManyToOne
 	@JoinColumn(name="cart_id", nullable = true)
 	private Cart cart;
-
+	
 	public CartItem(Product product, int quantity, Cart cart) {
 		super();
 		this.product = product;

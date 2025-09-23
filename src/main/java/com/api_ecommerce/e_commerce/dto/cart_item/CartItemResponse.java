@@ -1,19 +1,19 @@
 package com.api_ecommerce.e_commerce.dto.cart_item;
 
-import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 
 public class CartItemResponse {
-	private Product product;
+	private ProductDTO product;
 	private int quantity;
-	public CartItemResponse(Product product, int quantity) {
+	public CartItemResponse(ProductDTO product, int quantity) {
 		super();
 		this.product = product;
 		this.quantity = quantity;
 	}
-	public Product getProduct() {
+	public ProductDTO getProduct() {
 		return product;
 	}
-	public void setProduct(Product product) {
+	public void setProduct(ProductDTO product) {
 		this.product = product;
 	}
 	public int getQuantity() {

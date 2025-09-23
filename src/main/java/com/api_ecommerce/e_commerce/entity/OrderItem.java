@@ -1,5 +1,7 @@
 package com.api_ecommerce.e_commerce.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,9 +18,14 @@ public class OrderItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-	@JoinColumn(name="product_id")
-	private Product product;
+	@Column
+	private String productName;
+	
+	@Column
+	private String productDescription;
+	
+	@Column
+	private BigDecimal productPrice;
 	
 	@Column
 	private int quantity;
@@ -26,12 +33,29 @@ public class OrderItem {
 	@ManyToOne
 	@JoinColumn(name="order_id")
 	private Order order;
-
-	public OrderItem(Product product, int quantity, Order order) {
+	
+	public OrderItem(String productName, String productDescription, BigDecimal productPrice, int quantity,
+			Order order) {
 		super();
-		this.product = product;
+		this.productName = productName;
+		this.productDescription = productDescription;
+		this.productPrice = productPrice;
 		this.quantity = quantity;
 		this.order = order;
+	}
+
+	public OrderItem(String productName, String productDescription, BigDecimal productPrice, int quantity) {
+		super();
+		this.productName = productName;
+		this.productDescription = productDescription;
+		this.productPrice = productPrice;
+		this.quantity = quantity;
+	}
+
+
+
+	public OrderItem() {
+		super();
 	}
 
 	public Long getId() {
@@ -40,14 +64,6 @@ public class OrderItem {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 
 	public int getQuantity() {
@@ -65,8 +81,30 @@ public class OrderItem {
 	public void setOrder(Order order) {
 		this.order = order;
 	}
-	
-	
+
+	public BigDecimal getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(BigDecimal productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductDescription() {
+		return productDescription;
+	}
+
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
 	
 	
 }

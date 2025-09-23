@@ -1,6 +1,7 @@
 package com.api_ecommerce.e_commerce.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.dto.category.CategoryRequest;
+import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 
@@ -27,7 +28,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 	
 	@PostMapping("")
-	public ResponseEntity<String> saveCategory(@RequestBody CategoryRequest categoryDTO){
+	public ResponseEntity<String> saveCategory(@RequestBody CategoryDTO categoryDTO){
 		Category category = new Category(categoryDTO.name());
 		
 		categoryService.saveCategory(category);
@@ -36,14 +37,16 @@ public class CategoryController {
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<List<Category>> findAllCategory(){
+	public ResponseEntity<List<CategoryDTO>> findAllCategory(){
 		List<Category> categorys = categoryService.findAllCategory();
+		List<CategoryDTO> categorysResponse = new ArrayList<>();
+		categorys.forEach(category -> categorysResponse.add(new CategoryDTO(category.getName())));
 		
-		return ResponseEntity.status(HttpStatus.OK).body(categorys);
+		return ResponseEntity.status(HttpStatus.OK).body(categorysResponse);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<String> editCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest){
+	public ResponseEntity<String> editCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryRequest){
 		Category category = categoryService.findCategoryById(id);
 		category = categoryService.editCategory(category, categoryRequest);
 		

@@ -15,6 +15,7 @@ import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
@@ -31,7 +32,7 @@ public class CartController {
 	@GetMapping("/{id}")
 	public ResponseEntity<CartResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
-		CartResponse cartResponse = new CartResponse(cart.getUser(), cart.getCartItems());
+		CartResponse cartResponse = Mappers.toDTO(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartResponse);
 	}

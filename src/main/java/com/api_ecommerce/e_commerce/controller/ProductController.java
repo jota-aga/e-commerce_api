@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
+import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 
@@ -31,36 +32,41 @@ public class ProductController {
 	CategoryService categoryService;
 	
 	@PostMapping()
-	public ResponseEntity<String> saveProduct(@RequestBody ProductRequest productRequest){
+	public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productRequest){
 		
-		Category category = categoryService.findCategoryById(productRequest.getCategoryId());
-		Product product = new Product(productRequest.getName(), productRequest.getDescription(), 
-									  productRequest.getQuantity(), productRequest.getPrice(), category);
+		Category category = categoryService.findCategoryById(productRequest.categoryId());
+		Product product = new Product(productRequest.name(), productRequest.description(), 
+									  productRequest.quantity(), productRequest.price(), category);
 		productService.saveProduct(product);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<Product>> findAllProducts(){
+	public ResponseEntity<List<ProductDTO>> findAllProducts(){
 		List<Product> products = productService.findAllProducts();
 		
-		return ResponseEntity.status(HttpStatus.OK).body(products);
+		List<ProductDTO> productsResponse = Mappers.toDTO(products);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-name")
-	public ResponseEntity<List<Product>> findAllProductsByName(@RequestParam("name") String name){
+	public ResponseEntity<List<ProductDTO>> findAllProductsByName(@RequestParam("name") String name){
 		List<Product> products = productService.findAllByName(name);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(products);
+		List<ProductDTO> productsResponse = Mappers.toDTO(products);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-category")
-	public ResponseEntity<List<Product>> findAllProductsByCategory(@RequestParam String categoryName){
+	public ResponseEntity<List<ProductDTO>> findAllProductsByCategory(@RequestParam String categoryName){
 		Category category = categoryService.findCategoryByName(categoryName);
 		List<Product> products = productService.findAllByCategory(category.getId());
+		List<ProductDTO> productsResponse = Mappers.toDTO(products);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(products);
+		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@DeleteMapping("/{id}")
@@ -71,7 +77,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<String> editProductById(@PathVariable Long id,  @RequestBody ProductRequest productDTO){
+	public ResponseEntity<String> editProductById(@PathVariable Long id,  @RequestBody ProductDTO productDTO){
 		Product product = productService.findProductById(id);
 		
 		product = productService.editProduct(product, productDTO);

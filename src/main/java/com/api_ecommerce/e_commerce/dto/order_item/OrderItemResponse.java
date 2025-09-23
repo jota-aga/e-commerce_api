@@ -1,35 +1,8 @@
 package com.api_ecommerce.e_commerce.dto.order_item;
 
+import java.math.BigDecimal;
+
+import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Product;
 
-public class OrderItemResponse {
-	private Product product;
-	
-	private int quantity;
-
-	public OrderItemResponse() {
-		super();
-	}
-
-	public OrderItemResponse(Product product, int quantity) {
-		super();
-		this.product = product;
-		this.quantity = quantity;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-}
+public record OrderItemResponse (String productName, String productDescription, BigDecimal productPrice, int quantity){}

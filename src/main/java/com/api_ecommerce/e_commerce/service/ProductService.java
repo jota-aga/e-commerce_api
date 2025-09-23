@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
+import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
@@ -27,14 +27,14 @@ public class ProductService {
 		productRepository.save(product);
 	}
 	
-	public Product editProduct(Product product, ProductRequest productDTO) {
+	public Product editProduct(Product product, ProductDTO productDTO) {
 		
-		product.setName(productDTO.getName());
-		product.setDescricao(productDTO.getDescription());
-		product.setPrice(productDTO.getPrice());
-		product.setQuantity(productDTO.getQuantity());
+		product.setName(productDTO.name());
+		product.setDescricao(productDTO.description());
+		product.setPrice(productDTO.price());
+		product.setQuantity(productDTO.quantity());
 		
-		Optional<Category> category = categoryRepository.findById(productDTO.getCategoryId());
+		Optional<Category> category = categoryRepository.findById(productDTO.categoryId());
 		
 		product.setCategory(category.get());
 		

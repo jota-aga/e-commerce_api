@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api_ecommerce.e_commerce.dto.category.CategoryRequest;
+import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
@@ -41,7 +41,7 @@ public class CategoryService {
 		categoryRepository.delete(category);
 	}
 	
-	public Category editCategory(Category category, CategoryRequest categoryRequest) {
+	public Category editCategory(Category category, CategoryDTO categoryRequest) {
 		category.setName(categoryRequest.name());
 		
 		return category;

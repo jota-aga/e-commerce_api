@@ -48,13 +48,14 @@ public class CartService {
 				  			   .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
 				  			   .reduce(BigDecimal.ZERO, BigDecimal::add);
 		
-		Order order = new Order(user, total);
-		orderRepository.save(order);
-		
 		List<OrderItem> orderItems = cart.getCartItems().stream()
-														.map(cartItem -> new OrderItem(cartItem.getProduct(), cartItem.getQuantity(), order))
+														.map(cartItem -> new OrderItem(cartItem.getProduct().getName(),cartItem.getProduct().getDescricao(), 
+																					   cartItem.getProduct().getPrice(), cartItem.getQuantity()))
 														.toList();
-		orderItemRepository.saveAll(orderItems);
+		
+		Order order = new Order(user, total);
+		
+		orderRepository.save(order);
 		
 		cart.getCartItems().clear();
 		

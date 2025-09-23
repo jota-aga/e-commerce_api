@@ -2,7 +2,9 @@
 package com.api_ecommerce.e_commerce.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table
@@ -31,6 +34,9 @@ public class Product {
 	
 	@Column
 	private int quantity;
+	
+	@OneToMany(mappedBy="product", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CartItem> cartItem;
 	
 	@ManyToOne
 	@JoinColumn(name="category_id")

@@ -1,5 +1,6 @@
 package com.api_ecommerce.e_commerce.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,5 +36,15 @@ public class OrderService {
 	
 	public void deleteOrderById(Order order) {
 		orderRepository.delete(order);	
+	}
+	
+	public List<Order> findOrdersByDate(LocalDate date){
+		List<Order> orders = orderRepository.findAllByCreatedAt(date);
+		
+		return orders;
+	}
+	
+	public List<Order> findAllOrders(){
+		return orderRepository.findAll();
 	}
 }

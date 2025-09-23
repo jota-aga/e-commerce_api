@@ -24,9 +24,6 @@ public class CartService {
 	@Autowired
 	private OrderRepository orderRepository;
 	
-	@Autowired
-	private OrderItemRepository orderItemRepository;
-	
 	public void saveCart(Cart cart) {
 		cartRepository.save(cart);
 	}

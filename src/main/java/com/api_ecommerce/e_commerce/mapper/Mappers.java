@@ -7,7 +7,7 @@ import java.util.List;
 import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemResponse;
 import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
-import com.api_ecommerce.e_commerce.dto.order.OrderDTO;
+import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
 import com.api_ecommerce.e_commerce.dto.order_item.OrderItemDTO;
 import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Cart;
@@ -50,11 +50,11 @@ public class Mappers {
 		return orderItemResponse;
 	}
 	
-	public static OrderDTO toDTO(Order order) {
+	public static OrderResponse toDTO(Order order) {
 		List<OrderItemDTO> orderItemDTO = order.getOrdersItem().stream()
 																	.map(orderItem -> Mappers.toDTO(orderItem))
 																	.toList();
-		OrderDTO dto = new OrderDTO(orderItemDTO, order.getCreatedAt(), order.getTotalValue());
+		OrderResponse dto = new OrderResponse(order.getUser(), orderItemDTO, order.getCreatedAt(), order.getTotalValue());
 		
 		return dto;
 	}
@@ -78,8 +78,8 @@ public class Mappers {
 		return dto;
 	}
 	
-	public static List<OrderDTO> toListOrderDTO(List<Order> orders){
-		List<OrderDTO> dto = orders.stream()
+	public static List<OrderResponse> toListOrderDTO(List<Order> orders){
+		List<OrderResponse> dto = orders.stream()
 				 .map(order -> Mappers.toDTO(order))
 				 .toList();
 		return dto;

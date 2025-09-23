@@ -49,6 +49,13 @@ public class Order {
 		this.ordersItem = ordersItem;
 		this.totalValue = totalValue;
 	}
+	
+	public Order(User user) {
+		super();
+		this.user = user;
+		this.createdAt = LocalDate.now();
+		this.totalValue = BigDecimal.ZERO;
+	}
 
 	public Order() {
 		this.createdAt = LocalDate.now();

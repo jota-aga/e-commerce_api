@@ -1,13 +1,14 @@
 package com.api_ecommerce.e_commerce.mapper;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 
 import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemResponse;
 import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.dto.order.OrderDTO;
-import com.api_ecommerce.e_commerce.dto.order_item.OrderItemResponse;
+import com.api_ecommerce.e_commerce.dto.order_item.OrderItemDTO;
 import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
@@ -42,15 +43,15 @@ public class Mappers {
 		return product;
 	}
 	
-	public static OrderItemResponse toDTO(OrderItem orderItem) {
-		OrderItemResponse orderItemResponse = new OrderItemResponse(orderItem.getProductName(), orderItem.getProductDescription(), 
+	public static OrderItemDTO toDTO(OrderItem orderItem) {
+		OrderItemDTO orderItemResponse = new OrderItemDTO(orderItem.getProductName(), orderItem.getProductDescription(), 
 																	orderItem.getProductPrice(), orderItem.getQuantity());
 		
 		return orderItemResponse;
 	}
 	
 	public static OrderDTO toDTO(Order order) {
-		List<OrderItemResponse> orderItemDTO = order.getOrdersItem().stream()
+		List<OrderItemDTO> orderItemDTO = order.getOrdersItem().stream()
 																	.map(orderItem -> Mappers.toDTO(orderItem))
 																	.toList();
 		OrderDTO dto = new OrderDTO(orderItemDTO, order.getCreatedAt(), order.getTotalValue());

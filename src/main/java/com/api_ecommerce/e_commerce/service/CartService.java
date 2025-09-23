@@ -49,12 +49,12 @@ public class CartService {
 				  			   .reduce(BigDecimal.ZERO, BigDecimal::add);
 		
 		List<OrderItem> orderItems = cart.getCartItems().stream()
-														.map(cartItem -> new OrderItem(cartItem.getProduct().getName(),cartItem.getProduct().getDescricao(), 
+														.map(cartItem -> new OrderItem(cartItem.getProduct().getName(), cartItem.getProduct().getDescricao(), 
 																					   cartItem.getProduct().getPrice(), cartItem.getQuantity()))
 														.toList();
 		
-		Order order = new Order(user, total);
-		
+		Order order = new Order(user, orderItems, total);
+		orderItems.forEach(orderItem -> orderItem.setOrder(order));
 		orderRepository.save(order);
 		
 		cart.getCartItems().clear();

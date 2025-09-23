@@ -42,6 +42,14 @@ public class Order {
 		this.totalValue = totalValue;
 	}
 
+	public Order(User user, List<OrderItem> ordersItem, BigDecimal totalValue) {
+		super();
+		this.user = user;
+		this.createdAt = LocalDate.now();
+		this.ordersItem = ordersItem;
+		this.totalValue = totalValue;
+	}
+
 	public Order() {
 		this.createdAt = LocalDate.now();
 	}

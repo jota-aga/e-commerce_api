@@ -31,30 +31,18 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> ordersItem;
-	
-	@Column
-	private BigDecimal totalValue;
-	
-	public Order(User user, BigDecimal totalValue) {
-		super();
-		this.user = user;
-		this.createdAt = LocalDate.now();
-		this.totalValue = totalValue;
-	}
 
-	public Order(User user, List<OrderItem> ordersItem, BigDecimal totalValue) {
+	public Order(User user, List<OrderItem> ordersItem) {
 		super();
 		this.user = user;
 		this.createdAt = LocalDate.now();
 		this.ordersItem = ordersItem;
-		this.totalValue = totalValue;
 	}
 	
 	public Order(User user) {
 		super();
 		this.user = user;
 		this.createdAt = LocalDate.now();
-		this.totalValue = BigDecimal.ZERO;
 	}
 
 	public Order() {
@@ -92,14 +80,4 @@ public class Order {
 	public void setOrdersItem(List<OrderItem> ordersItem) {
 		this.ordersItem = ordersItem;
 	}
-
-	public BigDecimal getTotalValue() {
-		return totalValue;
-	}
-
-	public void setTotalValue(BigDecimal totalValue) {
-		this.totalValue = totalValue;
-	}
-	
-	
 }

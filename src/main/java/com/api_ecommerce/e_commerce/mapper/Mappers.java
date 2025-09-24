@@ -8,7 +8,7 @@ import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemResponse;
 import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
-import com.api_ecommerce.e_commerce.dto.order_item.OrderItemDTO;
+import com.api_ecommerce.e_commerce.dto.order_item.OrderItemResponse;
 import com.api_ecommerce.e_commerce.dto.product.ProductDTO;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
@@ -43,18 +43,21 @@ public class Mappers {
 		return product;
 	}
 	
-	public static OrderItemDTO toDTO(OrderItem orderItem) {
-		OrderItemDTO orderItemResponse = new OrderItemDTO(orderItem.getProductName(), orderItem.getProductDescription(), 
+	public static OrderItemResponse toDTO(OrderItem orderItem) {
+		OrderItemResponse orderItemResponse = new OrderItemResponse(orderItem.getProductName(), orderItem.getProductDescription(), 
 																	orderItem.getProductPrice(), orderItem.getQuantity());
 		
 		return orderItemResponse;
 	}
 	
 	public static OrderResponse toDTO(Order order) {
-		List<OrderItemDTO> orderItemDTO = order.getOrdersItem().stream()
+		List<OrderItemResponse> orderItemDTO = order.getOrdersItem().stream()
 																	.map(orderItem -> Mappers.toDTO(orderItem))
 																	.toList();
-		OrderResponse dto = new OrderResponse(order.getUser(), orderItemDTO, order.getCreatedAt(), order.getTotalValue());
+		BigDecimal totalValue = order.getOrdersItem().stream()
+													 .map(orderItem -> orderItem.getProductPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
+													 .reduce(BigDecimal.ZERO, BigDecimal::add);
+		OrderResponse dto = new OrderResponse(order.getUser(), orderItemDTO, order.getCreatedAt(), totalValue);
 		
 		return dto;
 	}

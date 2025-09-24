@@ -3,6 +3,7 @@ package com.api_ecommerce.e_commerce.controller;
 import java.time.LocalDate;
 
 
+
 import java.util.List;
 
 
@@ -13,21 +14,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.api_ecommerce.e_commerce.dto.order.OrderRequest;
 import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
-import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
-import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.mapper.Mappers;
-import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
-import com.api_ecommerce.e_commerce.service.ProductService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
 @RestController
@@ -58,7 +54,7 @@ public class OrderController {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<OrderResponse>> findOrdersByDate(){
+	public ResponseEntity<List<OrderResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
 		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
 		
@@ -74,4 +70,12 @@ public class OrderController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteOrder(@PathVariable Long id){
+		Order order = orderService.findOrderById(id);
+		
+		orderService.deleteOrderById(order);
+		
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
 }

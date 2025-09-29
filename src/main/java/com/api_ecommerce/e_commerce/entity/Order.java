@@ -1,6 +1,6 @@
 package com.api_ecommerce.e_commerce.entity;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.util.List;
 

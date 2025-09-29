@@ -1,6 +1,5 @@
 package com.api_ecommerce.e_commerce.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +12,6 @@ import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
-import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
 
 @Service

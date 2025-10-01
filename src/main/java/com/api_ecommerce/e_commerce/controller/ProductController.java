@@ -33,7 +33,7 @@ public class ProductController {
 	CategoryService categoryService;
 	
 	@PostMapping()
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productRequest){
 		
 		Category category = categoryService.findCategoryById(productRequest.categoryId());
@@ -72,7 +72,7 @@ public class ProductController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteProductById(@PathVariable Long id){
 		productService.deleteProduct(id);
 		
@@ -80,7 +80,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editProductById(@PathVariable Long id,  @RequestBody ProductDTO productDTO){
 		Product product = productService.findProductById(id);
 		

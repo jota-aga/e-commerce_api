@@ -34,7 +34,7 @@ public class CartItemController {
 	private CartService cartService;
 	
 	@PostMapping()
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> saveCartItem(@RequestBody CartItemRequest cartItemDTO){
 		Product product = productService.findProductById(cartItemDTO.getProductId());
 		Cart cart = cartService.findCartById(cartItemDTO.getCartId());
@@ -46,7 +46,7 @@ public class CartItemController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteCartItem(@PathVariable Long id){
 		CartItem cartItem = cartItemService.findCartItemById(id);
 		cartItemService.deleteCartItem(cartItem);
@@ -56,7 +56,7 @@ public class CartItemController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editCartItem(@PathVariable Long id, @RequestBody CartItemRequest cartItemDTO){
 		CartItem cartItem = cartItemService.findCartItemById(id);
 		cartItem = cartItemService.editCartItem(cartItem, cartItemDTO);

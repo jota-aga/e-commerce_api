@@ -33,7 +33,7 @@ public class CartController {
 	private UserService userService;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<CartResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
 		CartResponse cartResponse = Mappers.toDTO(cart);
@@ -42,7 +42,7 @@ public class CartController {
 	}
 	
 	@PostMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<CartItem>> checkoutCart(@PathVariable("id") Long userId){
 		User user = userService.findUserById(userId);
 		Cart cart = cartService.findCartByUserId(userId);
@@ -54,7 +54,7 @@ public class CartController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteCart(@PathVariable Long id){
 		Cart cart = cartService.findCartById(id);
 		

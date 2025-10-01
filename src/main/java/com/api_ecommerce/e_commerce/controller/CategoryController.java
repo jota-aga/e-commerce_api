@@ -29,7 +29,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 	
 	@PostMapping("")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> saveCategory(@RequestBody CategoryDTO categoryDTO){
 		Category category = new Category(categoryDTO.name());
 		
@@ -48,7 +48,7 @@ public class CategoryController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryRequest){
 		Category category = categoryService.findCategoryById(id);
 		category = categoryService.editCategory(category, categoryRequest);
@@ -58,7 +58,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteCategory(@PathVariable Long id){
 		Category category = categoryService.findCategoryById(id);
 		categoryService.deleteCategory(category);

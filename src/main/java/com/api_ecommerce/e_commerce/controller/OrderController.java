@@ -37,7 +37,7 @@ public class OrderController {
 	private UserService userService;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderResponse>> findOrdersByUserId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByUserId(id);
 		
@@ -48,7 +48,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("/date")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderResponse>> findOrdersByDate(@RequestParam LocalDate date){
 		List<Order> orders = orderService.findOrdersByDate(date);
 		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
@@ -57,7 +57,7 @@ public class OrderController {
 	}
 	
 	@GetMapping()
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
 		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);

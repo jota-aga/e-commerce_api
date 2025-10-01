@@ -21,6 +21,8 @@ import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -30,7 +32,7 @@ public class CategoryController {
 	
 	@PostMapping("")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> saveCategory(@RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<String> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO){
 		Category category = new Category(categoryDTO.name());
 		
 		categoryService.saveCategory(category);
@@ -49,7 +51,7 @@ public class CategoryController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryRequest){
+	public ResponseEntity<String> editCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryRequest){
 		Category category = categoryService.findCategoryById(id);
 		category = categoryService.editCategory(category, categoryRequest);
 		

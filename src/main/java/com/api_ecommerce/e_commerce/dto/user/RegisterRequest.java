@@ -1,12 +1,9 @@
 package com.api_ecommerce.e_commerce.dto.user;
+import jakarta.validation.constraints.NotBlank;
 
 
 
-
-import jakarta.validation.constraints.NotNull;
-
-
-public record RegisterRequest(@NotNull String username, @NotNull String password) {
+public record RegisterRequest(@NotBlank String username, @NotBlank String password) {
 	
 	
 }

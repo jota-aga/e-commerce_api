@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 public record ProductDTO(
 	@NotBlank
@@ -15,11 +17,14 @@ public record ProductDTO(
 	String description,
 	
 	@Positive
+	@NotNull
 	BigDecimal price,
 	
+	@NotNull
 	Long categoryId,
 	
-	@Min(value=0)
+	@PositiveOrZero
+	@NotNull
 	int quantity
 	)
 {

@@ -23,6 +23,8 @@ import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -34,7 +36,7 @@ public class ProductController {
 	
 	@PostMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> saveProduct(@RequestBody ProductDTO productRequest){
+	public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductDTO productRequest){
 		
 		Category category = categoryService.findCategoryById(productRequest.categoryId());
 		Product product = new Product(productRequest.name(), productRequest.description(), 
@@ -81,7 +83,7 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editProductById(@PathVariable Long id,  @RequestBody ProductDTO productDTO){
+	public ResponseEntity<String> editProductById(@PathVariable Long id,  @Valid @RequestBody ProductDTO productDTO){
 		Product product = productService.findProductById(id);
 		
 		product = productService.editProduct(product, productDTO);

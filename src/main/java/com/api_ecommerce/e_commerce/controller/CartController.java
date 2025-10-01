@@ -52,14 +52,4 @@ public class CartController {
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		
 	}
-	
-	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> deleteCart(@PathVariable Long id){
-		Cart cart = cartService.findCartById(id);
-		
-		cartService.deleteCart(cart);
-		
-		return ResponseEntity.status(HttpStatus.OK).build();		
-	}
 }

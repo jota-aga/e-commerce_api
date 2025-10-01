@@ -27,6 +27,8 @@ import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -67,7 +69,7 @@ public class OrderController {
 	
 	@PostMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
-	public ResponseEntity<String> createOrder(@RequestBody OrderRequest orderDTO){
+	public ResponseEntity<String> createOrder(@Valid @RequestBody OrderRequest orderDTO){
 		User user = userService.findUserById(orderDTO.userId());
 		Order order = new Order(user);
 		orderService.saveOrder(order);

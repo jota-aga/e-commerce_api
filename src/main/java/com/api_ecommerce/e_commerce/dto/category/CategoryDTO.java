@@ -1,5 +1,9 @@
 package com.api_ecommerce.e_commerce.dto.category;
 
-public record CategoryDTO(String name) {
+import jakarta.validation.constraints.NotBlank;
 
-}
+public record CategoryDTO(
+		@NotBlank
+		String name
+		) 		
+{}

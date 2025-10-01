@@ -2,6 +2,26 @@ package com.api_ecommerce.e_commerce.dto.order_item;
 
 import java.math.BigDecimal;
 
-public record OrderItemRequest(Long orderId, String productName, String productDescription, BigDecimal productPrice, int quantity) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-}
+public record OrderItemRequest(
+		@NotNull
+		Long orderId,
+		
+		@NotBlank
+		String productName,
+		
+		@NotBlank		
+		String productDescription,
+		
+		@Positive
+		@NotNull
+		BigDecimal productPrice,
+		
+		@Positive
+		@NotNull
+		int quantity
+		) 
+{}

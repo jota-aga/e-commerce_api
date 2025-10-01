@@ -18,6 +18,8 @@ import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.service.OrderItemService;
 import com.api_ecommerce.e_commerce.service.OrderService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("order-item")
 public class OrderItemController {
@@ -29,7 +31,7 @@ public class OrderItemController {
 	
 	@PostMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> createOrderItem(@RequestBody OrderItemRequest orderItemRequest){
+	public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest){
 		Order order = orderService.findOrderById(orderItemRequest.orderId());
 		OrderItem orderItem = new OrderItem(orderItemRequest.productName(), orderItemRequest.productDescription(), orderItemRequest.productPrice(), orderItemRequest.quantity(), order);
 		orderItemService.save(orderItem);
@@ -48,7 +50,7 @@ public class OrderItemController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editOrderItem(@PathVariable Long id, @RequestBody OrderItemRequest orderItemRequest){
+	public ResponseEntity<String> editOrderItem(@PathVariable Long id, @Valid @RequestBody OrderItemRequest orderItemRequest){
 		OrderItem orderItem = orderItemService.findOrderItemById(id);
 		orderItemService.editOrderItem(orderItem, orderItemRequest);
 		orderItemService.save(orderItem);

@@ -13,13 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemAdminRequest;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.service.CartItemService;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/cart_item")
@@ -35,11 +37,11 @@ public class CartItemController {
 	
 	@PostMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> saveCartItem(@RequestBody CartItemRequest cartItemDTO){
-		Product product = productService.findProductById(cartItemDTO.getProductId());
-		Cart cart = cartService.findCartById(cartItemDTO.getCartId());
+	public ResponseEntity<String> saveCartItem(@Valid @RequestBody CartItemAdminRequest cartItemDTO){
+		Product product = productService.findProductById(cartItemDTO.productId());
+		Cart cart = cartService.findCartById(cartItemDTO.cartId());
 		
-		CartItem cartItem = new CartItem(product, cartItemDTO.getQuantity(), cart);
+		CartItem cartItem = new CartItem(product, cartItemDTO.quantity(), cart);
 		cartItemService.saveCartItem(cartItem);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -57,7 +59,7 @@ public class CartItemController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editCartItem(@PathVariable Long id, @RequestBody CartItemRequest cartItemDTO){
+	public ResponseEntity<String> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemAdminRequest cartItemDTO){
 		CartItem cartItem = cartItemService.findCartItemById(id);
 		cartItem = cartItemService.editCartItem(cartItem, cartItemDTO);
 		cartItemService.saveCartItem(cartItem);

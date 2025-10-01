@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
-import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemAdminRequest;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemClientRequest;
 import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
@@ -31,6 +32,8 @@ import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 import com.api_ecommerce.e_commerce.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/client")
@@ -68,17 +71,17 @@ public class ClientController {
 	}
 	
 	@PostMapping("/cart/item")
-	public ResponseEntity<?> saveCartItemCliente(@RequestBody CartItemRequest request, JwtAuthenticationToken token){
+	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemClientRequest request, JwtAuthenticationToken token){
 		Cart cart = cartService.findCartByUserId( Long.valueOf(token.getToken().getSubject()));
-		Product product = productService.findProductById(request.getProductId());
-		CartItem cartItem = new CartItem(product, request.getQuantity(), cart);
+		Product product = productService.findProductById(request.productId());
+		CartItem cartItem = new CartItem(product, request.quantity(), cart);
 		cartItemService.saveCartItem(cartItem);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PutMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @RequestBody CartItemRequest request, JwtAuthenticationToken token){
+	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemAdminRequest request, JwtAuthenticationToken token){
 		CartItem cartItem = cartItemService.findCartItemById(cartItemId);
 		cartItemService.validateCartItemId(cartItem, Long.valueOf(token.getToken().getSubject()));
 		cartItemService.editCartItem(cartItem, request);

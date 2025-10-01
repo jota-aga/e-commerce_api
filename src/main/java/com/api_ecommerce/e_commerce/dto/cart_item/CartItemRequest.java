@@ -27,6 +27,10 @@ public class CartItemRequest{
 		this.quantity = quantity;
 	}
 
+	public CartItemRequest() {
+		super();
+	}
+
 	public Long getProductId() {
 		return productId;
 	}

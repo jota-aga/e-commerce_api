@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class OrderController {
 	private UserService userService;
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<List<OrderResponse>> findOrdersByUserId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByUserId(id);
 		
@@ -46,6 +48,7 @@ public class OrderController {
 	}
 	
 	@GetMapping("/date")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<List<OrderResponse>> findOrdersByDate(@RequestParam LocalDate date){
 		List<Order> orders = orderService.findOrdersByDate(date);
 		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
@@ -54,6 +57,7 @@ public class OrderController {
 	}
 	
 	@GetMapping()
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<List<OrderResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
 		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
@@ -62,6 +66,7 @@ public class OrderController {
 	}
 	
 	@PostMapping()
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> createOrder(@RequestBody OrderRequest orderDTO){
 		User user = userService.findUserById(orderDTO.userId());
 		Order order = new Order(user);
@@ -71,6 +76,7 @@ public class OrderController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> deleteOrder(@PathVariable Long id){
 		Order order = orderService.findOrderById(id);
 		

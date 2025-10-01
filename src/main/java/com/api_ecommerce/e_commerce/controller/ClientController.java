@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.mapper.Mappers;
 import com.api_ecommerce.e_commerce.service.CartItemService;
 import com.api_ecommerce.e_commerce.service.CartService;
@@ -92,5 +94,16 @@ public class ClientController {
 		cartItemService.deleteCartItem(cartItem);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@PostMapping("/checkout")
+	public ResponseEntity<?> checkoutCart(JwtAuthenticationToken token){
+		User user = userService.findUserById(Long.valueOf(token.getToken().getSubject()));
+		Cart cart = cartService.findCartByUserId(Long.valueOf(token.getToken().getSubject()));
+		
+		cartService.checkout(user, cart);
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).build();		
 	}
 }

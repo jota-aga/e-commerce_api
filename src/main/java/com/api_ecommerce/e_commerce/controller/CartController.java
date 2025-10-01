@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class CartController {
 	private UserService userService;
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<CartResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
 		CartResponse cartResponse = Mappers.toDTO(cart);
@@ -40,6 +42,7 @@ public class CartController {
 	}
 	
 	@PostMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<List<CartItem>> checkoutCart(@PathVariable("id") Long userId){
 		User user = userService.findUserById(userId);
 		Cart cart = cartService.findCartByUserId(userId);
@@ -51,6 +54,7 @@ public class CartController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> deleteCart(@PathVariable Long id){
 		Cart cart = cartService.findCartById(id);
 		

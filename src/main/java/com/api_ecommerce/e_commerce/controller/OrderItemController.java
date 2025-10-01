@@ -3,6 +3,7 @@ package com.api_ecommerce.e_commerce.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class OrderItemController {
 	OrderService orderService;
 	
 	@PostMapping()
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> createOrderItem(@RequestBody OrderItemRequest orderItemRequest){
 		Order order = orderService.findOrderById(orderItemRequest.orderId());
 		OrderItem orderItem = new OrderItem(orderItemRequest.productName(), orderItemRequest.productDescription(), orderItemRequest.productPrice(), orderItemRequest.quantity(), order);
@@ -36,6 +38,7 @@ public class OrderItemController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> deleteOrderItem(@PathVariable Long id){
 		OrderItem orderItem = orderItemService.findOrderItemById(id);
 		orderItemService.deleteOrderItem(orderItem);
@@ -44,6 +47,7 @@ public class OrderItemController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> editOrderItem(@PathVariable Long id, @RequestBody OrderItemRequest orderItemRequest){
 		OrderItem orderItem = orderItemService.findOrderItemById(id);
 		orderItemService.editOrderItem(orderItem, orderItemRequest);

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,7 @@ public class CartItemController {
 	private CartService cartService;
 	
 	@PostMapping()
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> saveCartItem(@RequestBody CartItemRequest cartItemDTO){
 		Product product = productService.findProductById(cartItemDTO.getProductId());
 		Cart cart = cartService.findCartById(cartItemDTO.getCartId());
@@ -44,6 +46,7 @@ public class CartItemController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> deleteCartItem(@PathVariable Long id){
 		CartItem cartItem = cartItemService.findCartItemById(id);
 		cartItemService.deleteCartItem(cartItem);
@@ -53,6 +56,7 @@ public class CartItemController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
 	public ResponseEntity<String> editCartItem(@PathVariable Long id, @RequestBody CartItemRequest cartItemDTO){
 		CartItem cartItem = cartItemService.findCartItemById(id);
 		cartItem = cartItemService.editCartItem(cartItem, cartItemDTO);

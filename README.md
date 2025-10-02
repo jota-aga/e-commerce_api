@@ -1,7 +1,14 @@
-# Minha API
+# API E-commerce
 
-Esta API fornece acesso aos recursos do sistema X.  
-Abaixo estão exemplos de uso, endpoints disponíveis e detalhes de autenticação.
+Esta API simula um sistema de e-commerce, oferecendo diferentes níveis de acesso para administradores e clientes. O Administrador possui controle total sobre o sistema e pode genrenciar todas as entidades presentes. Já o cliente vai possuir acesso só ao seu módulo, podendo gerenciar seu carrinho, ver todos os seus pedidos e também a partes que são abertar para os dois tipos de usuários.
+
+Ao iniciar a aplicação, caso ainda não exista, é criado automaticamente um usuário administrador padrão:
+
+Usuário: ecommerce_admin
+
+Senha: joao789
+
+O login retorna um token JWT, que deve ser utilizado para acessar os endpoints protegidos. O token de cada usuário libera a autorização que cada endpoint pede de acordo com sua função no sistema.
 
 ## Base URL
 
@@ -72,7 +79,8 @@ Authorization: Bearer <seu_token>
   "name": "Garrafa d'agua",
   "description": "black, 750ml"
   "quantity": 50,
-  "price": 15
+  "price": 15,
+  "categoryId": 1
 }
 ```
 
@@ -87,12 +95,14 @@ Authorization: Bearer <seu_token>
   {
     "name": "Garrafa d'agua",
     "description": "black, 750ml",
+    "category": "Garrafas",
     "quantity": 50,
     "price": 15
   },
   {
     "name": "mouse ryzer",
     "description": "black, 500dpi",
+    "category": "Mouses",
     "quantity": 20,
     "price": 30
   }
@@ -108,7 +118,8 @@ Authorization: Bearer <seu_token>
 ```json
 {
   "name": "Garrafa d'agua",
-  "description": "black, 750ml"
+  "description": "black, 750ml",
+  "category": "Garrafas",
   "quantity": 50,
   "price": 15
 }
@@ -128,7 +139,8 @@ name: Garrafa d'gua
 ```json
 {
   "name": "Garrafa d'agua",
-  "description": "black, 750ml"
+  "description": "black, 750ml",
+  "category": "Garrafas",
   "quantity": 50,
   "price": 15
 }
@@ -146,7 +158,8 @@ categoryName: Garrafas
 ```json
 {
   "name": "Garrafa d'agua",
-  "description": "black, 750ml"
+  "description": "black, 750ml",
+  "category": "Garrafas",
   "quantity": 50,
   "price": 15
 }
@@ -166,7 +179,8 @@ categoryName: Garrafas
   "name": "Garrafa d'agua",
   "description": "white, 750ml"
   "quantity": 50,
-  "price": 15
+  "price": 15,
+  "categoryId": 1
 }
 ```
 
@@ -249,7 +263,7 @@ categoryName: Garrafas
                 "name": "Redmi 12",
                 "description": "256gb de disco rígido, 16gm de ram",
                 "price": 5000.00,
-                "categoryId": 1,
+                "category": "Celular,
                 "quantity": 0
             },
             "quantity": 2
@@ -517,30 +531,19 @@ categoryName: Garrafas
 
 ```json
 {
-    "user": {
-        "id": 2,
-        "login": "maria",
-        "password": "$2a$10$aDBIgDH9orI.nWxiUw2Rt.vXrmmLk.iW.VStavlSZJMPXZj0kyHL2",
-        "roles": [
-            {
-                "id": 2,
-                "name": "CLIENT"
-            }
-        ]
-    },
     "cartItems": [
         {
             "product": {
-                "name": "Redmi 12",
+                "name": "Iphone 17",
                 "description": "256gb de disco rígido, 16gm de ram",
-                "price": 5000.00,
-                "categoryId": 1,
+                "price": 2000.00,
+                "category": "Eletrônicos",
                 "quantity": 0
             },
-            "quantity": 2
+            "quantity": 1
         }
     ],
-    "totalValue": 10000.00
+    "totalValue": 2000.00
 }
 ```
 ### 5. Pegar todos os pedidos do cliente (CLIENT)
@@ -549,17 +552,6 @@ categoryName: Garrafas
 ```json
 [
     {
-        "user": {
-            "id": 2,
-            "login": "maria",
-            "password": "$2a$10$aDBIgDH9orI.nWxiUw2Rt.vXrmmLk.iW.VStavlSZJMPXZj0kyHL2",
-            "roles": [
-                {
-                    "id": 2,
-                    "name": "CLIENT"
-                }
-            ]
-        },
         "ordersItemResponse": [
             {
                 "productName": "Iphone 17",

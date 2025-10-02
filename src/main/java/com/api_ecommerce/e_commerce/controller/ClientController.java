@@ -3,10 +3,10 @@ package com.api_ecommerce.e_commerce.controller;
 import java.util.List;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
+import com.api_ecommerce.e_commerce.dto.cart.CartClientResponse;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemAdminRequest;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemClientRequest;
-import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
+import com.api_ecommerce.e_commerce.dto.order.OrderClientResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
@@ -55,19 +55,19 @@ public class ClientController {
 	CartItemService cartItemService;
 	
 	@GetMapping("/order")
-	public ResponseEntity<List<OrderResponse>> getAllOrderClient(JwtAuthenticationToken token){
+	public ResponseEntity<List<OrderClientResponse>> getAllOrderClient(JwtAuthenticationToken token){
 		List<Order> orders = orderService.findOrdersByUserId( Long.valueOf(token.getToken().getSubject()));
-		List<OrderResponse> ordersResponse = Mappers.toListOrderDTO(orders);
+		List<OrderClientResponse> ordersResponse = Mappers.toListOrderClientDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(ordersResponse);
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<CartResponse> getCartClient(JwtAuthenticationToken token){
+	public ResponseEntity<CartClientResponse> getCartClient(JwtAuthenticationToken token){
 		Cart cart = cartService.findCartByUserId( Long.valueOf(token.getToken().getSubject()));
-		CartResponse cartResponse = Mappers.toDTO(cart);
+		CartClientResponse cartClientResponse = Mappers.toClientDTO(cart);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(cartResponse);
+		return ResponseEntity.status(HttpStatus.OK).body(cartClientResponse);
 	}
 	
 	@PostMapping("/cart/item")

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.api_ecommerce.e_commerce.dto.order.OrderRequest;
-import com.api_ecommerce.e_commerce.dto.order.OrderResponse;
+import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.mapper.Mappers;
@@ -40,31 +40,31 @@ public class OrderController {
 	
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<List<OrderResponse>> findOrdersByUserId(@PathVariable Long id){
+	public ResponseEntity<List<OrderAdminResponse>> findOrdersByUserId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByUserId(id);
 		
-		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
 		
 		
-		return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
+		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
 	@GetMapping("/date")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<List<OrderResponse>> findOrdersByDate(@RequestParam LocalDate date){
+	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate date){
 		List<Order> orders = orderService.findOrdersByDate(date);
-		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
+		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
 	@GetMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<List<OrderResponse>> findAllOrders(){
+	public ResponseEntity<List<OrderAdminResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
-		List<OrderResponse> orderResponse = Mappers.toListOrderDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(orderResponse);
+		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
 	@PostMapping()

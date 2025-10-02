@@ -2,11 +2,9 @@ package com.api_ecommerce.e_commerce.entity;
 
 import java.util.Set;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity

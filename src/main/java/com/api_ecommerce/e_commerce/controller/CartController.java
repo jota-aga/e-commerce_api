@@ -3,18 +3,18 @@ package com.api_ecommerce.e_commerce.controller;
 import java.util.List;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api_ecommerce.e_commerce.dto.cart.CartResponse;
+import com.api_ecommerce.e_commerce.dto.cart.CartAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.User;
@@ -34,11 +34,11 @@ public class CartController {
 	
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<CartResponse> findCartById(@PathVariable("id") Long id){
+	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
-		CartResponse cartResponse = Mappers.toDTO(cart);
+		CartAdminResponse cartAdminResponse = Mappers.toAdminDTO(cart);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(cartResponse);
+		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}
 	
 	@PostMapping("/{id}")

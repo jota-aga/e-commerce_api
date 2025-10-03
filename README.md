@@ -68,10 +68,11 @@ Authorization: Bearer <seu_token>
 
 ## Endpoints
 
-### 1. Salvar produto (ADMIN)
+### 1. Criar um produto (ADMIN)
 
 **POST** 
 
+Cria um produto.
 
 **Corpo da requisição:**
 ```json
@@ -88,6 +89,7 @@ Authorization: Bearer <seu_token>
 
 **GET**
 
+Lista todos os produtos.
 
 **Exemplo de resposta:**
 ```json
@@ -113,6 +115,7 @@ Authorization: Bearer <seu_token>
 
 **GET** `/{id}`
 
+Retorna um produto do id recebido.
 
 **Exemplo de resposta:**
 ```json
@@ -129,6 +132,8 @@ Authorization: Bearer <seu_token>
 ### 4. Procurar produto pelo nome (ALL)
 
 **GET** `/search-name`
+
+Retorna um produto do nome recebido.
 
 **Request Param:**
 ```json
@@ -149,6 +154,8 @@ name: Garrafa d'gua
 
 **GET** `/search-category`
 
+Retorna uma lista de produtos da categoria recebida.
+
 **Request Param:**
 ```json
 categoryName: Garrafas
@@ -168,11 +175,12 @@ categoryName: Garrafas
 
 **DELETE** `/{id}`
 
+Deleta um produto pelo id.
+
 ### 7. Editar produto (ADMIN)
 
 **PUT** `/{id}`
-
-
+Edita um produto pelo id.
 **Corpo da requisição:**
 ```json
 {
@@ -189,10 +197,11 @@ categoryName: Garrafas
 ```
 /category
 ```
-### 1. Salvar categoria (ADMIN)
+### 1. Criar uma categoria (ADMIN)
 
 **POST** 
 
+Cria uma categoria.
 
 **Corpo da requisição:**
 ```json
@@ -204,6 +213,7 @@ categoryName: Garrafas
 
 **PUT** `/{id}`
 
+Edita uma categoria pelo id recebido.
 
 **Corpo da requisição:**
 ```json
@@ -213,12 +223,15 @@ categoryName: Garrafas
 ```
 ### 3. Deletar categoria (ADMIN)
 
+Deleta uma categoria pelo id.
+
 **DELETE** `/{id}`
 
 ### 4. Listar todas as categorias (ALL)
 
-**GET**
+Lista todas as categorias.
 
+**GET**
 
 **Exemplo de resposta:**
 ```json
@@ -238,6 +251,8 @@ categoryName: Garrafas
 /cart
 ```
 ### 1. Procurar carrinho por id (ADMIN)
+
+Retorna um carrinho pelo id recebido.
 
 **GET** `/{id}`
 
@@ -274,6 +289,8 @@ categoryName: Garrafas
 ```
 ### 2. Fazer checkout de um carrinho (ADMIN)
 
+Faz um checkout de um carrinho pelo id recebido e salva o pedido automaticamente.
+
 **POST** `/{id}`
 
 ## Base URL
@@ -281,9 +298,11 @@ categoryName: Garrafas
 ```
 /cart-item
 ```
-### 1. Salva um item em um carrinho (ADMIN)
+### 1. Salvar um item em um carrinho (ADMIN)
 
 **POST** 
+
+Salva um item em um carrinho.
 
 **Corpo da requisição:**
 ```json
@@ -294,7 +313,9 @@ categoryName: Garrafas
 }
 ```
 
-### 2. Edita um item de um carrinho (ADMIN)
+### 2. Editar um item de um carrinho (ADMIN)
+
+Edita um item de um carrinho pelo id recebido.
 
 **PUT** `/{id}`
 
@@ -307,10 +328,10 @@ categoryName: Garrafas
 }
 ```
 
-### 3. Deleta um item de um carrinho por um id (ADMIN)
+### 3. Deletar um item de um carrinho por um id (ADMIN)
 
 **DELETE**
-
+Deleta um item de um carrinho pelo id.
 ## Base URL
 
 ```
@@ -319,6 +340,8 @@ categoryName: Garrafas
 ### 1. Salvar pedido (ADMIN)
 
 **POST** 
+
+Salva um pedido.
 
 **Corpo da requisição:**
 ```json
@@ -331,9 +354,13 @@ categoryName: Garrafas
 
 **DELETE** `/{id}`
 
-### 3. Procurar pedido por id de usuário (ADMIN)
+Deleta um pedido pelo id.
+
+### 3. Procurar pedidos por id de usuário (ADMIN)
 
 **POST** `/{id}`
+
+Retorna uma lista de pedidos pelo id de um usuário.
 
 **Exemplo de resposta:**
 ```json
@@ -364,9 +391,12 @@ categoryName: Garrafas
 ]
 ```
 
-### 4. Procurar pedido por data (ADMIN)
+### 4. Procurar pedidos por data (ADMIN)
 
 **POST** `/{id}`
+
+Retorna uma lista de pedidos por uma data.
+
 **Request Param**
 `date: 2025/09/30`
 
@@ -401,9 +431,9 @@ categoryName: Garrafas
 
 ### 5. Procurar todos os pedidos (ADMIN)
 
-**POST** `/{id}`
-**Request Param**
-`date: 2025-10-01`
+**GET** `/{id}`
+
+Retorna uma lista de todos os pedidos existentes.
 
 **Exemplo de resposta:**
 ```json
@@ -467,6 +497,8 @@ categoryName: Garrafas
 
 **POST**
 
+Salva um item em um pedido.
+
 **Corpo da requisição:**
 ```json
 {
@@ -482,6 +514,8 @@ categoryName: Garrafas
 
 **PUT**
 
+Edita um item de um pedido.
+
 **Corpo da requisição:**
 ```json
 {
@@ -496,13 +530,21 @@ categoryName: Garrafas
 
 **DELETE** `/{id}`
 
+Deleta um item de um pedido.
+
 ## Base URL
 
 ```
 /client
 ```
+
+Todos endpoints vão usar o token para conseguir manipular os dados do usuário logado, ou seja, como o token possui o id do usuário todos os métodos vão ser exclusivamente para aquele que está logado com o token recebido. Se o cliente tentar manipular dados que não seja dele, como tentar passar um id de um item de carrinho que não seja dele, não vai ser permitido.
+
 ### 1. Salvar item no carrinho do client (CLIENT)
+
 **POST** `/cart/item`
+
+Salva um item no carrinho do cliente logado.
 
 **Corpo da requisição:**
 ```json
@@ -513,7 +555,10 @@ categoryName: Garrafas
 ```
 
 ### 2. Editar item no carrinho do client (CLIENT)
-**PUT** `/cart/item`
+
+**PUT** `/cart/item/{cartItemId}`
+
+Edita um item no carrinho do cliente.
 
 **Corpo da requisição:**
 ```json
@@ -524,10 +569,17 @@ categoryName: Garrafas
 ```
 
 ### 3. Deletar item no carrinho do client (CLIENT)
-**DELETE** `/cart/item/{id}`
 
-### 4. Pegar carrinho do cliente (CLIENT)
+**DELETE** `/cart/item/{cartItemId}`
+
+Deleta um item di carrinho do cliente.
+
+
+### 4. Procurar carrinho do cliente (CLIENT)
+
 **GET** `/cart`
+
+Retorna o carrinho do cliente.
 
 ```json
 {
@@ -546,8 +598,11 @@ categoryName: Garrafas
     "totalValue": 2000.00
 }
 ```
-### 5. Pegar todos os pedidos do cliente (CLIENT)
+### 5. Procurar todos os pedidos do cliente (CLIENT)
+
 **GET** `/order`
+
+Retorna uma lista dos pedidos do cliente.
 
 ```json
 [
@@ -567,4 +622,7 @@ categoryName: Garrafas
 ```
 
 ### 5. Fazer o checkout no carrinho do cliente (CLIENT)
+
 **GET** `/checkout`
+
+Faz o checkout do carrinho do cliente e cria salva o pedidos automaticamente.

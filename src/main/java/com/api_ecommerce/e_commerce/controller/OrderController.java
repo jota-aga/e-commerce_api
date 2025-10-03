@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 
 
+
 import java.util.List;
 
 
@@ -23,7 +24,7 @@ import com.api_ecommerce.e_commerce.dto.order.OrderRequest;
 import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.mapper.Mappers;
+import com.api_ecommerce.e_commerce.mapper.OrderMapper;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
@@ -43,7 +44,7 @@ public class OrderController {
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByUserId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByUserId(id);
 		
-		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
@@ -53,7 +54,7 @@ public class OrderController {
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate date){
 		List<Order> orders = orderService.findOrdersByDate(date);
-		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -62,7 +63,7 @@ public class OrderController {
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
-		List<OrderAdminResponse> orderAdminResponse = Mappers.toListOrderAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}

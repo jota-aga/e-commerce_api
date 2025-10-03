@@ -2,6 +2,7 @@ package com.api_ecommerce.e_commerce.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.dto.product.ProductResponse;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
-import com.api_ecommerce.e_commerce.mapper.Mappers;
+import com.api_ecommerce.e_commerce.mapper.ProductMapper;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 
@@ -51,7 +52,7 @@ public class ProductController {
 	public ResponseEntity<List<ProductResponse>> findAllProducts(){
 		List<Product> products = productService.findAllProducts();
 		
-		List<ProductResponse> productsResponse = Mappers.toProductDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
@@ -60,7 +61,7 @@ public class ProductController {
 	public ResponseEntity<List<ProductResponse>> findAllProductsByName(@RequestParam("name") String name){
 		List<Product> products = productService.findAllByName(name);
 		
-		List<ProductResponse> productsResponse = Mappers.toProductDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
@@ -69,7 +70,7 @@ public class ProductController {
 	public ResponseEntity<List<ProductResponse>> findAllProductsByCategory(@RequestParam String categoryName){
 		Category category = categoryService.findCategoryByName(categoryName);
 		List<Product> products = productService.findAllByCategory(category.getId());
-		List<ProductResponse> productsResponse = Mappers.toProductDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}

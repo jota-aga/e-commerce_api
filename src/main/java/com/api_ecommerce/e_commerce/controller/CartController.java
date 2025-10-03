@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import com.api_ecommerce.e_commerce.dto.cart.CartAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.mapper.Mappers;
+import com.api_ecommerce.e_commerce.mapper.CartMapper;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.UserService;
 
@@ -36,7 +37,7 @@ public class CartController {
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
-		CartAdminResponse cartAdminResponse = Mappers.toAdminDTO(cart);
+		CartAdminResponse cartAdminResponse = CartMapper.toAdminDTO(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,8 @@ import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.mapper.Mappers;
+import com.api_ecommerce.e_commerce.mapper.CartMapper;
+import com.api_ecommerce.e_commerce.mapper.OrderMapper;
 import com.api_ecommerce.e_commerce.service.CartItemService;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
@@ -57,7 +59,7 @@ public class ClientController {
 	@GetMapping("/order")
 	public ResponseEntity<List<OrderClientResponse>> getAllOrderClient(JwtAuthenticationToken token){
 		List<Order> orders = orderService.findOrdersByUserId( Long.valueOf(token.getToken().getSubject()));
-		List<OrderClientResponse> ordersResponse = Mappers.toListOrderClientDTO(orders);
+		List<OrderClientResponse> ordersResponse = OrderMapper.toListClientDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(ordersResponse);
 	}
@@ -65,7 +67,7 @@ public class ClientController {
 	@GetMapping("/cart")
 	public ResponseEntity<CartClientResponse> getCartClient(JwtAuthenticationToken token){
 		Cart cart = cartService.findCartByUserId( Long.valueOf(token.getToken().getSubject()));
-		CartClientResponse cartClientResponse = Mappers.toClientDTO(cart);
+		CartClientResponse cartClientResponse = CartMapper.toClientDTO(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartClientResponse);
 	}

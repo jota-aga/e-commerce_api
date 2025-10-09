@@ -300,14 +300,13 @@ Faz um checkout de um carrinho pelo id recebido e salva o pedido automaticamente
 ```
 ### 1. Salvar um item em um carrinho (ADMIN)
 
-**POST** 
+**POST** `/{cartId}`
 
 Salva um item em um carrinho.
 
 **Corpo da requisição:**
 ```json
 {
-  "cartId": 1,
   "productId": 1,
   "quantity": 2
 }
@@ -322,7 +321,6 @@ Edita um item de um carrinho pelo id recebido.
 **Corpo da requisição:**
 ```json
 {
-  "cartId": 1,
   "productId": 2,
   "quantity": 3
 }
@@ -330,7 +328,7 @@ Edita um item de um carrinho pelo id recebido.
 
 ### 3. Deletar um item de um carrinho por um id (ADMIN)
 
-**DELETE**
+**DELETE** `/{id}`
 Deleta um item de um carrinho pelo id.
 ## Base URL
 
@@ -339,16 +337,9 @@ Deleta um item de um carrinho pelo id.
 ```
 ### 1. Salvar pedido (ADMIN)
 
-**POST** 
+**POST** `/{userId}`
 
-Salva um pedido.
-
-**Corpo da requisição:**
-```json
-{
-  "userId": 1
-}
-```
+Cria um pedido para um usuário.
 
 ### 2. Deletar pedido (ADMIN)
 
@@ -495,14 +486,13 @@ Retorna uma lista de todos os pedidos existentes.
 ```
 ### 1. Salvar item em um pedido (ADMIN)
 
-**POST**
+**POST** `/{orderId}`
 
 Salva um item em um pedido.
 
 **Corpo da requisição:**
 ```json
 {
-  "orderId": 1,
   "productName": "Iphone 17",
   "productDescription": "256gb de disco rígido, 16gm de ram",
   "productPrice": 2000.00,
@@ -519,7 +509,6 @@ Edita um item de um pedido.
 **Corpo da requisição:**
 ```json
 {
-  "orderId": 1,
   "productName": "Iphone 16",
   "productDescription": "256gb de disco rígido, 16gm de ram",
   "productPrice": 1800.00,

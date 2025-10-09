@@ -29,10 +29,10 @@ public class OrderItemController {
 	@Autowired
 	OrderService orderService;
 	
-	@PostMapping()
+	@PostMapping("/{orderId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest){
-		Order order = orderService.findOrderById(orderItemRequest.orderId());
+	public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest, @PathVariable Long orderId){
+		Order order = orderService.findOrderById(orderId);
 		OrderItem orderItem = new OrderItem(orderItemRequest.productName(), orderItemRequest.productDescription(), orderItemRequest.productPrice(), orderItemRequest.quantity(), order);
 		orderItemService.save(orderItem);
 		

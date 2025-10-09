@@ -5,6 +5,7 @@ import java.util.List;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart.CartClientResponse;
-import com.api_ecommerce.e_commerce.dto.cart_item.CartItemAdminRequest;
-import com.api_ecommerce.e_commerce.dto.cart_item.CartItemClientRequest;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.dto.order.OrderClientResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
@@ -73,8 +73,8 @@ public class ClientController {
 	}
 	
 	@PostMapping("/cart/item")
-	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemClientRequest request, JwtAuthenticationToken token){
-		Cart cart = cartService.findCartByUserId( Long.valueOf(token.getToken().getSubject()));
+	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemRequest request, JwtAuthenticationToken token){
+		Cart cart = cartService.findCartByUserId(Long.valueOf(token.getToken().getSubject()));
 		Product product = productService.findProductById(request.productId());
 		CartItem cartItem = new CartItem(product, request.quantity(), cart);
 		cartItemService.saveCartItem(cartItem);
@@ -83,7 +83,7 @@ public class ClientController {
 	}
 	
 	@PutMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemAdminRequest request, JwtAuthenticationToken token){
+	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request, JwtAuthenticationToken token){
 		CartItem cartItem = cartItemService.findCartItemById(cartItemId);
 		cartItemService.validateCartItemId(cartItem, Long.valueOf(token.getToken().getSubject()));
 		cartItemService.editCartItem(cartItem, request);

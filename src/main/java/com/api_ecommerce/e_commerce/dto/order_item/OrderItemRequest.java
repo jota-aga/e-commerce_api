@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record OrderItemRequest(
-		@NotNull
-		Long orderId,
 		
 		@NotBlank
 		String productName,

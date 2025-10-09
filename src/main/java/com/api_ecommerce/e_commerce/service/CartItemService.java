@@ -2,11 +2,12 @@ package com.api_ecommerce.e_commerce.service;
 
 import java.util.List;
 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.api_ecommerce.e_commerce.dto.cart_item.CartItemAdminRequest;
+import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
@@ -45,7 +46,7 @@ public class CartItemService {
 		cartItemRepository.deleteAll(cartItems);
 	}
 	
-	public CartItem editCartItem(CartItem cartItem, CartItemAdminRequest cartItemDTO) {
+	public CartItem editCartItem(CartItem cartItem, CartItemRequest cartItemDTO) {
 		
 		Product product = productService.findProductById(cartItemDTO.productId());
 		

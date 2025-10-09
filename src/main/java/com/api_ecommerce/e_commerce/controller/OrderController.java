@@ -1,10 +1,6 @@
 package com.api_ecommerce.e_commerce.controller;
 
 import java.time.LocalDate;
-
-
-
-
 import java.util.List;
 
 
@@ -16,19 +12,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.api_ecommerce.e_commerce.dto.order.OrderRequest;
 import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.mapper.OrderMapper;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.UserService;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/order")
@@ -68,10 +60,10 @@ public class OrderController {
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
-	@PostMapping()
+	@PostMapping("/{userId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN")
-	public ResponseEntity<String> createOrder(@Valid @RequestBody OrderRequest orderDTO){
-		User user = userService.findUserById(orderDTO.userId());
+	public ResponseEntity<String> createOrder(@PathVariable Long userId){
+		User user = userService.findUserById(userId);
 		Order order = new Order(user);
 		orderService.saveOrder(order);
 		

@@ -30,14 +30,10 @@ public class CartController {
 	@Autowired
 	private CartService cartService;
 	
-	@Autowired
-	private UserService userService;
-	
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
-		Cart cart = cartService.findCartById(id);
-		CartAdminResponse cartAdminResponse = CartMapper.toAdminDTO(cart);
+		CartAdminResponse cartAdminResponse = cartService.findCartById(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}
@@ -45,10 +41,8 @@ public class CartController {
 	@PostMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<CartItem>> checkoutCart(@PathVariable("id") Long userId){
-		User user = userService.findUserById(userId);
-		Cart cart = cartService.findCartByUserId(userId);
 		
-		cartService.checkout(user, cart);
+		cartService.checkout(userId);
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		

@@ -39,38 +39,29 @@ public class ProductController {
 	@PostMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductRequest productRequest){
-		
-		Category category = categoryService.findCategoryById(productRequest.categoryId());
-		Product product = new Product(productRequest.name(), productRequest.description(), 
-									  productRequest.quantity(), productRequest.price(), category);
-		productService.saveProduct(product);
+		productService.createProduct(productRequest);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@GetMapping()
 	public ResponseEntity<List<ProductResponse>> findAllProducts(){
-		List<Product> products = productService.findAllProducts();
-		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = productService.findAllProducts();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-name")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByName(@RequestParam("name") String name){
-		List<Product> products = productService.findAllByName(name);
 		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = productService.findAllByName(name);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-category")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByCategory(@RequestParam String categoryName){
-		Category category = categoryService.findCategoryByName(categoryName);
-		List<Product> products = productService.findAllByCategory(category.getId());
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = productService.findAllByCategory(categoryName);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
@@ -86,11 +77,8 @@ public class ProductController {
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editProductById(@PathVariable Long id,  @Valid @RequestBody ProductRequest productRequest){
-		Product product = productService.findProductById(id);
-		
-		product = productService.editProduct(product, productRequest);
-		
-		productService.saveProduct(product);
+	
+		productService.editProduct(id, productRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

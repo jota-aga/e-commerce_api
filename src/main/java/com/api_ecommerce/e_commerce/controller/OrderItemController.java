@@ -32,9 +32,7 @@ public class OrderItemController {
 	@PostMapping("/{orderId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest, @PathVariable Long orderId){
-		Order order = orderService.findOrderById(orderId);
-		OrderItem orderItem = new OrderItem(orderItemRequest.productName(), orderItemRequest.productDescription(), orderItemRequest.productPrice(), orderItemRequest.quantity(), order);
-		orderItemService.save(orderItem);
+		orderItemService.createOrderItem(orderItemRequest, orderId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -42,8 +40,7 @@ public class OrderItemController {
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteOrderItem(@PathVariable Long id){
-		OrderItem orderItem = orderItemService.findOrderItemById(id);
-		orderItemService.deleteOrderItem(orderItem);
+		orderItemService.deleteOrderItem(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
@@ -51,9 +48,7 @@ public class OrderItemController {
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editOrderItem(@PathVariable Long id, @Valid @RequestBody OrderItemRequest orderItemRequest){
-		OrderItem orderItem = orderItemService.findOrderItemById(id);
-		orderItemService.editOrderItem(orderItem, orderItemRequest);
-		orderItemService.save(orderItem);
+		orderItemService.editOrderItem(id, orderItemRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	} 

@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import com.api_ecommerce.e_commerce.repository.RoleRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Configuration
+@Order(1)
 public class AdminUserConfig implements CommandLineRunner {
 	@Autowired
 	private UserRepository userRepository;

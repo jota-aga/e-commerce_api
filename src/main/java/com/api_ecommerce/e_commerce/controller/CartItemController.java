@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.service.CartItemService;
+import com.api_ecommerce.e_commerce.service.TokenService;
 
 import jakarta.validation.Valid;
 
@@ -22,6 +23,9 @@ import jakarta.validation.Valid;
 public class CartItemController {
 	@Autowired
 	private CartItemService cartItemService;
+	
+	@Autowired
+	private TokenService tokenService;
 	
 	@PostMapping("/{cartId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
@@ -34,7 +38,9 @@ public class CartItemController {
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> deleteCartItem(@PathVariable Long id){
-		cartItemService.deleteCartItem(id);
+		Long adminUserId = tokenService.getCurrentUserId();
+		
+		cartItemService.deleteCartItem(id, adminUserId);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		
 		
@@ -43,7 +49,9 @@ public class CartItemController {
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<String> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemDTO){
-		cartItemService.editCartItem(id, cartItemDTO);
+		Long adminUserId = tokenService.getCurrentUserId();
+		
+		cartItemService.editCartItem(id, cartItemDTO, adminUserId);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

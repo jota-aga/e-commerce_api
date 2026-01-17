@@ -44,6 +44,7 @@ public class CartService {
 	
 	public void checkout(Long userId) {
 		User user = findUserById(userId);
+		
 		Cart cart = findCartByUserId(userId);
 		
 		createOrderByCheckout(user, cart);
@@ -76,7 +77,7 @@ public class CartService {
 		return user;
 	}
 	
-	private Cart findCartByUserId(Long userId) {
+	public Cart findCartByUserId(Long userId) {
 		Optional<Cart> cart = cartRepository.findByUserId(userId);
 		
 		return cart.orElseThrow(() -> new IdNotFoundException("Cart By user id"));

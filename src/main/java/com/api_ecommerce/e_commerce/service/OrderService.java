@@ -29,12 +29,10 @@ public class OrderService {
 		orderRepository.save(order);
 	}
 	
-	public List<OrderAdminResponse> findOrdersByUserId(Long id) {
+	public List<Order> findOrdersByUserId(Long id) {
 		List<Order> orders = orderRepository.findAllOrderByUserId(id);
-		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
-		
-		return orderAdminResponse;
+				
+		return orders;
 	}
 	
 	public Order findOrderById(Long id) {
@@ -48,19 +46,16 @@ public class OrderService {
 		orderRepository.delete(order);	
 	}
 	
-	public List<OrderAdminResponse> findOrdersByDate(LocalDate date){
+	public List<Order> findOrdersByDate(LocalDate date){
 		List<Order> orders = orderRepository.findAllByCreatedAt(date);
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
-		return orderAdminResponse;
+		return orders;
 	}
 	
-	public List<OrderAdminResponse> findAllOrders(){
+	public List<Order> findAllOrders(){
 		List<Order> orders= orderRepository.findAll();
-		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
-		
-		return orderAdminResponse;
+				
+		return orders;
 	}
 
 	public void createOrder(Long userId) {

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
+import com.api_ecommerce.e_commerce.entity.Order;
+import com.api_ecommerce.e_commerce.mapper.OrderMapper;
 import com.api_ecommerce.e_commerce.service.OrderService;
 
 @RestController
@@ -27,7 +29,9 @@ public class OrderController {
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByUserId(@PathVariable Long id){
-		List<OrderAdminResponse> orderAdminResponse = orderService.findOrdersByUserId(id);
+		List<Order> orders = orderService.findOrdersByUserId(id);
+		
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 	
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -35,7 +39,9 @@ public class OrderController {
 	@GetMapping("/date")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate date){
-		List<OrderAdminResponse> orderAdminResponse = orderService.findOrdersByDate(date);
+		List<Order> orders = orderService.findOrdersByDate(date);
+		
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -43,7 +49,9 @@ public class OrderController {
 	@GetMapping()
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findAllOrders(){
-		List<OrderAdminResponse> orderAdminResponse = orderService.findAllOrders();
+		List<Order> orders = orderService.findAllOrders();
+		
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}

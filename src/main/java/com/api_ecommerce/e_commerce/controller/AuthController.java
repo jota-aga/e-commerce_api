@@ -34,9 +34,9 @@ public class AuthController {
 	}
 	
 	@GetMapping("/login")
-	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest){
+	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest login){
 		
-		LoginResponse loginResponse = userService.doLogin(loginRequest); 					 
+		LoginResponse loginResponse = userService.doLogin(login); 					 
 		
 		return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
 	}

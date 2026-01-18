@@ -11,6 +11,7 @@ import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.dto.product.ProductResponse;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.mapper.ProductMapper;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
@@ -31,10 +32,13 @@ public class ProductService {
 		productRepository.save(product);
 	}
 	
-	public void createProduct(@Valid ProductRequest productRequest) {
+	public void createProduct(ProductRequest productRequest) {
 		Category category = findCategoryById(productRequest.categoryId());
+		
 		Product product = new Product(productRequest.name(), productRequest.description(), 
 									  productRequest.quantity(), productRequest.price(), category);
+		
+		validateNameOfProduct(productRequest, product);
 		
 		saveProduct(product);
 		
@@ -42,6 +46,8 @@ public class ProductService {
 	
 	public void editProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
+		
+		validateNameOfProduct(productRequest, product);
 		
 		product.setName(productRequest.name());
 		product.setDescricao(productRequest.description());
@@ -101,5 +107,20 @@ public class ProductService {
 		Category category = optionalCategory.orElseThrow(() -> new RuntimeException("Name of Category not found"));
 		
 		return category;
+	}
+	
+	private void validateNameOfProduct(ProductRequest productRequest, Product product) {
+		Optional<Product> optionalProduct = productRepository.findByName(productRequest.name());
+		
+		if(optionalProduct.isPresent()) {
+			Product repeatedProduct = optionalProduct.get();
+			
+			if(product.getId() == null) {
+				throw new AlreadyExistsException("Product's name");
+			}
+			else if(!product.getId().equals(repeatedProduct.getId())){
+				throw new AlreadyExistsException("Product's name");
+			}
+		}
 	}
 }

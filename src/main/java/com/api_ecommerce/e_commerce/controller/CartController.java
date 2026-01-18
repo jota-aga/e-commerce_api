@@ -1,10 +1,5 @@
 package com.api_ecommerce.e_commerce.controller;
 
-import java.util.List;
-
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart.CartAdminResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
-import com.api_ecommerce.e_commerce.entity.CartItem;
-import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.mapper.CartMapper;
 import com.api_ecommerce.e_commerce.service.CartService;
-import com.api_ecommerce.e_commerce.service.UserService;
 
 @RestController
 @RequestMapping("/cart")

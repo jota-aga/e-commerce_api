@@ -29,8 +29,8 @@ public class CartItemController {
 	
 	@PostMapping("/{cartId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest cartItemDTO, @PathVariable Long cartId){
-		cartItemService.createCartItem(cartItemDTO, cartId);
+	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest cartItemRequest, @PathVariable Long cartId){
+		cartItemService.createCartItem(cartItemRequest, cartId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -48,10 +48,10 @@ public class CartItemController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<?> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemDTO){
+	public ResponseEntity<?> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemRequest){
 		Long adminUserId = tokenService.getCurrentUserId();
 		
-		cartItemService.editCartItem(id, cartItemDTO, adminUserId);
+		cartItemService.editCartItem(id, cartItemRequest, adminUserId);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

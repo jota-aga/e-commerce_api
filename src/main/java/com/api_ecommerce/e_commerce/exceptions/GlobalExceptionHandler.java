@@ -27,5 +27,20 @@ public class GlobalExceptionHandler {
 		});
 		
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    } 
+    }
+	
+	@ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<String> handleAlreadyExists(AlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+	
+	@ExceptionHandler(UsernameOrPasswordIncorrectException.class)
+    public ResponseEntity<String> handleUsernameOrPasswordIncorrect(UsernameOrPasswordIncorrectException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+	
+	@ExceptionHandler(NotAuthorizedException.class)
+    public ResponseEntity<String> handleNotAuthorized(NotAuthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
 }

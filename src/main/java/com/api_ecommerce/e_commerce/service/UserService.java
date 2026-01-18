@@ -14,10 +14,10 @@ import com.api_ecommerce.e_commerce.dto.user.RegisterRequest;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.RoleNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.UsernameOrPasswordIncorrectException;
-import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 
@@ -25,9 +25,6 @@ import com.api_ecommerce.e_commerce.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private CartRepository cartRepository;
 	
 	@Autowired
 	private TokenService tokenService;
@@ -44,6 +41,8 @@ public class UserService {
 	}
 	
 	public void createUser(RegisterRequest register) {
+		validateRepeatedUsername(register);
+		
 		String encryptedPassword = passwordEncoder.encode(register.password());
 		
 		Role role = findRoleByName(Role.Value.CLIENT.name());
@@ -85,5 +84,13 @@ public class UserService {
 		Role role = optionalRole.orElseThrow(() -> new RoleNotFoundException());
 		
 		return role;
+	}
+	
+	private void validateRepeatedUsername(RegisterRequest register) {
+		Optional<User> optionalUser = userRepository.findByLogin(register.username());
+		
+		if(optionalUser.isPresent()) {
+			throw new AlreadyExistsException("Username");
+		}
 	}
 }

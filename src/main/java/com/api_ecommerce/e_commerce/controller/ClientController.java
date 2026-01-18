@@ -54,7 +54,7 @@ public class ClientController {
 	TokenService tokenService;
 	
 	@GetMapping("/order")
-	public ResponseEntity<List<OrderClientResponse>> getAllOrderClient(JwtAuthenticationToken token){
+	public ResponseEntity<List<OrderClientResponse>> getAllOrderClient(){
 		Long userId = tokenService.getCurrentUserId();
 		
 		List<Order> orders = orderService.findOrdersByUserId(userId);
@@ -65,7 +65,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<CartClientResponse> getCartClient(JwtAuthenticationToken token){
+	public ResponseEntity<CartClientResponse> getCartClient(){
 		Long userId = tokenService.getCurrentUserId();
 		
 		Cart cart = cartService.findCartByUserId(userId);
@@ -76,7 +76,7 @@ public class ClientController {
 	}
 	
 	@PostMapping("/cart/item")
-	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemRequest request, JwtAuthenticationToken token){
+	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemRequest request){
 		Long userId = tokenService.getCurrentUserId();
 		
 		Cart cart = cartService.findCartByUserId(userId);
@@ -87,7 +87,7 @@ public class ClientController {
 	}
 	
 	@PutMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request, JwtAuthenticationToken token){
+	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){
 		Long userId = tokenService.getCurrentUserId();
 		
 		cartItemService.editCartItem(cartItemId, request, userId);
@@ -96,7 +96,7 @@ public class ClientController {
 	}
 	
 	@DeleteMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> deleteCartItemCliente(@PathVariable Long cartItemId, JwtAuthenticationToken token){
+	public ResponseEntity<?> deleteCartItemCliente(@PathVariable Long cartItemId){
 		Long userId = tokenService.getCurrentUserId();
 		
 		cartItemService.deleteCartItem(cartItemId, userId);
@@ -105,7 +105,7 @@ public class ClientController {
 	}
 	
 	@PostMapping("/checkout")
-	public ResponseEntity<?> checkoutCart(JwtAuthenticationToken token){
+	public ResponseEntity<?> checkoutCart(){
 		Long userId = tokenService.getCurrentUserId();
 		
 		cartService.checkout(userId);

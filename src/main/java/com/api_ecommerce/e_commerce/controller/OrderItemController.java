@@ -31,7 +31,7 @@ public class OrderItemController {
 	
 	@PostMapping("/{orderId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest, @PathVariable Long orderId){
+	public ResponseEntity<?> createOrderItem(@Valid @RequestBody OrderItemRequest orderItemRequest, @PathVariable Long orderId){
 		orderItemService.createOrderItem(orderItemRequest, orderId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -39,7 +39,7 @@ public class OrderItemController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> deleteOrderItem(@PathVariable Long id){
+	public ResponseEntity<?> deleteOrderItem(@PathVariable Long id){
 		orderItemService.deleteOrderItem(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
@@ -47,7 +47,7 @@ public class OrderItemController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editOrderItem(@PathVariable Long id, @Valid @RequestBody OrderItemRequest orderItemRequest){
+	public ResponseEntity<?> editOrderItem(@PathVariable Long id, @Valid @RequestBody OrderItemRequest orderItemRequest){
 		orderItemService.editOrderItem(id, orderItemRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();

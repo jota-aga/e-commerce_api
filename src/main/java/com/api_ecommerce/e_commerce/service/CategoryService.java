@@ -40,10 +40,10 @@ public class CategoryService {
 		return category.orElseThrow(() -> new RuntimeException("Category not found"));
 	}
 	
-	public List<CategoryDTO> findAllCategory() {
+	public List<Category> findAllCategory() {
 		List<Category> categorys = categoryRepository.findAll();
 		
-		return CategoryMapper.toListDTO(categorys);
+		return categorys;
 				
 				
 	}

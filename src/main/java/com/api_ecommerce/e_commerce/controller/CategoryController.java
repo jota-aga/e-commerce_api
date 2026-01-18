@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
+import com.api_ecommerce.e_commerce.entity.Category;
+import com.api_ecommerce.e_commerce.mapper.CategoryMapper;
 import com.api_ecommerce.e_commerce.service.CategoryService;
 
 import jakarta.validation.Valid;
@@ -30,7 +32,7 @@ public class CategoryController {
 	
 	@PostMapping
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<?> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO){
 		categoryService.createCategory(categoryDTO);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -38,14 +40,16 @@ public class CategoryController {
 	
 	@GetMapping
 	public ResponseEntity<List<CategoryDTO>> findAllCategory(){
-		List<CategoryDTO> categorysResponse = categoryService.findAllCategory();
+		List<Category> categorys = categoryService.findAllCategory();
+		
+		List<CategoryDTO> categorysResponse = CategoryMapper.toListDTO(categorys);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(categorysResponse);
 	}
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> editCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryRequest){
+	public ResponseEntity<?> editCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryRequest){
 		categoryService.editCategory(id, categoryRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
@@ -53,7 +57,7 @@ public class CategoryController {
 	
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<String> deleteCategory(@PathVariable Long id){
+	public ResponseEntity<?> deleteCategory(@PathVariable Long id){
 		categoryService.deleteCategory(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();

@@ -33,14 +33,16 @@ public class CartController {
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
-		CartAdminResponse cartAdminResponse = cartService.findCartById(id);
+		Cart cart = cartService.findCartById(id);
+		
+		CartAdminResponse cartAdminResponse = CartMapper.toAdminDTO(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}
 	
 	@PostMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<List<CartItem>> checkoutCart(@PathVariable("id") Long userId){
+	public ResponseEntity<?> checkoutCart(@PathVariable("id") Long userId){
 		
 		cartService.checkout(userId);
 		

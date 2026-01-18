@@ -32,14 +32,12 @@ public class CartService {
 		cartRepository.save(cart);
 	}
 	
-	public CartAdminResponse findCartById(Long id) {
+	public Cart findCartById(Long id) {
 		Optional<Cart> optionalCart = cartRepository.findById(id);
 		
 		Cart cart = optionalCart.orElseThrow(() -> new IdNotFoundException("Cart"));
-		
-		CartAdminResponse cartAdminResponse = CartMapper.toAdminDTO(cart);
-		
-		return cartAdminResponse;
+				
+		return cart;
 	}
 	
 	public void checkout(Long userId) {

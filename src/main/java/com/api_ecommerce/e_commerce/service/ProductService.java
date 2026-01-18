@@ -61,28 +61,24 @@ public class ProductService {
 		return product.orElseThrow(() -> new IdNotFoundException("Product"));
 	}
 	
-	public List<ProductResponse> findAllProducts(){
+	public List<Product> findAllProducts(){
 		List<Product> products = productRepository.findAll();
 		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
-		return productsResponse;
+		return products;
 	}
 	
-	public List<ProductResponse> findAllByName(String name){
+	public List<Product> findAllByName(String name){
 		List<Product> products = productRepository.findAllByNameIgnoreCase(name);
 		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
-		return productsResponse;
+		return products;
 	}
 	
-	public List<ProductResponse> findAllByCategory(String categoryName){
+	public List<Product> findAllByCategory(String categoryName){
 		Category category = findCategoryByName(categoryName);
 		
 		List<Product> products = productRepository.findAllByCategoryId(category.getId());
-		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
-		
-		return productsResponse;
+				
+		return products;
 	}
 	
 	public void deleteProduct(Long id){

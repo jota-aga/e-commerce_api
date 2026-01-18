@@ -46,22 +46,27 @@ public class ProductController {
 	
 	@GetMapping()
 	public ResponseEntity<List<ProductResponse>> findAllProducts(){
-		List<ProductResponse> productsResponse = productService.findAllProducts();
+		List<Product> products = productService.findAllProducts();
+		
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-name")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByName(@RequestParam("name") String name){
-		
-		List<ProductResponse> productsResponse = productService.findAllByName(name);
+		List<Product> products = productService.findAllByName(name);
+				
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
 	@GetMapping("/search-category")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByCategory(@RequestParam String categoryName){
-		List<ProductResponse> productsResponse = productService.findAllByCategory(categoryName);
+		List<Product> products = productService.findAllByCategory(categoryName);
+		
+		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}

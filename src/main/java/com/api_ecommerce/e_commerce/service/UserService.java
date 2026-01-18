@@ -53,7 +53,7 @@ public class UserService {
 	}
 	
 	public LoginResponse doLogin(LoginRequest login) {
-		User user = findUserByLogin(login.username());
+		User user = findUserByUsername(login.username());
 				
 		isLoginCorrect(login, user, passwordEncoder);
 		
@@ -68,8 +68,8 @@ public class UserService {
 		return user.orElseThrow(() -> new IdNotFoundException("User"));
 	}
 	
-	public User findUserByLogin(String login) {
-		Optional<User> user = userRepository.findByLogin(login);
+	public User findUserByUsername(String username) {
+		Optional<User> user = userRepository.findByUsername(username);
 		
 		return user.orElseThrow(() -> new UsernameOrPasswordIncorrectException());
 	}
@@ -87,7 +87,7 @@ public class UserService {
 	}
 	
 	private void validateRepeatedUsername(RegisterRequest register) {
-		Optional<User> optionalUser = userRepository.findByLogin(register.username());
+		Optional<User> optionalUser = userRepository.findByUsername(register.username());
 		
 		if(optionalUser.isPresent()) {
 			throw new AlreadyExistsException("Username");

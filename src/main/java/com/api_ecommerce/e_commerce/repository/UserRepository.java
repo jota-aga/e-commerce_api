@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.api_ecommerce.e_commerce.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByLogin(String login);
+	Optional<User> findByUsername(String username);
 
 }

@@ -24,7 +24,7 @@ public class User {
 	private Long id;
 	
 	@Column
-	private String login;
+	private String username;
 	
 	@Column
 	private String password;
@@ -45,9 +45,9 @@ public class User {
 	}
 	
 	
-	public User(String login, String password, Set<Role> roles) {
+	public User(String username, String password, Set<Role> roles) {
 		super();
-		this.login = login;
+		this.username = username;
 		this.password = password;
 		this.roles = roles;
 	}
@@ -61,12 +61,12 @@ public class User {
 		this.id = id;
 	}
 
-	public String getLogin() {
-		return login;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setLogin(String login) {
-		this.login = login;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

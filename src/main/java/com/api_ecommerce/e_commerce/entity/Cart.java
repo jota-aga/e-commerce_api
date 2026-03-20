@@ -32,4 +32,15 @@ public class Cart {
 	
 	@OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, orphanRemoval = true)
 	private List<CartItem> cartItems;
+
+	public Cart(User user, List<CartItem> cartItems) {
+		super();
+		this.user = user;
+		this.cartItems = cartItems;
+	}
+
+	public Cart(User user) {
+		super();
+		this.user = user;
+	}
 }

@@ -39,4 +39,17 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> ordersItem;
+
+	public Order(User user, List<OrderItem> ordersItem) {
+		super();
+		this.user = user;
+		this.ordersItem = ordersItem;
+	}
+
+	public Order(User user) {
+		super();
+		this.user = user;
+	}
+	
+	
 }

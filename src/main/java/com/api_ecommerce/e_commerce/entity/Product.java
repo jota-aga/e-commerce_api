@@ -47,4 +47,15 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name="category_id")
 	private Category category;
+
+	public Product(String name, String descricao, int quantity, BigDecimal price, Category category) {
+		super();
+		this.name = name;
+		this.descricao = descricao;
+		this.price = price;
+		this.quantity = quantity;
+		this.category = category;
+	}
+	
+	
 }

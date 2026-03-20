@@ -44,7 +44,13 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name="role_id")
 			)
 	private Set<Role> roles;
+
+	public User(String username, String password, Set<Role> roles) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.roles = roles;
+	}
 	
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Cart cart;
+	
 }

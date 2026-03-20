@@ -92,10 +92,7 @@ public class CartItemService {
 		
 		if(optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			
-			if(user.getRoles().contains(Role.Value.ADMIN) || user.getCart().getId() == cartItem.getCart().getId()) {
-				return;
-			}
+		
 		}	
 			throw new NotAuthorizedException();
 		

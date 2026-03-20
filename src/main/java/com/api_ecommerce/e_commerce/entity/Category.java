@@ -30,4 +30,11 @@ public class Category {
 	
 	@OneToMany(mappedBy="category", cascade = CascadeType.ALL, orphanRemoval = false)
 	private List<Product> products;
+
+	public Category(String name) {
+		super();
+		this.name = name;
+	}
+	
+	
 }

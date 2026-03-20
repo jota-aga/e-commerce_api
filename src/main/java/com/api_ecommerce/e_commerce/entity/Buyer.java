@@ -1,14 +1,13 @@
 package com.api_ecommerce.e_commerce.entity;
 
-import java.util.List;
+import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +18,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Category {
+public class Buyer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column
+	@NotNull
 	private String name;
 	
-	@OneToMany(mappedBy="category", cascade = CascadeType.ALL, orphanRemoval = false)
-	private List<Product> products;
+	@NotNull
+	@Past
+	private LocalDate birthday;
+	
+	private String adress;
+	
 }

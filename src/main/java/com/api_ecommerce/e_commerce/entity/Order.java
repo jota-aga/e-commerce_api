@@ -14,9 +14,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="orders")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Order {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,53 +39,4 @@ public class Order {
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> ordersItem;
-
-	public Order(User user, List<OrderItem> ordersItem) {
-		super();
-		this.user = user;
-		this.createdAt = LocalDate.now();
-		this.ordersItem = ordersItem;
-	}
-	
-	public Order(User user) {
-		super();
-		this.user = user;
-		this.createdAt = LocalDate.now();
-	}
-
-	public Order() {
-		this.createdAt = LocalDate.now();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public LocalDate getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(LocalDate createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public List<OrderItem> getOrdersItem() {
-		return ordersItem;
-	}
-
-	public void setOrdersItem(List<OrderItem> ordersItem) {
-		this.ordersItem = ordersItem;
-	}
 }

@@ -11,10 +11,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,38 +32,4 @@ public class Cart {
 	
 	@OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, orphanRemoval = true)
 	private List<CartItem> cartItems;
-	
-
-	public Cart(User user) {
-		super();
-		this.user = user;
-	}
-
-	public Cart() {
-		super();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<CartItem> getCartItems() {
-		return cartItems;
-	}
-
-	public void setCartItems(List<CartItem> cartItems) {
-		this.cartItems = cartItems;
-	}
 }

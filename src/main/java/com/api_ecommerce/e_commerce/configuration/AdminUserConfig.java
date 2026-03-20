@@ -33,7 +33,7 @@ public class AdminUserConfig implements CommandLineRunner {
 		String username = "ecommerce_admin";
 		String password = "joao789";
 		
-		Optional<User> adminRepeat =  userRepository.findByLogin(username);
+		Optional<User> adminRepeat =  userRepository.findByUsername(username);
 		
 		adminRepeat.ifPresentOrElse(
 									u -> System.out.println(),

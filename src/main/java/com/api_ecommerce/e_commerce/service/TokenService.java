@@ -38,10 +38,7 @@ public class TokenService {
 	}
 	
 	public String generateToken(User user) {
-		var scopes = user.getRoles()
-						.stream()
-						.map(Role::getName)
-						.collect(Collectors.joining(" "));
+		var scopes = user.getRole();
 		var claims = JwtClaimsSet.builder()
 				 .issuer("mybackend")
 				 .subject(user.getId().toString())

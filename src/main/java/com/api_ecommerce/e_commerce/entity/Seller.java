@@ -33,4 +33,11 @@ public class Seller {
 	
 	@OneToOne
 	private User user;
+
+	public Seller(@NotEmpty String name, @CNPJ @NotNull String cnpj, User user) {
+		super();
+		this.name = name;
+		this.cnpj = cnpj;
+		this.user = user;
+	}
 }

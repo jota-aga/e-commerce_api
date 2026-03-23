@@ -43,13 +43,13 @@ public class User {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name="role_id")
 			)
-	private Set<Role> roles;
+	private Role role;
 
-	public User(String username, String password, Set<Role> roles) {
+	public User(String username, String password, Role role) {
 		super();
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
+		this.role = role;
 	}
 	
 	

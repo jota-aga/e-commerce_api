@@ -45,7 +45,8 @@ public class Role {
 	
 	public enum Value{
 		ADMIN(1L),
-		CLIENT(2L);
+		SELLER(2L),
+		BUYER(3L);
 		
 		Long id;
 		

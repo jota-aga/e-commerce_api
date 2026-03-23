@@ -5,12 +5,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
 
 @Configuration
+@Order(0)
 public class RoleConfig implements CommandLineRunner {
 	@Autowired
 	RoleRepository roleRepository;
@@ -24,9 +26,11 @@ public class RoleConfig implements CommandLineRunner {
 								   u -> System.out.println("The roles are already in db"),
 								   () ->{
 									   		Role roleAdmin = new Role(Role.Value.ADMIN.name());
-									   		Role roleClient = new Role(Role.Value.CLIENT.name());
+									   		Role roleSeller = new Role(Role.Value.SELLER.name());
+									   		Role roleBuyer = new Role(Role.Value.BUYER.name());
 									   		roleRepository.save(roleAdmin);
-									   		roleRepository.save(roleClient);
+									   		roleRepository.save(roleSeller);
+									   		roleRepository.save(roleBuyer);
 								   }
 								 );
 		

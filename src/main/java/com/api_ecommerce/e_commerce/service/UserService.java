@@ -45,7 +45,7 @@ public class UserService {
 		
 		String encryptedPassword = passwordEncoder.encode(register.password());
 		
-		Role role = findRoleByName(Role.Value.CLIENT.name());
+		Role role = findRoleByName(Role.Value.SELLER.name());
 		
 		User user = new User(register.username(), encryptedPassword, Set.of(role));
 		

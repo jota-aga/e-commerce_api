@@ -33,7 +33,7 @@ public class CartMapper {
 		   .map(cartItem -> cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())))
 		   .reduce(BigDecimal.ZERO, BigDecimal::add);
 		
-		CartAdminResponse dto = new CartAdminResponse(cart.getUser(), cartItemDTO, totalValue);
+		CartAdminResponse dto = new CartAdminResponse(cart.getBuyer(), cartItemDTO, totalValue);
 		
 		return dto;
 	}

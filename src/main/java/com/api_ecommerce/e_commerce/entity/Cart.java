@@ -33,9 +33,9 @@ public class Cart {
 	@OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, orphanRemoval = true)
 	private List<CartItem> cartItems;
 
-	public Cart(User user, List<CartItem> cartItems) {
+	public Cart(Buyer buyer, List<CartItem> cartItems) {
 		super();
-		this.user = user;
+		this.buyer = buyer;
 		this.cartItems = cartItems;
 	}
 

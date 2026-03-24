@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemResponse;
-import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.entity.Buyer;
 
-public record CartAdminResponse(User user, List<CartItemResponse> cartItems, BigDecimal totalValue) {}
+public record CartAdminResponse(Buyer buyer, List<CartItemResponse> cartItems, BigDecimal totalValue) {}

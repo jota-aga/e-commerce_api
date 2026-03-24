@@ -1,7 +1,6 @@
 package com.api_ecommerce.e_commerce.service;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
-import com.api_ecommerce.e_commerce.dto.user.RegisterRequest;
 import com.api_ecommerce.e_commerce.dto.user.RegisterSellerRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
+import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.Seller;
 import com.api_ecommerce.e_commerce.entity.User;
@@ -23,12 +22,13 @@ import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.RoleNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.UsernameOrPasswordIncorrectException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
+import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
 import com.api_ecommerce.e_commerce.repository.SellerRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Service
-public class UserService {
+public class AuthService {
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -145,7 +145,7 @@ public class UserService {
 	}
 	
 	private User createUser(String username, String password, String roleName) {
-		Role role = roleRepository.findRoleByName(roleName).orElseThrow(() -> new RoleNotFoundException());
+		Role role = findRoleByName(roleName);
 		User user = new User(username, password, role);
 		validateRepeatedUsername(user.getUsername());
 		user = userRepository.save(user);

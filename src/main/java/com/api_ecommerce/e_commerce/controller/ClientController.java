@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +21,12 @@ import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.mapper.CartMapper;
 import com.api_ecommerce.e_commerce.mapper.OrderMapper;
+import com.api_ecommerce.e_commerce.service.AuthService;
 import com.api_ecommerce.e_commerce.service.CartItemService;
 import com.api_ecommerce.e_commerce.service.CartService;
 import com.api_ecommerce.e_commerce.service.OrderService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 import com.api_ecommerce.e_commerce.service.TokenService;
-import com.api_ecommerce.e_commerce.service.UserService;
 
 import jakarta.validation.Valid;
 
@@ -36,7 +35,7 @@ import jakarta.validation.Valid;
 public class ClientController {
 	
 	@Autowired
-	UserService userService;
+	AuthService authService;
 	
 	@Autowired
 	OrderService orderService;

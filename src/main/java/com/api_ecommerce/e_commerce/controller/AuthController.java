@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterRequest;
-import com.api_ecommerce.e_commerce.service.UserService;
+import com.api_ecommerce.e_commerce.service.AuthService;
 
 import jakarta.validation.Valid;
 
@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 public class AuthController {
 	
 	@Autowired
-	private UserService userService;
+	private AuthService authService;
 	
 	
 	
@@ -36,7 +36,7 @@ public class AuthController {
 	@GetMapping("/login")
 	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest login){
 		
-		LoginResponse loginResponse = userService.doLogin(login); 					 
+		LoginResponse loginResponse = authService.doLogin(login); 					 
 		
 		return ResponseEntity.status(HttpStatus.OK).body(loginResponse);
 	}

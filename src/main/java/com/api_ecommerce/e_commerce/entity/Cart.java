@@ -27,8 +27,8 @@ public class Cart {
 	private Long id;
 	
 	@OneToOne
-	@JoinColumn(name="user_id", nullable = false)
-	private User user;
+	@JoinColumn(name="buyer_id", nullable = false)
+	private Buyer buyer;
 	
 	@OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, orphanRemoval = true)
 	private List<CartItem> cartItems;
@@ -39,8 +39,8 @@ public class Cart {
 		this.cartItems = cartItems;
 	}
 
-	public Cart(User user) {
+	public Cart(Buyer buyer) {
 		super();
-		this.user = user;
+		this.buyer = buyer;
 	}
 }

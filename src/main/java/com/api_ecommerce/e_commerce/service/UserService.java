@@ -46,18 +46,26 @@ public class UserService {
 	
 	@Autowired
 	private SellerRepository sellerRepository;
+
+	@Autowired
+	private CartRepository cartRepository;
 	
 	public void registerBuyer(RegisterBuyerRequest dto) {
 		User user = createUser(dto.username(), dto.password(), Role.Value.BUYER.name());
+		validateRepeatedUsername(dto.username());
 		
 		Buyer buyer = new Buyer(dto.name(), dto.birthday(), dto.cpf(), dto.adress(), user);
 		validateCpfRepeated(buyer);
-		buyerRepository.save(buyer);
+		buyer = buyerRepository.save(buyer);
+
+		Cart cart = new Cart(buyer);
+		cartRepository.save(cart);
 	}
 	
 	@Transactional
 	public void registerSeller(RegisterSellerRequest dto) {
 		User user = createUser(dto.username(), dto.password(), Role.Value.SELLER.name());
+		validateRepeatedUsername(dto.username());
 		
 		Seller seller = new Seller(dto.name(), dto.cnpj(), user);
 		validateCnpjRepeated(seller);

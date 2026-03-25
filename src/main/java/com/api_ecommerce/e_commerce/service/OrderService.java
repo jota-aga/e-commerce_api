@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
+import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.mapper.OrderMapper;
+import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 
@@ -22,28 +22,24 @@ public class OrderService {
 	OrderRepository orderRepository;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private BuyerRepository buyerRepository;
 	
-	public void saveOrder(Order order) {
-		
-		orderRepository.save(order);
-	}
-	
-	public List<Order> findOrdersByUserId(Long id) {
-		List<Order> orders = orderRepository.findAllOrderByUserId(id);
+	public List<Order> findOrdersByBuyerId(Long id) {
+		List<Order> orders = orderRepository.findAllOrderByBuyerId(id);
 				
 		return orders;
+	}
+	
+	public List<Order> findOrdersByUserAuthenticated(){
+		Buyer buyer = findBuyerByUserAuthenticated();
+		
+		return findOrdersByBuyerId(buyer.getId());
 	}
 	
 	public Order findOrderById(Long id) {
 		Optional<Order> order = orderRepository.findById(id);
 	
 		return order.orElseThrow(() -> new IdNotFoundException("Order"));
-	}
-	
-	public void deleteOrderById(Long id) {
-		Order order = findOrderById(id);
-		orderRepository.delete(order);	
 	}
 	
 	public List<Order> findOrdersByDate(LocalDate date){
@@ -57,20 +53,12 @@ public class OrderService {
 				
 		return orders;
 	}
-
-	public void createOrder(Long userId) {
-		User user = findUserById(userId);
-		
-		Order order = new Order(user);
-		
-		saveOrder(order);
-	}
 	
-	private User findUserById(Long userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	private Buyer findBuyerByUserAuthenticated() {
+		User user = TokenService.getCurrentUser();
 		
-		User user = optionalUser.orElseThrow(() -> new IdNotFoundException("User"));
+		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		
-		return user;
+		return optionalBuyer.orElseThrow(() -> new IdNotFoundException("User"));
 	}
 }

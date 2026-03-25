@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.api_ecommerce.e_commerce.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long>{
-	List<Order> findAllOrderByUserId(Long id);
+	List<Order> findAllOrderByBuyerId(Long buyerID);
 	List<Order> findAllByCreatedAt(LocalDate date);
 }

@@ -31,8 +31,8 @@ public class Order {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
+	@JoinColumn(name="buyer_id")
+	private Buyer buyer;
 	
 	@Column
 	private LocalDate createdAt;
@@ -40,15 +40,15 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> ordersItem;
 
-	public Order(User user, List<OrderItem> ordersItem) {
+	public Order(Buyer buyer, List<OrderItem> ordersItem) {
 		super();
-		this.user = user;
+		this.buyer = buyer;
 		this.ordersItem = ordersItem;
 	}
 
-	public Order(User user) {
+	public Order(Buyer buyer) {
 		super();
-		this.user = user;
+		this.buyer = buyer;
 	}
 	
 	

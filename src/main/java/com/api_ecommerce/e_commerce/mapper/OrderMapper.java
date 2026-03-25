@@ -16,7 +16,7 @@ public class OrderMapper {
 		BigDecimal totalValue = order.getOrdersItem().stream()
 													 .map(orderItem -> orderItem.getProductPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
 													 .reduce(BigDecimal.ZERO, BigDecimal::add);
-		OrderAdminResponse dto = new OrderAdminResponse(order.getUser(), orderItemDTO, order.getCreatedAt(), totalValue);
+		OrderAdminResponse dto = new OrderAdminResponse(order.getBuyer(), orderItemDTO, order.getCreatedAt(), totalValue);
 		
 		return dto;
 	}

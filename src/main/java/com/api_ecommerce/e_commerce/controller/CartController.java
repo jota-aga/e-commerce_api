@@ -35,7 +35,6 @@ public class CartController {
 	@PostMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> checkoutCart(@PathVariable("id") Long userId){
-		
 		cartService.checkout(userId);
 		
 		

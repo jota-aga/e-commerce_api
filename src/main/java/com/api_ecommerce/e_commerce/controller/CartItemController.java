@@ -24,9 +24,6 @@ public class CartItemController {
 	@Autowired
 	private CartItemService cartItemService;
 	
-	@Autowired
-	private TokenService tokenService;
-	
 	@PostMapping("/{cartId}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest cartItemRequest, @PathVariable Long cartId){
@@ -38,9 +35,8 @@ public class CartItemController {
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> deleteCartItem(@PathVariable Long id){
-		Long adminUserId = tokenService.getCurrentUserId();
 		
-		cartItemService.deleteCartItem(id, adminUserId);
+		cartItemService.deleteCartItem(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		
 		
@@ -48,10 +44,8 @@ public class CartItemController {
 	
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<?> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemRequest){
-		Long adminUserId = tokenService.getCurrentUserId();
-		
-		cartItemService.editCartItem(id, cartItemRequest, adminUserId);
+	public ResponseEntity<?> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemRequest){		
+		cartItemService.editCartItem(id, cartItemRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

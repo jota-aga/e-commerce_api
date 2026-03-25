@@ -53,10 +53,8 @@ public class ClientController {
 	TokenService tokenService;
 	
 	@GetMapping("/order")
-	public ResponseEntity<List<OrderClientResponse>> getAllOrderClient(){
-		Long userId = tokenService.getCurrentUserId();
-		
-		List<Order> orders = orderService.findOrdersByUserId(userId);
+	public ResponseEntity<List<OrderClientResponse>> getAllOrderByUserAuthenticated(){		
+		List<Order> orders = orderService.findOrdersByUserAuthenticated();
 		
 		List<OrderClientResponse> ordersResponse = OrderMapper.toListClientDTO(orders);
 		
@@ -64,10 +62,8 @@ public class ClientController {
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<CartClientResponse> getCartClient(){
-		Long userId = tokenService.getCurrentUserId();
-		
-		Cart cart = cartService.findCartByUserId(userId);
+	public ResponseEntity<CartClientResponse> getBuyerCart(){		
+		Cart cart = cartService.getCartOfUserAuthenticated();
 		
 		CartClientResponse cartClientResponse = CartMapper.toClientDTO(cart);
 		
@@ -76,38 +72,29 @@ public class ClientController {
 	
 	@PostMapping("/cart/item")
 	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemRequest request){
-		Long userId = tokenService.getCurrentUserId();
-		
-		Cart cart = cartService.findCartByUserId(userId);
-		
-		cartItemService.createCartItem(request, cart.getId());
+				
+		cartItemService.createCartItemForUserAuthenticated(request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PutMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> editCartItemCliente(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){
-		Long userId = tokenService.getCurrentUserId();
-		
-		cartItemService.editCartItem(cartItemId, request, userId);
+	public ResponseEntity<?> editCartItem(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){		
+		cartItemService.editCartItem(cartItemId, request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@DeleteMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> deleteCartItemCliente(@PathVariable Long cartItemId){
-		Long userId = tokenService.getCurrentUserId();
-		
-		cartItemService.deleteCartItem(cartItemId, userId);
+	public ResponseEntity<?> deleteCartItemCliente(@PathVariable Long cartItemId){		
+		cartItemService.deleteCartItem(cartItemId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@PostMapping("/checkout")
-	public ResponseEntity<?> checkoutCart(){
-		Long userId = tokenService.getCurrentUserId();
-		
-		cartService.checkout(userId);
+	public ResponseEntity<?> checkoutCart(){		
+		cartService.checkoutForUserAuthenticated();
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		

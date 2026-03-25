@@ -5,17 +5,18 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.api_ecommerce.e_commerce.dto.cart.CartAdminResponse;
+import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.mapper.CartMapper;
+import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
+import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
-import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Service
 public class CartService {
@@ -26,11 +27,7 @@ public class CartService {
 	private OrderRepository orderRepository;
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	public void saveCart(Cart cart) {
-		cartRepository.save(cart);
-	}
+	private BuyerRepository buyerRepository;
 	
 	public Cart findCartById(Long id) {
 		Optional<Cart> optionalCart = cartRepository.findById(id);
@@ -40,44 +37,63 @@ public class CartService {
 		return cart;
 	}
 	
-	public void checkout(Long userId) {
-		User user = findUserById(userId);
+	public Cart findCartByBuyerId(Long buyerId) {
+		Optional<Cart> cart = cartRepository.findByBuyerId(buyerId);
 		
-		Cart cart = findCartByUserId(userId);
+		return cart.orElseThrow(() -> new IdNotFoundException("Cart By user id"));
+	}
+	
+	public Cart getCartOfUserAuthenticated() {
+		Buyer buyer = findBuyerByUserAuthenticated();
 		
-		createOrderByCheckout(user, cart);
+		Optional<Cart> cart = cartRepository.findByBuyerId(buyer.getId());
+		
+		return cart.orElseThrow(() -> new IdNotFoundException("Cart By user id"));
+	}
+	
+	@Transactional
+	public void checkoutForUserAuthenticated() {
+		Buyer buyer = findBuyerByUserAuthenticated();
+		
+		Cart cart = findCartByBuyerId(buyer.getId());
+		
+		createOrderByCheckout(buyer, cart);
 		
 		cart.getCartItems().clear();
 		
 		cartRepository.save(cart);
 	}
-
-	public void deleteCart(Cart cart) {
-		cartRepository.delete(cart);
+	
+	@Transactional
+	public void checkout(Long buyerId) {
+		Buyer buyer = buyerRepository.findById(buyerId)
+					  .orElseThrow(() -> new IdNotFoundException("Buyer"));
+		
+		Cart cart = findCartByBuyerId(buyer.getId());
+		
+		createOrderByCheckout(buyer, cart);
+		
+		cart.getCartItems().clear();
+		
+		cartRepository.save(cart);
 	}
 	
-	private void createOrderByCheckout(User user, Cart cart) {
+	@Transactional
+	private void createOrderByCheckout(Buyer buyer, Cart cart) {
 		List<OrderItem> orderItems = cart
-				.getCartItems().stream().map(cartItem -> new OrderItem(cartItem.getProduct().getName(),
-						cartItem.getProduct().getDescricao(), cartItem.getProduct().getPrice(), cartItem.getQuantity()))
+				.getCartItems().stream().map(cartItem -> OrderItemMapper.toEntity(cartItem))
 				.toList();
 
-		Order order = new Order(user, orderItems);
+		Order order = new Order(buyer, orderItems);
 		orderItems.forEach(orderItem -> orderItem.setOrder(order));
 		orderRepository.save(order);
 	}
 	
-	private User findUserById(Long userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	private Buyer findBuyerByUserAuthenticated() {
+		User user = TokenService.getCurrentUser();
 		
-		User user = optionalUser.orElseThrow(() -> new IdNotFoundException("User"));
+		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		
-		return user;
-	}
-	
-	public Cart findCartByUserId(Long userId) {
-		Optional<Cart> cart = cartRepository.findByUserId(userId);
-		
-		return cart.orElseThrow(() -> new IdNotFoundException("Cart By user id"));
+		return optionalBuyer.orElseThrow(() -> new IdNotFoundException("User"));
 	}
 }

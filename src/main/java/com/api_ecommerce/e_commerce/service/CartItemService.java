@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
+import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Product;
-import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
+import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
@@ -22,38 +23,24 @@ import com.api_ecommerce.e_commerce.repository.UserRepository;
 @Service
 public class CartItemService {
 	@Autowired
-	CartItemRepository cartItemRepository;
+	private CartItemRepository cartItemRepository;
 	
 	@Autowired
-	ProductService productService;
+	private CartRepository cartRepository;
 	
 	@Autowired
-	CartRepository cartRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
-	ProductRepository productRepository;
+	private BuyerRepository buyerRepository;
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	public List<CartItem> findCartItemsByCartId(Long id){
 		List<CartItem> cartItems = cartItemRepository.findAllByCartId(id);
 		
 		return cartItems;
-	}
-	
-	public void saveCartItem(CartItem cartItem) {
-		cartItemRepository.save(cartItem);
-	}
-	
-	public void createCartItem(CartItemRequest cartItemRequest, Long cartId) {
-		Product product = findProductById(cartItemRequest.productId());
-		
-		Cart cart = findCartById(cartId);
-		
-		CartItem cartItem = new CartItem(product, cartItemRequest.quantity(), cart);
-		
-		saveCartItem(cartItem);
 	}
 	
 	public CartItem findCartItemById(Long id) {
@@ -62,10 +49,10 @@ public class CartItemService {
 		return cartItem.orElseThrow(() -> new IdNotFoundException("Cart Item"));
 	}
 	
-	public void deleteCartItem(Long id, Long userId) {
+	public void deleteCartItem(Long id) {
 		CartItem cartItem = findCartItemById(id);
 		
-		validateCartItemId(cartItem, userId);
+		validateCartItemId(cartItem);
 		
 		cartItemRepository.delete(cartItem);
 	}
@@ -74,28 +61,42 @@ public class CartItemService {
 		cartItemRepository.deleteAll(cartItems);
 	}
 	
-	public void editCartItem(Long id, CartItemRequest cartItemDTO, Long userId) {
+	public void createCartItemForUserAuthenticated(CartItemRequest dto) {
+		Cart cart = findCartByUserAuthenticated();
+		Product product = findProductById(dto.productId());
+		
+		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
+		cartItemRepository.save(cartItem);
+	}
+	
+	public void createCartItem(CartItemRequest dto, Long cartId) {
+		Cart cart = cartRepository.findById(cartId)
+				    .orElseThrow(() -> new IdNotFoundException("Cart"));
+		
+		Product product = findProductById(dto.productId());
+		
+		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
+		cartItemRepository.save(cartItem);
+	}
+	
+	public void editCartItem(Long id, CartItemRequest cartItemDTO) {
 		CartItem cartItem = findCartItemById(id);
 		
-		validateCartItemId(cartItem, userId);
+		validateCartItemId(cartItem);
 		
 		Product product = findProductById(cartItemDTO.productId());
 		
 		cartItem.setProduct(product);
 		cartItem.setQuantity(cartItemDTO.quantity());
 		
-		saveCartItem(cartItem);
+		cartItemRepository.save(cartItem);
 	}
 	
-	private void validateCartItemId(CartItem cartItem, Long userId) {
-		Optional<User> optionalUser = userRepository.findById(userId);
+	private void validateCartItemId(CartItem cartItem) {
+		User user = TokenService.getCurrentUser();
+		Buyer buyer = cartItem.getCart().getBuyer();
 		
-		if(optionalUser.isPresent()) {
-			User user = optionalUser.get();
-		
-		}	
-			throw new NotAuthorizedException();
-		
+		if(!user.getId().equals(buyer.getUser().getId())) throw new NotAuthorizedException();	
 	}
 	
 	private Product findProductById(Long productId) {
@@ -106,8 +107,13 @@ public class CartItemService {
 		return product;
 	}
 	
-	private Cart findCartById(Long cartId) {
-		Optional<Cart> optionalCart = cartRepository.findById(cartId);
+	private Cart findCartByUserAuthenticated() {
+		User user = TokenService.getCurrentUser();
+		
+		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
+		Buyer buyer = optionalBuyer.orElseThrow(() -> new IdNotFoundException("User"));
+		
+		Optional<Cart> optionalCart = cartRepository.findByBuyerId(buyer.getId());
 		
 		Cart cart = optionalCart.orElseThrow(() -> new IdNotFoundException("Cart"));
 		

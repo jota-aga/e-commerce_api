@@ -6,16 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
-import com.api_ecommerce.e_commerce.dto.user.RegisterSellerRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
-import com.api_ecommerce.e_commerce.entity.Seller;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
@@ -24,7 +21,6 @@ import com.api_ecommerce.e_commerce.exceptions.UsernameOrPasswordIncorrectExcept
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
-import com.api_ecommerce.e_commerce.repository.SellerRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Service
@@ -43,9 +39,6 @@ public class AuthService {
 	
 	@Autowired
 	private BuyerRepository buyerRepository;
-	
-	@Autowired
-	private SellerRepository sellerRepository;
 
 	@Autowired
 	private CartRepository cartRepository;
@@ -60,16 +53,6 @@ public class AuthService {
 
 		Cart cart = new Cart(buyer);
 		cartRepository.save(cart);
-	}
-	
-	@Transactional
-	public void registerSeller(RegisterSellerRequest dto) {
-		User user = createUser(dto.username(), dto.password(), Role.Value.SELLER.name());
-		validateRepeatedUsername(dto.username());
-		
-		Seller seller = new Seller(dto.name(), dto.cnpj(), user);
-		validateCnpjRepeated(seller);
-		sellerRepository.save(seller);
 	}
 	
 	public LoginResponse doLogin(LoginRequest login) {
@@ -125,21 +108,6 @@ public class AuthService {
 				Buyer repeatedBuyer = optionalBuyer.get();
 				
 				if(!repeatedBuyer.getId().equals(buyer.getId())) throw new AlreadyExistsException("CPF");
-			}
-		}
-	}
-	
-	private void validateCnpjRepeated(Seller seller) {
-		Optional<Seller> optionalSeller = sellerRepository.findByCnpj(seller.getCnpj());
-		
-		if(optionalSeller.isPresent()) {
-			if(seller.getId() == null) throw new AlreadyExistsException("CNPJ");
-			
-			
-			else {
-				Seller repeatedSeller = optionalSeller.get();
-				
-				if(!repeatedSeller.getId().equals(seller.getId())) throw new AlreadyExistsException("CNPJ");
 			}
 		}
 	}

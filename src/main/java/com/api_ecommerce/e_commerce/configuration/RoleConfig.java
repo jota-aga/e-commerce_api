@@ -26,10 +26,8 @@ public class RoleConfig implements CommandLineRunner {
 								   u -> System.out.println("The roles are already in db"),
 								   () ->{
 									   		Role roleAdmin = new Role(Role.Value.ADMIN.name());
-									   		Role roleSeller = new Role(Role.Value.SELLER.name());
 									   		Role roleBuyer = new Role(Role.Value.BUYER.name());
 									   		roleRepository.save(roleAdmin);
-									   		roleRepository.save(roleSeller);
 									   		roleRepository.save(roleBuyer);
 								   }
 								 );

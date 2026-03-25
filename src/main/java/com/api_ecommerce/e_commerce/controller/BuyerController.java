@@ -31,8 +31,8 @@ import com.api_ecommerce.e_commerce.service.TokenService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/client")
-public class ClientController {
+@RequestMapping("/buyer")
+public class BuyerController {
 	
 	@Autowired
 	AuthService authService;
@@ -52,8 +52,8 @@ public class ClientController {
 	@Autowired
 	TokenService tokenService;
 	
-	@GetMapping("/order")
-	public ResponseEntity<List<OrderClientResponse>> getAllOrderByUserAuthenticated(){		
+	@GetMapping("/orders")
+	public ResponseEntity<List<OrderClientResponse>> getAllOrderOfBuyer(){		
 		List<Order> orders = orderService.findOrdersByUserAuthenticated();
 		
 		List<OrderClientResponse> ordersResponse = OrderMapper.toListClientDTO(orders);
@@ -62,7 +62,7 @@ public class ClientController {
 	}
 	
 	@GetMapping("/cart")
-	public ResponseEntity<CartClientResponse> getBuyerCart(){		
+	public ResponseEntity<CartClientResponse> getCart(){		
 		Cart cart = cartService.getCartOfUserAuthenticated();
 		
 		CartClientResponse cartClientResponse = CartMapper.toClientDTO(cart);
@@ -71,7 +71,7 @@ public class ClientController {
 	}
 	
 	@PostMapping("/cart/item")
-	public ResponseEntity<?> saveCartItemCliente(@Valid @RequestBody CartItemRequest request){
+	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest request){
 				
 		cartItemService.createCartItemForUserAuthenticated(request);
 		
@@ -86,7 +86,7 @@ public class ClientController {
 	}
 	
 	@DeleteMapping("/cart/item/{cartItemId}")
-	public ResponseEntity<?> deleteCartItemCliente(@PathVariable Long cartItemId){		
+	public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId){		
 		cartItemService.deleteCartItem(cartItemId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -95,7 +95,6 @@ public class ClientController {
 	@PostMapping("/checkout")
 	public ResponseEntity<?> checkoutCart(){		
 		cartService.checkoutForUserAuthenticated();
-		
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		
 	}

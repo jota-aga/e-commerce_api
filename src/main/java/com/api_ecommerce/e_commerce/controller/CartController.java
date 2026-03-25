@@ -3,7 +3,6 @@ package com.api_ecommerce.e_commerce.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,6 @@ public class CartController {
 	private CartService cartService;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
 		
@@ -32,10 +30,9 @@ public class CartController {
 		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}
 	
-	@PostMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-	public ResponseEntity<?> checkoutCart(@PathVariable("id") Long userId){
-		cartService.checkout(userId);
+	@PostMapping("/{buyerId}")
+	public ResponseEntity<?> checkoutCartByBuyerId(@PathVariable("buyerId") Long buyerId){
+		cartService.checkout(buyerId);
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		

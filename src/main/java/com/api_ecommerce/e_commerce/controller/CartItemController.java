@@ -3,7 +3,6 @@ package com.api_ecommerce.e_commerce.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,18 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.service.CartItemService;
-import com.api_ecommerce.e_commerce.service.TokenService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/cart_item")
+@RequestMapping("/cart-item")
 public class CartItemController {
 	@Autowired
 	private CartItemService cartItemService;
 	
 	@PostMapping("/{cartId}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest cartItemRequest, @PathVariable Long cartId){
 		cartItemService.createCartItem(cartItemRequest, cartId);
 		
@@ -33,7 +30,6 @@ public class CartItemController {
 	}
 	
 	@DeleteMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> deleteCartItem(@PathVariable Long id){
 		
 		cartItemService.deleteCartItem(id);
@@ -43,7 +39,6 @@ public class CartItemController {
 	}
 	
 	@PutMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<?> editCartItem(@PathVariable Long id, @Valid @RequestBody CartItemRequest cartItemRequest){		
 		cartItemService.editCartItem(id, cartItemRequest);
 		

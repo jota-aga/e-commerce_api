@@ -28,13 +28,13 @@ public class TokenService {
 	}
 	
 	public String generateToken(User user) {
-		var scopes = user.getRole();
+		var scope = user.getRole();
 		var claims = JwtClaimsSet.builder()
 				 .issuer("mybackend")
 				 .subject(user.getId().toString())
 				 .issuedAt(Instant.now())
 				 .expiresAt(this.tokenExpiration())
-				 .claim("scope", scopes)
+				 .claim("scope", scope)
 				 .build();
 		
 		var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

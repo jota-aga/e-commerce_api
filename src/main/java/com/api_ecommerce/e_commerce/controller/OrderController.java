@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@GetMapping("/{id}")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByBuyerId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByBuyerId(id);
 		
@@ -35,7 +33,6 @@ public class OrderController {
 	}
 	
 	@GetMapping("/date")
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate date){
 		List<Order> orders = orderService.findOrdersByDate(date);
 		
@@ -44,8 +41,7 @@ public class OrderController {
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
-	@GetMapping()
-	@PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+	@GetMapping
 	public ResponseEntity<List<OrderAdminResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
 		

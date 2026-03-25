@@ -4,7 +4,6 @@ package com.api_ecommerce.e_commerce.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
-import com.api_ecommerce.e_commerce.dto.user.RegisterRequest;
+import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
 import com.api_ecommerce.e_commerce.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -27,13 +26,13 @@ public class AuthController {
 	
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest register){
-		//userService.createUser(register);
+	public ResponseEntity<?> registerBuyer(@Valid @RequestBody RegisterBuyerRequest request){
+		authService.registerBuyer(request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@GetMapping("/login")
+	@PostMapping("/login")
 	public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest login){
 		
 		LoginResponse loginResponse = authService.doLogin(login); 					 

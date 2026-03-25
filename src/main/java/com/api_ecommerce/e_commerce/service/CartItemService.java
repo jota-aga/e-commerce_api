@@ -12,6 +12,8 @@ import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.enums.ProductStatus;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
@@ -74,6 +76,10 @@ public class CartItemService {
 				    .orElseThrow(() -> new IdNotFoundException("Cart"));
 		
 		Product product = findProductById(dto.productId());
+		
+		if(product.getStatus() != ProductStatus.DISPONIVEL) {
+			throw new ConflictException("This Product is unavailable");
+		}
 		
 		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
 		cartItemRepository.save(cartItem);

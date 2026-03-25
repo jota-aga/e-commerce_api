@@ -49,4 +49,11 @@ public class OrderController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
+	
+	@GetMapping("/product/{productId}")
+	public ResponseEntity<?> findOrdersByProduct(@PathVariable Long productId){
+		List<Order> orders = orderService.findOrdersByProduct(productId);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(OrderMapper.toListAdminDTO(orders));
+	}
 }

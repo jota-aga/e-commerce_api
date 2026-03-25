@@ -1,6 +1,7 @@
 package com.api_ecommerce.e_commerce.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,17 +10,21 @@ import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Order;
+import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
+import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
-import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Service
 public class OrderService {
 	
 	@Autowired
-	OrderRepository orderRepository;
+	private OrderRepository orderRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	
 	@Autowired
 	private BuyerRepository buyerRepository;
@@ -51,6 +56,15 @@ public class OrderService {
 	public List<Order> findAllOrders(){
 		List<Order> orders= orderRepository.findAll();
 				
+		return orders;
+	}
+	
+	public List<Order> findOrdersByProduct(Long productId){
+		List<OrderItem> orderItems = orderItemRepository.findAllByProductId(productId);
+		
+		List<Order> orders = new ArrayList<>();
+		orderItems.forEach(orderItem -> orders.add(orderItem.getOrder()));
+		
 		return orders;
 	}
 	

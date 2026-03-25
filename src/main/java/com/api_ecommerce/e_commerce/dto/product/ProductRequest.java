@@ -2,6 +2,8 @@ package com.api_ecommerce.e_commerce.dto.product;
 
 import java.math.BigDecimal;
 
+import com.api_ecommerce.e_commerce.enums.ProductStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,7 +25,9 @@ public record ProductRequest(
 	
 	@PositiveOrZero
 	@NotNull
-	int quantity
+	int quantity,
+	
+	ProductStatus status
 	)
 {
 }

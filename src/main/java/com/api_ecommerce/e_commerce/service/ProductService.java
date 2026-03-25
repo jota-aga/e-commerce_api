@@ -1,23 +1,19 @@
 package com.api_ecommerce.e_commerce.service;
 
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
-import com.api_ecommerce.e_commerce.dto.product.ProductResponse;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
 import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.mapper.ProductMapper;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
-
-import jakarta.validation.Valid;
 
 @Service
 public class ProductService {
@@ -36,7 +32,7 @@ public class ProductService {
 		Category category = findCategoryById(productRequest.categoryId());
 		
 		Product product = new Product(productRequest.name(), productRequest.description(), 
-									  productRequest.quantity(), productRequest.price(), category);
+									  productRequest.quantity(), productRequest.price(), category, ProductStatus.DISPONIVEL);
 		
 		validateNameOfProduct(productRequest, product);
 		
@@ -53,6 +49,7 @@ public class ProductService {
 		product.setDescricao(productRequest.description());
 		product.setPrice(productRequest.price());
 		product.setQuantity(productRequest.quantity());
+		product.setStatus(productRequest.status());
 		
 		Category category = findCategoryById(productRequest.categoryId());
 		

@@ -14,13 +14,12 @@ import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
-import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
-import com.api_ecommerce.e_commerce.repository.UserRepository;
 
 @Service
 public class CartItemService {
@@ -36,9 +35,6 @@ public class CartItemService {
 	@Autowired
 	private BuyerRepository buyerRepository;
 	
-	@Autowired
-	private UserRepository userRepository;
-	
 	public List<CartItem> findCartItemsByCartId(Long id){
 		List<CartItem> cartItems = cartItemRepository.findAllByCartId(id);
 		
@@ -48,7 +44,7 @@ public class CartItemService {
 	public CartItem findCartItemById(Long id) {
 		Optional<CartItem> cartItem = cartItemRepository.findById(id);
 		
-		return cartItem.orElseThrow(() -> new IdNotFoundException("Cart Item"));
+		return cartItem.orElseThrow(() -> new NotFoundException("Cart Item id"));
 	}
 	
 	public void deleteCartItem(Long id) {
@@ -73,7 +69,7 @@ public class CartItemService {
 	
 	public void createCartItem(CartItemRequest dto, Long cartId) {
 		Cart cart = cartRepository.findById(cartId)
-				    .orElseThrow(() -> new IdNotFoundException("Cart"));
+				    .orElseThrow(() -> new NotFoundException("Cart's id"));
 		
 		Product product = findProductById(dto.productId());
 		
@@ -108,7 +104,7 @@ public class CartItemService {
 	private Product findProductById(Long productId) {
 		Optional<Product> optionalProduct = productRepository.findById(productId);
 		
-		Product product = optionalProduct.orElseThrow(() -> new IdNotFoundException("Product"));
+		Product product = optionalProduct.orElseThrow(() -> new NotFoundException("Product's id"));
 		
 		return product;
 	}
@@ -117,11 +113,11 @@ public class CartItemService {
 		User user = TokenService.getCurrentUser();
 		
 		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
-		Buyer buyer = optionalBuyer.orElseThrow(() -> new IdNotFoundException("User"));
+		Buyer buyer = optionalBuyer.orElseThrow(() -> new NotFoundException("Buyer by User"));
 		
 		Optional<Cart> optionalCart = cartRepository.findByBuyerId(buyer.getId());
 		
-		Cart cart = optionalCart.orElseThrow(() -> new IdNotFoundException("Cart"));
+		Cart cart = optionalCart.orElseThrow(() -> new NotFoundException("Cart's id"));
 		
 		return cart;
 	}

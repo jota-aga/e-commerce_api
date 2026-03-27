@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.dto.category.CategoryRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
-import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.mapper.CategoryMapper;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 
 @Service
@@ -31,13 +30,13 @@ public class CategoryService {
 	public Category findCategoryById(Long id) {
 		Optional<Category> category = categoryRepository.findById(id);
 		
-		return category.orElseThrow(() -> new IdNotFoundException("Category"));
+		return category.orElseThrow(() -> new NotFoundException("Category's id"));
 	}
 	
 	public Category findCategoryByName(String name) {
 		Optional<Category> category = categoryRepository.findByName(name);
 		
-		return category.orElseThrow(() -> new RuntimeException("Category not found"));
+		return category.orElseThrow(() -> new NotFoundException("Category"));
 	}
 	
 	public List<Category> findAllCategory() {

@@ -12,7 +12,7 @@ import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
@@ -44,7 +44,7 @@ public class OrderService {
 	public Order findOrderById(Long id) {
 		Optional<Order> order = orderRepository.findById(id);
 	
-		return order.orElseThrow(() -> new IdNotFoundException("Order"));
+		return order.orElseThrow(() -> new NotFoundException("Order's id"));
 	}
 	
 	public List<Order> findOrdersByDate(LocalDate date){
@@ -73,6 +73,6 @@ public class OrderService {
 		
 		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		
-		return optionalBuyer.orElseThrow(() -> new IdNotFoundException("User"));
+		return optionalBuyer.orElseThrow(() -> new NotFoundException("Buyer's id"));
 	}
 }

@@ -1,7 +1,6 @@
 package com.api_ecommerce.e_commerce.configuration;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

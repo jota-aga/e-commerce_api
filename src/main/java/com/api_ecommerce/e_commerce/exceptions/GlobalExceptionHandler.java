@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	
-	@ExceptionHandler(IdNotFoundException.class)
-    public ResponseEntity<String> handleIdNotExists(IdNotFoundException e) {
+	@ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 	

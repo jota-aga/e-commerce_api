@@ -15,8 +15,7 @@ import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
-import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
-import com.api_ecommerce.e_commerce.exceptions.RoleNotFoundException;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.exceptions.UsernameOrPasswordIncorrectException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
@@ -68,7 +67,7 @@ public class AuthService {
 	public User findUserById(Long id) {
 		Optional<User> user = userRepository.findById(id);
 		
-		return user.orElseThrow(() -> new IdNotFoundException("User"));
+		return user.orElseThrow(() -> new NotFoundException("User"));
 	}
 	
 	public User findUserByUsername(String username) {
@@ -84,7 +83,7 @@ public class AuthService {
 	private Role findRoleByName(String roleName) {
 		Optional<Role> optionalRole = roleRepository.findRoleByName(roleName);
 		
-		Role role = optionalRole.orElseThrow(() -> new RoleNotFoundException());
+		Role role = optionalRole.orElseThrow(() -> new NotFoundException("Role"));
 		
 		return role;
 	}

@@ -11,7 +11,7 @@ import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
-import com.api_ecommerce.e_commerce.exceptions.IdNotFoundException;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
@@ -23,27 +23,20 @@ public class ProductService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
-	public void saveProduct(Product product) {
-		
-		productRepository.save(product);
-	}
-	
 	public void createProduct(ProductRequest productRequest) {
 		Category category = findCategoryById(productRequest.categoryId());
 		
 		Product product = new Product(productRequest.name(), productRequest.description(), 
 									  productRequest.quantity(), productRequest.price(), category, ProductStatus.DISPONIVEL);
 		
-		validateNameOfProduct(productRequest, product);
+		validateNameOfProduct(product);
 		
-		saveProduct(product);
+		productRepository.save(product);
 		
 	}
 	
 	public void editProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
-		
-		validateNameOfProduct(productRequest, product);
 		
 		product.setName(productRequest.name());
 		product.setDescricao(productRequest.description());
@@ -51,17 +44,19 @@ public class ProductService {
 		product.setQuantity(productRequest.quantity());
 		product.setStatus(productRequest.status());
 		
+		validateNameOfProduct(product);
+		
 		Category category = findCategoryById(productRequest.categoryId());
 		
 		product.setCategory(category);
 		
-		saveProduct(product);
+		productRepository.save(product);
 	}
 	
 	public Product findProductById(Long id) {
 		Optional<Product> product = productRepository.findById(id);
 		
-		return product.orElseThrow(() -> new IdNotFoundException("Product"));
+		return product.orElseThrow(() -> new NotFoundException("Product's id"));
 	}
 	
 	public List<Product> findAllProducts(){
@@ -93,7 +88,7 @@ public class ProductService {
 	private Category findCategoryById(Long categoryId) {
 		Optional<Category> optionalCategory = categoryRepository.findById(categoryId);
 		
-		Category category = optionalCategory.orElseThrow(() -> new IdNotFoundException("Category"));
+		Category category = optionalCategory.orElseThrow(() -> new NotFoundException("Category's id"));
 		
 		return category;
 	}
@@ -106,8 +101,8 @@ public class ProductService {
 		return category;
 	}
 	
-	private void validateNameOfProduct(ProductRequest productRequest, Product product) {
-		Optional<Product> optionalProduct = productRepository.findByName(productRequest.name());
+	private void validateNameOfProduct(Product product) {
+		Optional<Product> optionalProduct = productRepository.findByName(product.getName());
 		
 		if(optionalProduct.isPresent()) {
 			Product repeatedProduct = optionalProduct.get();

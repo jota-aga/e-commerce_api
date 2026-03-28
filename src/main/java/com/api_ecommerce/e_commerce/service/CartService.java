@@ -29,6 +29,9 @@ public class CartService {
 	@Autowired
 	private BuyerRepository buyerRepository;
 	
+	@Autowired
+	private SecurityService securityService;
+	
 	public Cart findCartById(Long id) {
 		Optional<Cart> optionalCart = cartRepository.findById(id);
 		
@@ -90,7 +93,7 @@ public class CartService {
 	}
 	
 	private Buyer findBuyerByUserAuthenticated() {
-		User user = TokenService.getCurrentUser();
+		User user = securityService.getCurrentUser();
 		
 		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		

@@ -29,6 +29,9 @@ public class OrderService {
 	@Autowired
 	private BuyerRepository buyerRepository;
 	
+	@Autowired
+	private SecurityService securityService;
+	
 	public List<Order> findOrdersByBuyerId(Long id) {
 		List<Order> orders = orderRepository.findAllOrderByBuyerId(id);
 				
@@ -69,7 +72,7 @@ public class OrderService {
 	}
 	
 	private Buyer findBuyerByUserAuthenticated() {
-		User user = TokenService.getCurrentUser();
+		User user = securityService.getCurrentUser();
 		
 		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		

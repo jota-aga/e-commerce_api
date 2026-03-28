@@ -35,6 +35,9 @@ public class CartItemService {
 	@Autowired
 	private BuyerRepository buyerRepository;
 	
+	@Autowired
+	private SecurityService securityService;
+	
 	public List<CartItem> findCartItemsByCartId(Long id){
 		List<CartItem> cartItems = cartItemRepository.findAllByCartId(id);
 		
@@ -95,7 +98,7 @@ public class CartItemService {
 	}
 	
 	private void validateCartItemId(CartItem cartItem) {
-		User user = TokenService.getCurrentUser();
+		User user = securityService.getCurrentUser();
 		Buyer buyer = cartItem.getCart().getBuyer();
 		
 		if(!user.getId().equals(buyer.getUser().getId())) throw new NotAuthorizedException();	
@@ -110,7 +113,7 @@ public class CartItemService {
 	}
 	
 	private Cart findCartByUserAuthenticated() {
-		User user = TokenService.getCurrentUser();
+		User user = securityService.getCurrentUser();
 		
 		Optional<Buyer> optionalBuyer = buyerRepository.findByUser(user);
 		Buyer buyer = optionalBuyer.orElseThrow(() -> new NotFoundException("Buyer by User"));

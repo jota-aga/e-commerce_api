@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -20,12 +18,6 @@ public class TokenService {
 	@Autowired 
 	private JwtEncoder jwtEncoder;
 	
-	public static User getCurrentUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) authentication.getPrincipal();
-
-		return user;
-	}
 	
 	public String generateToken(User user) {
 		var scope = user.getRole();

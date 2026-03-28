@@ -39,19 +39,6 @@ public class ProductServiceTest {
 	
 	@Mock
 	private CategoryRepository categoryRepository;
-	/*
-	 * 
-	 * 
-	 * Category category = findCategoryById(productRequest.categoryId());
-	 * 
-	 * Product product = new Product(productRequest.name(),
-	 * productRequest.description(), productRequest.quantity(),
-	 * productRequest.price(), category, ProductStatus.DISPONIVEL);
-	 * 
-	 * validateNameOfProduct(productRequest, product);
-	 * 
-	 * saveProduct(product);
-	 */
 	
 	@Test
 	public void createProductSucess() {

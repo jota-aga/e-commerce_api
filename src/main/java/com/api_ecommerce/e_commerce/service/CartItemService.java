@@ -64,24 +64,15 @@ public class CartItemService {
 	
 	public void createCartItemForUserAuthenticated(CartItemRequest dto) {
 		Cart cart = findCartByUserAuthenticated();
-		Product product = findProductById(dto.productId());
 		
-		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
-		cartItemRepository.save(cartItem);
+		createCartItem(dto, cart);
 	}
 	
-	public void createCartItem(CartItemRequest dto, Long cartId) {
+	public void createCartItemAdmin(CartItemRequest dto, Long cartId) {
 		Cart cart = cartRepository.findById(cartId)
-				    .orElseThrow(() -> new NotFoundException("Cart's id"));
+				    .orElseThrow(() -> new NotFoundException("Cart"));
 		
-		Product product = findProductById(dto.productId());
-		
-		if(product.getStatus() != ProductStatus.DISPONIVEL) {
-			throw new ConflictException("This Product is unavailable");
-		}
-		
-		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
-		cartItemRepository.save(cartItem);
+		createCartItem(dto, cart);
 	}
 	
 	public void editCartItem(Long id, CartItemRequest cartItemDTO) {
@@ -94,6 +85,17 @@ public class CartItemService {
 		cartItem.setProduct(product);
 		cartItem.setQuantity(cartItemDTO.quantity());
 		
+		cartItemRepository.save(cartItem);
+	}
+	
+	private void createCartItem(CartItemRequest dto, Cart cart) {
+		Product product = findProductById(dto.productId());
+		
+		if(product.getStatus() != ProductStatus.DISPONIVEL) {
+			throw new ConflictException("This Product is unavailable");
+		}
+		
+		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
 		cartItemRepository.save(cartItem);
 	}
 	

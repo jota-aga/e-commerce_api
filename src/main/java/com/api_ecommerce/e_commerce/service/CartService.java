@@ -35,7 +35,8 @@ public class CartService {
 	public Cart findCartById(Long id) {
 		Optional<Cart> optionalCart = cartRepository.findById(id);
 		
-		Cart cart = optionalCart.orElseThrow(() -> new NotFoundException("Cart's id"));
+		Cart cart = optionalCart
+				    .orElseThrow(() -> new NotFoundException("Cart's id"));
 				
 		return cart;
 	}
@@ -43,15 +44,8 @@ public class CartService {
 	public Cart findCartByBuyerId(Long buyerId) {
 		Optional<Cart> cart = cartRepository.findByBuyerId(buyerId);
 		
-		return cart.orElseThrow(() -> new NotFoundException("Cart by buyer id"));
-	}
-	
-	public Cart getCartOfUserAuthenticated() {
-		Buyer buyer = findBuyerByUserAuthenticated();
-		
-		Optional<Cart> cart = cartRepository.findByBuyerId(buyer.getId());
-		
-		return cart.orElseThrow(() -> new NotFoundException("Cart by user id"));
+		return cart
+			   .orElseThrow(() -> new NotFoundException("Cart by buyer id"));
 	}
 	
 	@Transactional

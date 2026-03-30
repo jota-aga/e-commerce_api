@@ -12,6 +12,7 @@ import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
@@ -48,35 +49,45 @@ public class CartService {
 			   .orElseThrow(() -> new NotFoundException("Cart by buyer id"));
 	}
 	
+	public Cart getCartOfUserAuthenticated() {
+		Buyer buyer = findBuyerByUserAuthenticated();
+		
+		Optional<Cart> cart = cartRepository.findByBuyerId(buyer.getId());
+		
+		return cart
+			   .orElseThrow(() -> new NotFoundException("Cart by user id"));
+	}
+	
 	@Transactional
 	public void checkoutForUserAuthenticated() {
 		Buyer buyer = findBuyerByUserAuthenticated();
 		
-		Cart cart = findCartByBuyerId(buyer.getId());
-		
-		createOrderByCheckout(buyer, cart);
-		
-		cart.getCartItems().clear();
-		
-		cartRepository.save(cart);
+		checkout(buyer);
 	}
 	
 	@Transactional
-	public void checkout(Long buyerId) {
+	public void checkoutByBuyerId(Long buyerId) {
 		Buyer buyer = buyerRepository.findById(buyerId)
 					  .orElseThrow(() -> new NotFoundException("Buyer's id"));
 		
+		checkout(buyer);
+	}
+	
+	@Transactional
+	private void checkout(Buyer buyer) {
 		Cart cart = findCartByBuyerId(buyer.getId());
 		
-		createOrderByCheckout(buyer, cart);
+		if(cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
+			throw new ConflictException("The cart is empty");
+		}
+		createOrderByCart(buyer, cart);
 		
 		cart.getCartItems().clear();
 		
 		cartRepository.save(cart);
 	}
 	
-	@Transactional
-	private void createOrderByCheckout(Buyer buyer, Cart cart) {
+	private void createOrderByCart(Buyer buyer, Cart cart) {
 		List<OrderItem> orderItems = cart
 				.getCartItems().stream().map(cartItem -> OrderItemMapper.toEntity(cartItem))
 				.toList();

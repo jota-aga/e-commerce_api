@@ -32,7 +32,7 @@ public class CartController {
 	
 	@PostMapping("/{buyerId}")
 	public ResponseEntity<?> checkoutCartByBuyerId(@PathVariable("buyerId") Long buyerId){
-		cartService.checkout(buyerId);
+		cartService.checkoutByBuyerId(buyerId);
 		
 		
 		return ResponseEntity.status(HttpStatus.OK).build();		

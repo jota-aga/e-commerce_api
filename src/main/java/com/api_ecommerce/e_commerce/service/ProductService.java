@@ -10,7 +10,7 @@ import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
-import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
@@ -27,7 +27,7 @@ public class ProductService {
 		Category category = findCategoryById(productRequest.categoryId());
 		
 		Product product = new Product(productRequest.name(), productRequest.description(), 
-									  productRequest.quantity(), productRequest.price(), category, ProductStatus.DISPONIVEL);
+									  productRequest.quantity(), productRequest.price(), category, ProductStatus.AVAILABLE);
 		
 		validateNameOfProduct(product);
 		
@@ -108,10 +108,10 @@ public class ProductService {
 			Product repeatedProduct = optionalProduct.get();
 			
 			if(product.getId() == null) {
-				throw new AlreadyExistsException("Product's name");
+				throw new ConflictException("This name of product is already registered");
 			}
 			else if(!product.getId().equals(repeatedProduct.getId())){
-				throw new AlreadyExistsException("Product's name");
+				throw new ConflictException("This name of product is already registered");
 			}
 		}
 	}

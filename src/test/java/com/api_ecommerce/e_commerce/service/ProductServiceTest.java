@@ -23,7 +23,7 @@ import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
-import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
@@ -45,7 +45,7 @@ public class ProductServiceTest {
 		ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
 		
 		Category category = new Category("Categoria");
-		ProductRequest dto = new ProductRequest("name", "description", new BigDecimal(100), 1L, 100, ProductStatus.INDISPONIVEL);
+		ProductRequest dto = new ProductRequest("name", "description", new BigDecimal(100), 1L, 100, ProductStatus.UNAVAILABLE);
 		
 		when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
 		when(productRepository.findByName(any())).thenReturn(Optional.empty());
@@ -55,18 +55,18 @@ public class ProductServiceTest {
 		verify(productRepository).save(productCaptor.capture());
 		
 		assertNotNull(productCaptor.getValue());
-		assertEquals(ProductStatus.DISPONIVEL, productCaptor.getValue().getStatus());
+		assertEquals(ProductStatus.AVAILABLE, productCaptor.getValue().getStatus());
 	}
 	
 	@Test
 	public void createProductWithNameRepeated() {		
 		Category category = new Category("Categoria");
-		ProductRequest dto = new ProductRequest("name", "description", new BigDecimal(100), 1L, 100, ProductStatus.INDISPONIVEL);
+		ProductRequest dto = new ProductRequest("name", "description", new BigDecimal(100), 1L, 100, ProductStatus.UNAVAILABLE);
 		
 		when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
 		when(productRepository.findByName("name")).thenReturn(Optional.of(new Product()));
 		
-		assertThrows(AlreadyExistsException.class, () -> productService.createProduct(dto));
+		assertThrows(ConflictException.class, () -> productService.createProduct(dto));
 	}
 	
 	@Test
@@ -79,8 +79,8 @@ public class ProductServiceTest {
 		Category category2 = new Category("Category 2");
 		category2.setId(2L);
 		
-		Product productBeforeUpdate = new Product("Product", "Description", 100, new BigDecimal(50), category1, ProductStatus.DISPONIVEL);
-		ProductRequest dto = new ProductRequest("dto", "description updated", new BigDecimal(100), 2L, 100, ProductStatus.INDISPONIVEL);
+		Product productBeforeUpdate = new Product("Product", "Description", 100, new BigDecimal(50), category1, ProductStatus.AVAILABLE);
+		ProductRequest dto = new ProductRequest("dto", "description updated", new BigDecimal(100), 2L, 100, ProductStatus.UNAVAILABLE);
 		
 		when(productRepository.findById(1L)).thenReturn(Optional.of(productBeforeUpdate));
 		when(categoryRepository.findById(any())).thenReturn(Optional.of(category2));
@@ -107,10 +107,10 @@ public class ProductServiceTest {
 		Category category2 = new Category("Category 2");
 		category2.setId(2L);
 		
-		Product productBeforeUpdate = new Product("Product", "Description", 100, new BigDecimal(50), category1, ProductStatus.DISPONIVEL);
+		Product productBeforeUpdate = new Product("Product", "Description", 100, new BigDecimal(50), category1, ProductStatus.AVAILABLE);
 		productBeforeUpdate.setId(2L);
 		
-		ProductRequest dto = new ProductRequest("dto", "description updated", new BigDecimal(100), 2L, 100, ProductStatus.INDISPONIVEL);
+		ProductRequest dto = new ProductRequest("dto", "description updated", new BigDecimal(100), 2L, 100, ProductStatus.UNAVAILABLE);
 		
 		Product productRepeated = new Product();
 		productRepeated.setId(1L);
@@ -118,6 +118,6 @@ public class ProductServiceTest {
 		when(productRepository.findById(1L)).thenReturn(Optional.of(productBeforeUpdate));
 		when(productRepository.findByName("dto")).thenReturn(Optional.of(productRepeated));
 		
-		assertThrows(AlreadyExistsException.class, () -> productService.editProduct(1L,dto));
+		assertThrows(ConflictException.class, () -> productService.editProduct(1L,dto));
 	}
 }

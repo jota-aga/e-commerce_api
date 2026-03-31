@@ -1,16 +1,16 @@
 package com.api_ecommerce.e_commerce.enums;
 
 public enum ProductStatus {
-	DISPONIVEL("Disponível"),
-	INDISPONIVEL("Indisponível");
+	AVAILABLE("Available"),
+	UNAVAILABLE("Unavailable");
 	
-	private String legenda;
+	private String description;
 
-	private ProductStatus(String legenda) {
-		this.legenda = legenda;
+	private ProductStatus(String description) {
+		this.description = description;
 	}
 
-	public String getLegenda() {
-		return legenda;
+	public String getDescription() {
+		return description;
 	}
 }

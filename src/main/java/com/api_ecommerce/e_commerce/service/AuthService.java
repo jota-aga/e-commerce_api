@@ -3,8 +3,6 @@ package com.api_ecommerce.e_commerce.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,9 +14,9 @@ import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
+import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
-import com.api_ecommerce.e_commerce.exceptions.UsernameOrPasswordIncorrectException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
@@ -75,11 +73,11 @@ public class AuthService {
 	public User findUserByUsername(String username) {
 		Optional<User> user = userRepository.findByUsername(username);
 		
-		return user.orElseThrow(() -> new UsernameOrPasswordIncorrectException());
+		return user.orElseThrow(() -> new NotAuthorizedException("Username or password incorrect"));
 	}
 	
 	private void isLoginCorrect(LoginRequest loginRequest, User user, PasswordEncoder passwordEncoder) {
-		if(passwordEncoder.matches(loginRequest.password(), user.getPassword()) == false) throw new UsernameOrPasswordIncorrectException();
+		if(passwordEncoder.matches(loginRequest.password(), user.getPassword()) == false) throw new NotAuthorizedException("Username or password incorrect");
 	}
 	
 	private Role findRoleByName(String roleName) {
@@ -94,7 +92,7 @@ public class AuthService {
 		Optional<User> optionalUser = userRepository.findByUsername(username);
 		
 		if(optionalUser.isPresent()) {
-			throw new AlreadyExistsException("Username");
+			throw new ConflictException("Username already registered");
 		}
 	}
 	
@@ -102,13 +100,13 @@ public class AuthService {
 		Optional<Buyer> optionalBuyer = buyerRepository.findByCpf(buyer.getCpf());
 		
 		if(optionalBuyer.isPresent()) {
-			if(buyer.getId() == null) throw new AlreadyExistsException("CPF");
+			if(buyer.getId() == null) throw new ConflictException("CPF already registered");
 			
 			
 			else {
 				Buyer repeatedBuyer = optionalBuyer.get();
 				
-				if(!repeatedBuyer.getId().equals(buyer.getId())) throw new AlreadyExistsException("CPF");
+				if(!repeatedBuyer.getId().equals(buyer.getId())) throw new ConflictException("CPF already registered");
 			}
 		}
 	}

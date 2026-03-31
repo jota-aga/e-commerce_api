@@ -9,5 +9,5 @@ import com.api_ecommerce.e_commerce.entity.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long>{
 	List<Order> findAllOrderByBuyerId(Long buyerID);
-	List<Order> findAllByCreatedAt(LocalDate date);
+	List<Order> findAllByCreatedAtBetween(LocalDate start, LocalDate end);
 }

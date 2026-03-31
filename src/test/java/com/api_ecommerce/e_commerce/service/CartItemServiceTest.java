@@ -69,7 +69,7 @@ public class CartItemServiceTest {
 	@BeforeEach
 	public void setUp() {
 		category = new Category("Category");
-		product = new Product("Product", "Description", 100, new BigDecimal(50), category, ProductStatus.DISPONIVEL);
+		product = new Product("Product", "Description", 100, new BigDecimal(50), category, ProductStatus.AVAILABLE);
 		role = new Role(Role.Value.BUYER.name());
 		user = new User(1L, "username", "password", role);
 		buyer = new Buyer("name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
@@ -135,7 +135,7 @@ public class CartItemServiceTest {
 	@Test
 	public void createCartItemForUserAuthenticatedForProductUnavailable() {
 		CartItemRequest dto = new CartItemRequest(1L, 10);
-		product.setStatus(ProductStatus.INDISPONIVEL);
+		product.setStatus(ProductStatus.UNAVAILABLE);
 		
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(buyerRepository.findByUser(user)).thenReturn(Optional.of(buyer));

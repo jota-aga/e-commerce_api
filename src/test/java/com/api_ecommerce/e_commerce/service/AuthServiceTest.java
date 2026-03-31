@@ -24,7 +24,7 @@ import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
-import com.api_ecommerce.e_commerce.exceptions.AlreadyExistsException;
+import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
@@ -96,7 +96,7 @@ public class AuthServiceTest {
 		
 		when(buyerRepository.findByCpf(dto.cpf())).thenReturn(Optional.of(new Buyer()));
 		
-		assertThrows(AlreadyExistsException.class, () -> {
+		assertThrows(ConflictException.class, () -> {
 			authService.registerBuyer(dto);
 			});
 	}

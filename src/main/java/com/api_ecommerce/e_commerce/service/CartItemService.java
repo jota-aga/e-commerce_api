@@ -91,7 +91,7 @@ public class CartItemService {
 	private void createCartItem(CartItemRequest dto, Cart cart) {
 		Product product = findProductById(dto.productId());
 		
-		if(product.getStatus() != ProductStatus.DISPONIVEL) {
+		if(product.getStatus() != ProductStatus.AVAILABLE) {
 			throw new ConflictException("This Product is unavailable");
 		}
 		
@@ -103,7 +103,7 @@ public class CartItemService {
 		User user = securityService.getCurrentUser();
 		Buyer buyer = cartItem.getCart().getBuyer();
 		
-		if(!user.getId().equals(buyer.getUser().getId())) throw new NotAuthorizedException();	
+		if(!user.getId().equals(buyer.getUser().getId())) throw new NotAuthorizedException("You cant manage this cart item");	
 	}
 	
 	private Product findProductById(Long productId) {

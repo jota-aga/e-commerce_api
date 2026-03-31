@@ -40,8 +40,7 @@ public class SecurityConfiguration {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity
 				.authorizeHttpRequests(authorize -> authorize
-															 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-															 .requestMatchers(HttpMethod.POST, "/auth/register/**").permitAll()
+															 .requestMatchers("/auth/**").permitAll()
 															 .requestMatchers("/buyer/**").hasAuthority("SCOPE_BUYER")
 															 .requestMatchers("/cart/**").hasAuthority("SCOPE_ADMIN")
 															 .requestMatchers("/cart-item/**").hasAuthority("SCOPE_ADMIN")

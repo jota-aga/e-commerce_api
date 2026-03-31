@@ -33,8 +33,8 @@ public class OrderController {
 	}
 	
 	@GetMapping("/date")
-	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate date){
-		List<Order> orders = orderService.findOrdersByDate(date);
+	public ResponseEntity<List<OrderAdminResponse>> findOrdersByDate(@RequestParam LocalDate start, @RequestParam LocalDate end){
+		List<Order> orders = orderService.findOrdersByPeriod(start, end);
 		
 		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
 		

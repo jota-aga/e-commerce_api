@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,8 +72,8 @@ public class CartServiceTest {
 	@BeforeEach
 	public void setUp() {
 		category = new Category("Category");
-		product1 = new Product("Product1", "Description", 100, new BigDecimal(50), category, ProductStatus.DISPONIVEL);
-		product2 = new Product("Product2", "Description", 60, new BigDecimal(7), category, ProductStatus.DISPONIVEL);
+		product1 = new Product("Product1", "Description", 100, new BigDecimal(50), category, ProductStatus.AVAILABLE);
+		product2 = new Product("Product2", "Description", 60, new BigDecimal(7), category, ProductStatus.AVAILABLE);
 		role = new Role(Role.Value.BUYER.name());
 		user = new User(1L, "username", "password", role);
 		buyer = new Buyer(1L, "name", LocalDate.now().minusYears(20), "11237419484", "adress", user);

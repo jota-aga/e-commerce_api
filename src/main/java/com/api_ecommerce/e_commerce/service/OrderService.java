@@ -50,8 +50,8 @@ public class OrderService {
 		return order.orElseThrow(() -> new NotFoundException("Order's id"));
 	}
 	
-	public List<Order> findOrdersByDate(LocalDate date){
-		List<Order> orders = orderRepository.findAllByCreatedAt(date);
+	public List<Order> findOrdersByPeriod(LocalDate start, LocalDate end){
+		List<Order> orders = orderRepository.findAllByCreatedAtBetween(start, end);
 		
 		return orders;
 	}

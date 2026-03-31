@@ -34,7 +34,6 @@ public class CartController {
 	public ResponseEntity<?> checkoutCartByBuyerId(@PathVariable("buyerId") Long buyerId){
 		cartService.checkoutByBuyerId(buyerId);
 		
-		
 		return ResponseEntity.status(HttpStatus.OK).build();		
 	}
 }

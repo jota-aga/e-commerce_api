@@ -73,7 +73,7 @@ public class BuyerController {
 	@PostMapping("/cart-item")
 	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest request){
 				
-		cartItemService.createCartItemForUserAuthenticated(request);
+		cartItemService.addItemToCartToCurrentUser(request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

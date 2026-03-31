@@ -12,6 +12,7 @@ import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Product;
+import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
@@ -66,14 +67,14 @@ public class CartItemService {
 	}
 	
 	@Transactional
-	public void createCartItemForUserAuthenticated(CartItemRequest dto) {
+	public void addItemToCartToCurrentUser(CartItemRequest dto) {
 		Cart cart = findCartByUserAuthenticated();
 		
 		createCartItem(dto, cart);
 	}
 	
 	@Transactional
-	public void createCartItemAdmin(CartItemRequest dto, Long cartId) {
+	public void addItemToCart(CartItemRequest dto, Long cartId) {
 		Cart cart = cartRepository.findById(cartId)
 				    .orElseThrow(() -> new NotFoundException("Cart"));
 		
@@ -108,6 +109,9 @@ public class CartItemService {
 	
 	private void validateCartItemId(CartItem cartItem) {
 		User user = securityService.getCurrentUser();
+		
+		if(user.getRole().getName().equals(Role.Value.ADMIN.name())) return;
+				
 		Buyer buyer = cartItem.getCart().getBuyer();
 		
 		if(!user.getId().equals(buyer.getUser().getId())) throw new NotAuthorizedException("You cant manage this cart item");	

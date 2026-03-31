@@ -125,7 +125,7 @@ public class CartItemServiceTest {
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
 		when(productRepository.findById(any())).thenReturn(Optional.of(product));
 		
-		cartItemService.createCartItemForUserAuthenticated(dto);
+		cartItemService.addItemToCartToCurrentUser(dto);
 		
 		verify(cartItemRepository).save(captorCartItem.capture());
 		
@@ -142,7 +142,7 @@ public class CartItemServiceTest {
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
 		when(productRepository.findById(any())).thenReturn(Optional.of(product));
 		
-		assertThrows(ConflictException.class,() -> cartItemService.createCartItemForUserAuthenticated(dto));
+		assertThrows(ConflictException.class,() -> cartItemService.addItemToCartToCurrentUser(dto));
 	}
 	
 	@Test

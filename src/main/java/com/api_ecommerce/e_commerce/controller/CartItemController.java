@@ -24,7 +24,7 @@ public class CartItemController {
 	
 	@PostMapping("/{cartId}")
 	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest cartItemRequest, @PathVariable Long cartId){
-		cartItemService.createCartItemAdmin(cartItemRequest, cartId);
+		cartItemService.addItemToCart(cartItemRequest, cartId);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

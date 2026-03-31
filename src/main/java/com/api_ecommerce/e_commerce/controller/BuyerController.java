@@ -70,7 +70,7 @@ public class BuyerController {
 		return ResponseEntity.status(HttpStatus.OK).body(cartClientResponse);
 	}
 	
-	@PostMapping("/cart/item")
+	@PostMapping("/cart-item")
 	public ResponseEntity<?> saveCartItem(@Valid @RequestBody CartItemRequest request){
 				
 		cartItemService.createCartItemForUserAuthenticated(request);
@@ -78,14 +78,14 @@ public class BuyerController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@PutMapping("/cart/item/{cartItemId}")
+	@PutMapping("/cart-item/{cartItemId}")
 	public ResponseEntity<?> editCartItem(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){		
 		cartItemService.editCartItem(cartItemId, request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@DeleteMapping("/cart/item/{cartItemId}")
+	@DeleteMapping("/cart-item/{cartItemId}")
 	public ResponseEntity<?> deleteCartItem(@PathVariable Long cartItemId){		
 		cartItemService.deleteCartItem(cartItemId);
 		

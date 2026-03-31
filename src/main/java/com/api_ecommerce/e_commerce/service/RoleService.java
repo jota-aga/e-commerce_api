@@ -2,6 +2,7 @@ package com.api_ecommerce.e_commerce.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
@@ -15,6 +16,7 @@ public class RoleService {
 		return roleRepository.findRoleByName(name).get();
 	}
 	
+	@Transactional
 	public void saveRole(Role role) {
 		roleRepository.save(role);
 	}

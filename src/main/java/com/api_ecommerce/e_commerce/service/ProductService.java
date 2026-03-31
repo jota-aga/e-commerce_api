@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
@@ -23,6 +24,7 @@ public class ProductService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
+	@Transactional
 	public void createProduct(ProductRequest productRequest) {
 		Category category = findCategoryById(productRequest.categoryId());
 		
@@ -35,6 +37,8 @@ public class ProductService {
 		
 	}
 	
+	
+	@Transactional
 	public void editProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
 		
@@ -79,6 +83,7 @@ public class ProductService {
 		return products;
 	}
 	
+	@Transactional
 	public void deleteProduct(Long id){
 		Product product = this.findProductById(id);
 		

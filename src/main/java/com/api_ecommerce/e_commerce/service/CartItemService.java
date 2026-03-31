@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
@@ -50,6 +51,7 @@ public class CartItemService {
 		return cartItem.orElseThrow(() -> new NotFoundException("Cart Item id"));
 	}
 	
+	@Transactional
 	public void deleteCartItem(Long id) {
 		CartItem cartItem = findCartItemById(id);
 		
@@ -58,16 +60,19 @@ public class CartItemService {
 		cartItemRepository.delete(cartItem);
 	}
 	
+	@Transactional
 	public void deleteAllCartItem(List<CartItem> cartItems) {
 		cartItemRepository.deleteAll(cartItems);
 	}
 	
+	@Transactional
 	public void createCartItemForUserAuthenticated(CartItemRequest dto) {
 		Cart cart = findCartByUserAuthenticated();
 		
 		createCartItem(dto, cart);
 	}
 	
+	@Transactional
 	public void createCartItemAdmin(CartItemRequest dto, Long cartId) {
 		Cart cart = cartRepository.findById(cartId)
 				    .orElseThrow(() -> new NotFoundException("Cart"));
@@ -75,6 +80,7 @@ public class CartItemService {
 		createCartItem(dto, cart);
 	}
 	
+	@Transactional
 	public void editCartItem(Long id, CartItemRequest cartItemDTO) {
 		CartItem cartItem = findCartItemById(id);
 		
@@ -88,6 +94,7 @@ public class CartItemService {
 		cartItemRepository.save(cartItem);
 	}
 	
+	@Transactional
 	private void createCartItem(CartItemRequest dto, Cart cart) {
 		Product product = findProductById(dto.productId());
 		

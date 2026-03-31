@@ -87,6 +87,7 @@ public class CartService {
 		cartRepository.save(cart);
 	}
 	
+	@Transactional
 	private void createOrderByCart(Buyer buyer, Cart cart) {
 		List<OrderItem> orderItems = cart
 				.getCartItems().stream().map(cartItem -> OrderItemMapper.toEntity(cartItem))

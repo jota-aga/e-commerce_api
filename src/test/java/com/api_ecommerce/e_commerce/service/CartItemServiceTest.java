@@ -6,8 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +27,6 @@ import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
-import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;

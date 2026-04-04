@@ -2,8 +2,6 @@ package com.api_ecommerce.e_commerce.entity;
 
 import java.math.BigDecimal;
 
-import com.api_ecommerce.e_commerce.entity.Product;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

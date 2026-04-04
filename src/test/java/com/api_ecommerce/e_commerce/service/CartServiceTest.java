@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import com.api_ecommerce.e_commerce.creator.CartCreator;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.CartItem;
@@ -61,9 +62,6 @@ public class CartServiceTest {
 	@Mock
 	private OrderItemMapper orderItemMapper;
 	
-	private Category category;
-	private Product product1;
-	private Role role;
 	private User user;
 	private Buyer buyer;
 	private Cart cart;
@@ -74,14 +72,11 @@ public class CartServiceTest {
 	
 	@BeforeEach
 	public void setUp() {
-		category = new Category(1L, "Category", null);
-		product1 = new Product(1L, "Product1", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
-		role = new Role(1L, Role.Value.BUYER.name());
-		user = new User(1L, "username", "password", role);
-		buyer = new Buyer(1L, "name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
-		ci1 = new CartItem(1L, product1, 1, cart);
-		ci2 = new CartItem(2L, product1, 2, cart);
-		cart = new Cart(1L, buyer, null, null);
+		cart = CartCreator.completeCart();
+		buyer = cart.getBuyer();
+		user = buyer.getUser();
+		ci1 = cart.getCartItems().get(0);
+		ci2 = cart.getCartItems().get(1);
 	}
 	
 	@Test
@@ -153,11 +148,6 @@ public class CartServiceTest {
 		when(buyerRepository.findByUser(user)).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
 		
-		
-		ArrayList<CartItem> itens = new ArrayList();
-		itens.addAll(List.of(ci1, ci2));
-		cart.setCartItems(itens);
-		
 		cartService.checkoutForUserAuthenticated();
 		
 		verify(orderRepository).save(orderCaptor.capture());
@@ -170,6 +160,7 @@ public class CartServiceTest {
 	
 	@Test
 	public void checkoutForUserAuthenticatedCartEmpty() {
+		cart.setCartItems(List.of());
 		
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(buyerRepository.findByUser(user)).thenReturn(Optional.of(buyer));
@@ -203,6 +194,7 @@ public class CartServiceTest {
 	
 	@Test
 	public void checkoutByBuyerIdCartEmpty() {
+		cart.setCartItems(List.of());
 		
 		when(buyerRepository.findById(1L)).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));

@@ -20,6 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import com.api_ecommerce.e_commerce.creator.BuyerCreator;
+import com.api_ecommerce.e_commerce.creator.CartCreator;
+import com.api_ecommerce.e_commerce.creator.ProductCreator;
+import com.api_ecommerce.e_commerce.creator.RoleCreator;
+import com.api_ecommerce.e_commerce.creator.UserCreator;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
@@ -59,28 +64,19 @@ public class CartItemServiceTest {
 	@Mock
 	private SecurityService securityService;
 	
-	private Category category;
 	private Product product;
-	private Role role;
-	private User user;
 	private Buyer buyer;
 	private Cart cart;
+	private User user;
+	private Role roleBuyer;
 	
 	@BeforeEach
-	public void setUp() {
-		category = Category.builder()
-						   .name("Category")
-						   .build();
-		
-		product = new Product(1L, "Product", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
-		role = Role.builder()
-				   .name(Role.Value.BUYER.name())
-				   .build();
-		user = new User(1L, "username", "password", role);
-		buyer = new Buyer(1L, "name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
-		cart = Cart.builder()
-				   .buyer(buyer)
-				   .build();
+	public void setUp() {	
+		product = ProductCreator.productAvaliable();
+		buyer = BuyerCreator.simpleBuyer();
+		user = UserCreator.userBuyer();
+		cart = CartCreator.cartWithBuyer();
+		roleBuyer = RoleCreator.roleBuyer();
 	}
 	
 	@Test
@@ -99,7 +95,10 @@ public class CartItemServiceTest {
 	@Test
 	public void deleteCartItemWithAnotherUser() {
 		CartItem cartItem = new CartItem(1L, product, 1, cart);
-		User anotherUser = new User(2L, "username", "password", role);
+		User anotherUser = User.builder()
+							   .id(Long.MAX_VALUE)
+							   .role(roleBuyer)
+							   .build();
 		
 		when(cartItemRepository.findById((any()))).thenReturn(Optional.of(cartItem));
 		when(securityService.getCurrentUser()).thenReturn(anotherUser);
@@ -173,7 +172,7 @@ public class CartItemServiceTest {
 	public void editCartItemWithAnotherUser() {
 		CartItemRequest dto = new CartItemRequest(1L, 50);
 		CartItem cartItem = new CartItem(1L, product, 1, cart);
-		User anotherUser = new User(5L, "username", "password", role);
+		User anotherUser = new User(5L, "username", "password", roleBuyer);
 		
 		when(cartItemRepository.findById(1L)).thenReturn(Optional.of(cartItem));
 		when(securityService.getCurrentUser()).thenReturn(anotherUser);

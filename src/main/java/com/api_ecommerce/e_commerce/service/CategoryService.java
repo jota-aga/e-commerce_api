@@ -44,9 +44,7 @@ public class CategoryService {
 	public List<Category> findAllCategory() {
 		List<Category> categorys = categoryRepository.findAll();
 		
-		return categorys;
-				
-				
+		return categorys;		
 	}
 	
 	public void deleteCategory(Long id) {

@@ -13,6 +13,7 @@ import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
+import com.api_ecommerce.e_commerce.mapper.ProductMapper;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
@@ -48,11 +49,7 @@ public class ProductService {
 	public void editProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
 		
-		product.setName(productRequest.name());
-		product.setDescription(productRequest.description());
-		product.setPrice(productRequest.price());
-		product.setQuantity(productRequest.quantity());
-		product.setStatus(productRequest.status());
+		ProductMapper.INSTANCE.updateProduct(productRequest, product);
 		
 		validateNameOfProduct(product);
 		

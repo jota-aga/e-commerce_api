@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.api_ecommerce.e_commerce.creator.RoleCreator;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
@@ -62,9 +63,7 @@ public class AuthServiceTest {
 	@BeforeEach
 	public void setUp() {
 		dto = new RegisterBuyerRequest("username", "senha", "nome", "11237419484", LocalDate.now().minusYears(20), "endereço");
-		role =  Role.builder()
-						 .name(Role.Value.BUYER.name())
-						 .build();
+		role =  RoleCreator.roleBuyer();
 	}
 	
 	@Test

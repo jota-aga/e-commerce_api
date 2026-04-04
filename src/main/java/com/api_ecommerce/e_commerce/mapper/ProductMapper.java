@@ -2,32 +2,25 @@ package com.api_ecommerce.e_commerce.mapper;
 
 import java.util.List;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.factory.Mappers;
+
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.dto.product.ProductResponse;
 import com.api_ecommerce.e_commerce.entity.Product;
 
-public class ProductMapper {
-	public static ProductResponse toDTO(Product product) {
-		ProductResponse dto = new ProductResponse(product.getName(), product.getDescricao(), 
-										product.getPrice(), product.getCategory().getName(), product.getQuantity());
-		
-		return dto;
-	}
+@Mapper
+public interface ProductMapper {
 	
-	public static List<ProductResponse> toDTOList(List<Product> products){
-		List<ProductResponse> dto = products.stream()
-									   .map(product -> ProductMapper.toDTO(product))
-									   .toList();
-		
-		return dto;
-	}
+	public static final ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 	
-	public static Product toEntity(ProductRequest productRequest, Product product) {
-		product.setName(productRequest.name());
-		product.setDescricao(productRequest.description());
-		product.setPrice(productRequest.price());
-		product.setQuantity(productRequest.quantity());
-		
-		return product;
-	}
+	@Mapping(source = "category.name", target = "categoryName")
+	ProductResponse productToProductResponse(Product product);
+	
+	List<ProductResponse> listProductToListProductResponse(List<Product> list);
+
+	Product updateProduct(ProductRequest productRequest, @MappingTarget Product product);
+	
 }

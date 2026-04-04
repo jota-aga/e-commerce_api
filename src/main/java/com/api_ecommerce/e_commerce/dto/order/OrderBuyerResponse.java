@@ -6,5 +6,5 @@ import java.util.List;
 
 import com.api_ecommerce.e_commerce.dto.order_item.OrderItemResponse;
 
-public record OrderClientResponse(List<OrderItemResponse> ordersItemResponse, LocalDate createdAt, BigDecimal totalValue ) 
+public record OrderBuyerResponse(List<OrderItemResponse> ordersItemResponse, LocalDate createdAt, BigDecimal totalValue ) 
 {}

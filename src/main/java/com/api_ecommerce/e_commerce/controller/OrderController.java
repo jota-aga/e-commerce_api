@@ -27,7 +27,7 @@ public class OrderController {
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByBuyerId(@PathVariable Long id){
 		List<Order> orders = orderService.findOrdersByBuyerId(id);
 		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders);
 	
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -36,7 +36,7 @@ public class OrderController {
 	public ResponseEntity<List<OrderAdminResponse>> findOrdersByPeriod(@RequestParam LocalDate start, @RequestParam LocalDate end){
 		List<Order> orders = orderService.findOrdersByPeriod(start, end);
 		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -45,7 +45,7 @@ public class OrderController {
 	public ResponseEntity<List<OrderAdminResponse>> findAllOrders(){
 		List<Order> orders = orderService.findAllOrders();
 		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.toListAdminDTO(orders);
+		List<OrderAdminResponse> orderAdminResponse = OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -54,6 +54,6 @@ public class OrderController {
 	public ResponseEntity<?> findOrdersByProduct(@PathVariable Long productId){
 		List<Order> orders = orderService.findOrdersByProduct(productId);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(OrderMapper.toListAdminDTO(orders));
+		return ResponseEntity.status(HttpStatus.OK).body(OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders));
 	}
 }

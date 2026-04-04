@@ -46,11 +46,20 @@ public class AuthService {
 		User user = createUser(dto.username(), dto.password(), Role.Value.BUYER.name());
 		validateRepeatedUsername(dto.username());
 		
-		Buyer buyer = new Buyer(dto.name(), dto.birthday(), dto.cpf(), dto.adress(), user);
+		Buyer buyer = Buyer.builder()
+						   .name(dto.name())
+						   .birthday(dto.birthday())
+						   .cpf(dto.cpf())
+						   .adress(dto.adress())
+						   .user(user)
+						   .build();
+				
 		validateCpfRepeated(buyer);
 		buyer = buyerRepository.save(buyer);
 
-		Cart cart = new Cart(buyer);
+		Cart cart = Cart.builder()
+				        .buyer(buyer)
+				        .build();
 		cartRepository.save(cart);
 	}
 	
@@ -113,7 +122,12 @@ public class AuthService {
 	
 	private User createUser(String username, String password, String roleName) {
 		Role role = findRoleByName(roleName);
-		User user = new User(username, password, role);
+		User user = User.builder()
+						.username(username)
+						.password(password)
+						.role(role)
+						.build();
+		
 		validateRepeatedUsername(user.getUsername());
 		user = userRepository.save(user);
 		

@@ -25,8 +25,12 @@ public class RoleConfig implements CommandLineRunner {
 		roleRepeat.ifPresentOrElse(
 								   u -> System.out.println("The roles are already in db"),
 								   () ->{
-									   		Role roleAdmin = new Role(Role.Value.ADMIN.name());
-									   		Role roleBuyer = new Role(Role.Value.BUYER.name());
+									   		Role roleAdmin = Role.builder()
+									   							 .name(Role.Value.ADMIN.name())
+									   							 .build();
+									   		Role roleBuyer = Role.builder()
+									   							 .name(Role.Value.BUYER.name())
+									   							 .build();
 									   		roleRepository.save(roleAdmin);
 									   		roleRepository.save(roleBuyer);
 								   }

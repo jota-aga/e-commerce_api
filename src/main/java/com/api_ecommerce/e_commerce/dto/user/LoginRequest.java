@@ -1,13 +1,12 @@
 package com.api_ecommerce.e_commerce.dto.user;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 public record LoginRequest(
-		@NotBlank
+		@NotEmpty
 		String username,
 		
-		@NotBlank
+		@NotEmpty
 		String password
 		) 
 {}
-

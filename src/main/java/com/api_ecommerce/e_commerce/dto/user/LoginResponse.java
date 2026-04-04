@@ -1,5 +1,4 @@
 package com.api_ecommerce.e_commerce.dto.user;
 
-public record LoginResponse(String acessToken) {
-
-}
+public record LoginResponse(String acessToken) 
+{}

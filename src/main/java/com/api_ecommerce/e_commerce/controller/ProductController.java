@@ -44,25 +44,25 @@ public class ProductController {
 	public ResponseEntity<List<ProductResponse>> findAllProducts(){
 		List<Product> products = productService.findAllProducts();
 		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.INSTANCE.listProductToListProductResponse(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
-	@GetMapping("/search-name")
+	@GetMapping("/name")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByName(@RequestParam("name") String name){
 		List<Product> products = productService.findAllByName(name);
 				
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.INSTANCE.listProductToListProductResponse(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}
 	
-	@GetMapping("/search-category")
+	@GetMapping("/category")
 	public ResponseEntity<List<ProductResponse>> findAllProductsByCategory(@RequestParam String categoryName){
 		List<Product> products = productService.findAllByCategory(categoryName);
 		
-		List<ProductResponse> productsResponse = ProductMapper.toDTOList(products);
+		List<ProductResponse> productsResponse = ProductMapper.INSTANCE.listProductToListProductResponse(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
 	}

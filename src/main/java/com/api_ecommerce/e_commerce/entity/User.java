@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
 
 	@Id
@@ -40,13 +42,4 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name="role_id")
 			)
 	private Role role;
-
-	public User(String username, String password, Role role) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.role = role;
-	}
-	
-	
 }

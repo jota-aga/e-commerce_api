@@ -34,6 +34,7 @@ import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
+import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
@@ -57,9 +58,11 @@ public class CartServiceTest {
 	@Mock
 	private SecurityService securityService;
 	
+	@Mock
+	private OrderItemMapper orderItemMapper;
+	
 	private Category category;
 	private Product product1;
-	private Product product2;
 	private Role role;
 	private User user;
 	private Buyer buyer;
@@ -71,15 +74,14 @@ public class CartServiceTest {
 	
 	@BeforeEach
 	public void setUp() {
-		category = new Category("Category");
-		product1 = new Product("Product1", "Description", 100, new BigDecimal(50), category, ProductStatus.AVAILABLE);
-		product2 = new Product("Product2", "Description", 60, new BigDecimal(7), category, ProductStatus.AVAILABLE);
-		role = new Role(Role.Value.BUYER.name());
+		category = new Category(1L, "Category", null);
+		product1 = new Product(1L, "Product1", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
+		role = new Role(1L, Role.Value.BUYER.name());
 		user = new User(1L, "username", "password", role);
 		buyer = new Buyer(1L, "name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
-		ci1 = new CartItem(product1, 1, cart);
-		ci2 = new CartItem(product1, 2, cart);
-		cart = new Cart(1L, buyer, null);
+		ci1 = new CartItem(1L, product1, 1, cart);
+		ci2 = new CartItem(2L, product1, 2, cart);
+		cart = new Cart(1L, buyer, null, null);
 	}
 	
 	@Test
@@ -162,7 +164,7 @@ public class CartServiceTest {
 		verify(cartRepository).save(cartCaptor.capture());
 		
 		assertNotNull(orderCaptor.getValue());
-		assertEquals(orderCaptor.getValue().getOrdersItem().size(), 2);
+		assertEquals(orderCaptor.getValue().getOrderItems().size(), 2);
 		assertEquals(cartCaptor.getValue().getCartItems().size(), 0);
 	}
 	
@@ -195,14 +197,12 @@ public class CartServiceTest {
 		verify(cartRepository).save(cartCaptor.capture());
 		
 		assertNotNull(orderCaptor.getValue());
-		assertEquals(orderCaptor.getValue().getOrdersItem().size(), 2);
+		assertEquals(orderCaptor.getValue().getOrderItems().size(), 2);
 		assertEquals(cartCaptor.getValue().getCartItems().size(), 0);
 	}
 	
 	@Test
 	public void checkoutByBuyerIdCartEmpty() {
-		ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
-		ArgumentCaptor<Cart> cartCaptor = ArgumentCaptor.forClass(Cart.class);
 		
 		when(buyerRepository.findById(1L)).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));

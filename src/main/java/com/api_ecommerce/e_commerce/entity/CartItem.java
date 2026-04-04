@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CartItem {
 	
 	@Id
@@ -37,13 +39,4 @@ public class CartItem {
 	@ManyToOne
 	@JoinColumn(name="cart_id", nullable = true)
 	private Cart cart;
-
-	public CartItem(Product product, int quantity, Cart cart) {
-		super();
-		this.product = product;
-		this.quantity = quantity;
-		this.cart = cart;
-	}
-	
-	
 }

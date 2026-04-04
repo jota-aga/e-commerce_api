@@ -103,7 +103,12 @@ public class CartItemService {
 			throw new ConflictException("This Product is unavailable");
 		}
 		
-		CartItem cartItem = new CartItem(product, dto.quantity(), cart);
+		CartItem cartItem = CartItem.builder()
+									.product(product)
+									.quantity(dto.quantity())
+									.cart(cart)
+									.build();
+
 		cartItemRepository.save(cartItem);
 	}
 	
@@ -120,7 +125,7 @@ public class CartItemService {
 	private Product findProductById(Long productId) {
 		Optional<Product> optionalProduct = productRepository.findById(productId);
 		
-		Product product = optionalProduct.orElseThrow(() -> new NotFoundException("Product's id"));
+		Product product = optionalProduct.orElseThrow(() -> new NotFoundException("Product id"));
 		
 		return product;
 	}
@@ -133,7 +138,7 @@ public class CartItemService {
 		
 		Optional<Cart> optionalCart = cartRepository.findByBuyerId(buyer.getId());
 		
-		Cart cart = optionalCart.orElseThrow(() -> new NotFoundException("Cart's id"));
+		Cart cart = optionalCart.orElseThrow(() -> new NotFoundException("Cart id"));
 		
 		return cart;
 	}

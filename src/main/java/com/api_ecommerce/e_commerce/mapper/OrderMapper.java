@@ -1,49 +1,19 @@
 package com.api_ecommerce.e_commerce.mapper;
 
-import java.math.BigDecimal;
 import java.util.List;
 
+import org.mapstruct.factory.Mappers;
+
 import com.api_ecommerce.e_commerce.dto.order.OrderAdminResponse;
-import com.api_ecommerce.e_commerce.dto.order.OrderClientResponse;
-import com.api_ecommerce.e_commerce.dto.order_item.OrderItemResponse;
+import com.api_ecommerce.e_commerce.dto.order.OrderBuyerResponse;
 import com.api_ecommerce.e_commerce.entity.Order;
 
-public class OrderMapper {
-	public static OrderAdminResponse toAdminDTO(Order order) {
-		List<OrderItemResponse> orderItemDTO = order.getOrdersItem().stream()
-																	.map(orderItem -> OrderItemMapper.toDTO(orderItem))
-																	.toList();
-		BigDecimal totalValue = order.getOrdersItem().stream()
-													 .map(orderItem -> orderItem.getProductPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
-													 .reduce(BigDecimal.ZERO, BigDecimal::add);
-		OrderAdminResponse dto = new OrderAdminResponse(order.getBuyer(), orderItemDTO, order.getCreatedAt(), totalValue);
-		
-		return dto;
-	}
+public interface OrderMapper {
 	
-	public static OrderClientResponse toClientDTO(Order order) {
-		List<OrderItemResponse> ordersItemsDTO = order.getOrdersItem().stream()
-																	  .map(orderItem -> OrderItemMapper.toDTO(orderItem))
-																	  .toList();
-		BigDecimal totalValue = order.getOrdersItem().stream()
-				 .map(orderItem -> orderItem.getProductPrice().multiply(BigDecimal.valueOf(orderItem.getQuantity())))
-				 .reduce(BigDecimal.ZERO, BigDecimal::add);
-		
-		OrderClientResponse dto = new OrderClientResponse(ordersItemsDTO, order.getCreatedAt(), totalValue);
-		return dto;
-	}
+	OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 	
-	public static List<OrderAdminResponse> toListAdminDTO(List<Order> orders){
-		List<OrderAdminResponse> dto = orders.stream()
-				 .map(order -> toAdminDTO(order))
-				 .toList();
-		return dto;
-	}
-	
-	public static List<OrderClientResponse> toListClientDTO(List<Order> orders){
-		List<OrderClientResponse> dto = orders.stream()
-				 .map(order -> toClientDTO(order))
-				 .toList();
-		return dto;
-	}
+	OrderAdminResponse orderToOrderAdminResponse(Order order);
+	OrderBuyerResponse orderToOrderBuyerResponse(Order order);
+	List<OrderAdminResponse> listOrderToListOrderAdminResponse(List<Order> orders);
+	List<OrderBuyerResponse> listOrderToListOrderBuyerResponse(List<Order> orders);
 }	

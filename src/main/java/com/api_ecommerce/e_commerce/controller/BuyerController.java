@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api_ecommerce.e_commerce.dto.cart.CartClientResponse;
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemRequest;
-import com.api_ecommerce.e_commerce.dto.order.OrderClientResponse;
+import com.api_ecommerce.e_commerce.dto.order.OrderBuyerResponse;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.mapper.CartMapper;
@@ -53,10 +53,10 @@ public class BuyerController {
 	TokenService tokenService;
 	
 	@GetMapping("/orders")
-	public ResponseEntity<List<OrderClientResponse>> getAllOrderOfBuyer(){		
+	public ResponseEntity<List<OrderBuyerResponse>> getAllOrderOfBuyer(){		
 		List<Order> orders = orderService.findOrdersByUserAuthenticated();
 		
-		List<OrderClientResponse> ordersResponse = OrderMapper.toListClientDTO(orders);
+		List<OrderBuyerResponse> ordersResponse = OrderMapper.INSTANCE.listOrderToListOrderBuyerResponse(orders);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(ordersResponse);
 	}
@@ -65,7 +65,7 @@ public class BuyerController {
 	public ResponseEntity<CartClientResponse> getCart(){		
 		Cart cart = cartService.getCartOfUserAuthenticated();
 		
-		CartClientResponse cartClientResponse = CartMapper.toClientDTO(cart);
+		CartClientResponse cartClientResponse = CartMapper.INSTANCE.cartToCartClienteResponse(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartClientResponse);
 	}

@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.api_ecommerce.e_commerce.dto.category.CategoryRequest;
+import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
@@ -21,8 +21,10 @@ public class CategoryService {
 		categoryRepository.save(category);
 	}
 	
-	public void createCategory(CategoryRequest categoryRequest) {
-		Category category = new Category(categoryRequest.name());
+	public void createCategory(CategoryDTO dto) {
+		Category category = Category.builder()
+									.name(dto.name())
+									.build();
 		
 		saveCategory(category);
 	}
@@ -53,10 +55,10 @@ public class CategoryService {
 		categoryRepository.delete(category);
 	}
 	
-	public void editCategory(Long id, CategoryRequest categoryRequest) {
+	public void editCategory(Long id, CategoryDTO CategoryDTO) {
 		Category category = findCategoryById(id);
 		
-		category.setName(categoryRequest.name());
+		category.setName(CategoryDTO.name());
 		
 		saveCategory(category);
 	}

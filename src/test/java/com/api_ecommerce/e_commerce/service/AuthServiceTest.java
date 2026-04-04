@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -55,14 +56,24 @@ public class AuthServiceTest {
 	@Mock
 	private CartRepository cartRepository;
 	
+	private RegisterBuyerRequest dto;
+	private Role role;
+	
+	@BeforeEach
+	public void setUp() {
+		dto = new RegisterBuyerRequest("username", "senha", "nome", "11237419484", LocalDate.now().minusYears(20), "endereço");
+		role =  Role.builder()
+						 .name(Role.Value.BUYER.name())
+						 .build();
+	}
+	
 	@Test
 	public void registerBuyerSucesso() {
 		ArgumentCaptor<Buyer> captorBuyer = ArgumentCaptor.forClass(Buyer.class);
 		ArgumentCaptor<User> captorUser = ArgumentCaptor.forClass(User.class);
 		ArgumentCaptor<Cart> captorCart = ArgumentCaptor.forClass(Cart.class);
 		
-		RegisterBuyerRequest dto = new RegisterBuyerRequest("username", "senha", "nome", "11237419484", LocalDate.now().minusYears(20), "endereço");
-		Role role =  new Role(Role.Value.BUYER.name());
+		
 		
 		when(roleRepository.findRoleByName(Role.Value.BUYER.name())).thenReturn(Optional.of(role));
 		
@@ -84,10 +95,7 @@ public class AuthServiceTest {
 	}
 	
 	@Test
-	public void registerBuyerCPFRepetido() {
-		RegisterBuyerRequest dto = new RegisterBuyerRequest("username", "senha", "nome", "11237419484", LocalDate.now().minusYears(20), "endereço");
-		Role role =  new Role(Role.Value.BUYER.name());
-		
+	public void registerBuyerCPFRepetido() {		
 		when(roleRepository.findRoleByName(Role.Value.BUYER.name())).thenReturn(Optional.of(role));
 		
 		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.empty());

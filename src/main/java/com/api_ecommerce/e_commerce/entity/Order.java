@@ -4,7 +4,6 @@ package com.api_ecommerce.e_commerce.entity;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Order {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -37,19 +38,6 @@ public class Order {
 	@Column
 	private LocalDate createdAt;
 	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<OrderItem> ordersItem;
-
-	public Order(Buyer buyer, List<OrderItem> ordersItem) {
-		super();
-		this.buyer = buyer;
-		this.ordersItem = ordersItem;
-	}
-
-	public Order(Buyer buyer) {
-		super();
-		this.buyer = buyer;
-	}
-	
-	
+	@OneToMany(mappedBy = "order", orphanRemoval = true)
+	private List<OrderItem> orderItems;
 }

@@ -28,9 +28,15 @@ public class ProductService {
 	public void createProduct(ProductRequest productRequest) {
 		Category category = findCategoryById(productRequest.categoryId());
 		
-		Product product = new Product(productRequest.name(), productRequest.description(), 
-									  productRequest.quantity(), productRequest.price(), category, ProductStatus.AVAILABLE);
-		
+		Product product = Product.builder()
+								 .name(productRequest.name())
+								 .description(productRequest.description())
+								 .quantity(productRequest.quantity())
+								 .price(productRequest.price())
+								 .category(category)
+								 .status(ProductStatus.AVAILABLE)
+								 .build();
+
 		validateNameOfProduct(product);
 		
 		productRepository.save(product);
@@ -43,7 +49,7 @@ public class ProductService {
 		Product product = findProductById(id);
 		
 		product.setName(productRequest.name());
-		product.setDescricao(productRequest.description());
+		product.setDescription(productRequest.description());
 		product.setPrice(productRequest.price());
 		product.setQuantity(productRequest.quantity());
 		product.setStatus(productRequest.status());

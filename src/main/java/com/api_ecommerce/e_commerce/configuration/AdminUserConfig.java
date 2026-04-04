@@ -38,7 +38,11 @@ public class AdminUserConfig implements CommandLineRunner {
 									u -> System.out.println(),
 									() -> {
 											Role role = roleRepository.findRoleByName(Role.Value.ADMIN.name()).get();
-											User user = new User(username, passwordEncoder.encode(password), role);
+											User user = User.builder()
+															.username(username)
+															.password(passwordEncoder.encode(password))
+															.role(role)
+															.build();
 											userRepository.save(user);
 										  }
 								);

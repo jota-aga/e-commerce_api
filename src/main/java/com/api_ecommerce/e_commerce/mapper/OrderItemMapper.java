@@ -1,26 +1,26 @@
 package com.api_ecommerce.e_commerce.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
+
 import com.api_ecommerce.e_commerce.dto.order_item.OrderItemResponse;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
-import com.api_ecommerce.e_commerce.entity.Product;
 
-public class OrderItemMapper {
-	public static OrderItemResponse toDTO(OrderItem orderItem) {
-		OrderItemResponse orderItemResponse = new OrderItemResponse(orderItem.getProductName(), orderItem.getProductDescription(), 
-																	orderItem.getProductPrice(), orderItem.getQuantity());
-		
-		return orderItemResponse;
-	}
+@Mapper
+public interface OrderItemMapper {
 	
-	public static OrderItem toEntity(CartItem cartItem) {
-		Product product = cartItem.getProduct();
-		
-		OrderItem orderItem = new OrderItem(
-				product, product.getName(), product.getDescricao(), 
-				product.getPrice(), cartItem.getQuantity()
-				);
-		
-		return orderItem;
-	}
+	OrderItemMapper INSTANCE = Mappers.getMapper(OrderItemMapper.class);
+	
+	OrderItemResponse orderItemToOrderItemResponse(OrderItem orderItem);
+	
+	@Mappings(
+			{
+				@Mapping(source = "product.name", target = "productName"),
+				@Mapping(source = "product.description", target = "productDescription"),
+				@Mapping(source = "product.price", target = "productPrice"),
+			})
+	OrderItem cartItemToOrderItem(CartItem cartItem);
 }

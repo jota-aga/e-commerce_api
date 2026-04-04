@@ -1,15 +1,15 @@
 package com.api_ecommerce.e_commerce.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
 import com.api_ecommerce.e_commerce.dto.cart_item.CartItemResponse;
 import com.api_ecommerce.e_commerce.entity.CartItem;
 
-public class CartItemMapper {
+@Mapper
+public interface CartItemMapper {
 	
-	public static CartItemResponse toDTO(CartItem cartItem) {
-		CartItemResponse dto = new CartItemResponse(ProductMapper.toDTO(cartItem.getProduct()), cartItem.getQuantity());
-		
-		return dto;
-	}
+	CartItemMapper INSTANCE = Mappers.getMapper(CartItemMapper.class);
 	
-	
+	CartItemResponse cartItemToCartItemResponse(CartItem cartItem);
 }

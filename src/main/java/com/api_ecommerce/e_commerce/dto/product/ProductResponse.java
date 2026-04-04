@@ -9,7 +9,7 @@ public record ProductResponse(
 		
 		BigDecimal price,
 		
-		String category,
+		String categoryName,
 		
 		int quantity) {
 

@@ -51,11 +51,8 @@ public class CartService {
 	
 	public Cart getCartOfUserAuthenticated() {
 		Buyer buyer = findBuyerByUserAuthenticated();
-		
-		Optional<Cart> cart = cartRepository.findByBuyerId(buyer.getId());
-		
-		return cart
-			   .orElseThrow(() -> new NotFoundException("Cart by user id"));
+				
+		return findCartByBuyerId(buyer.getId());
 	}
 	
 	@Transactional
@@ -80,6 +77,7 @@ public class CartService {
 		if(cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
 			throw new ConflictException("The cart is empty");
 		}
+		
 		createOrderByCart(buyer, cart);
 		
 		cart.getCartItems().clear();
@@ -90,12 +88,24 @@ public class CartService {
 	@Transactional
 	private void createOrderByCart(Buyer buyer, Cart cart) {
 		List<OrderItem> orderItems = cart
-				.getCartItems().stream().map(cartItem -> OrderItemMapper.toEntity(cartItem))
+				.getCartItems().stream().map(cartItem -> OrderItemMapper.INSTANCE.cartItemToOrderItem(cartItem))
 				.toList();
-
-		Order order = new Order(buyer, orderItems);
-		orderItems.forEach(orderItem -> orderItem.setOrder(order));
-		orderRepository.save(order);
+		
+		if(orderItems == null || orderItems.isEmpty()) {
+			throw new ConflictException("Order items is empty!");
+			
+		}
+		else {
+			Order order = Order.builder()
+			           .buyer(buyer)
+			           .orderItems(orderItems)
+			           .build();
+	
+			orderItems.forEach(orderItem -> orderItem.setOrder(order));
+			order.setOrderItems(orderItems);
+			
+			orderRepository.save(order);
+		}
 	}
 	
 	private Buyer findBuyerByUserAuthenticated() {

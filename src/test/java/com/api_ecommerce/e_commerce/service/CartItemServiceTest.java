@@ -68,12 +68,19 @@ public class CartItemServiceTest {
 	
 	@BeforeEach
 	public void setUp() {
-		category = new Category("Category");
-		product = new Product("Product", "Description", 100, new BigDecimal(50), category, ProductStatus.AVAILABLE);
-		role = new Role(Role.Value.BUYER.name());
+		category = Category.builder()
+						   .name("Category")
+						   .build();
+		
+		product = new Product(1L, "Product", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
+		role = Role.builder()
+				   .name(Role.Value.BUYER.name())
+				   .build();
 		user = new User(1L, "username", "password", role);
-		buyer = new Buyer("name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
-		cart = new Cart(buyer);
+		buyer = new Buyer(1L, "name", LocalDate.now().minusYears(20), "11237419484", "adress", user);
+		cart = Cart.builder()
+				   .buyer(buyer)
+				   .build();
 	}
 	
 	@Test

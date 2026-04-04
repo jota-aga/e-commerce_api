@@ -25,7 +25,7 @@ public class CartController {
 	public ResponseEntity<CartAdminResponse> findCartById(@PathVariable("id") Long id){
 		Cart cart = cartService.findCartById(id);
 		
-		CartAdminResponse cartAdminResponse = CartMapper.toAdminDTO(cart);
+		CartAdminResponse cartAdminResponse = CartMapper.INSTANCE.cartToAdminCartResponse(cart);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(cartAdminResponse);
 	}

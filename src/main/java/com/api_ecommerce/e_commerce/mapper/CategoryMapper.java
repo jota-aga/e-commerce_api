@@ -1,26 +1,17 @@
 package com.api_ecommerce.e_commerce.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.api_ecommerce.e_commerce.dto.category.CategoryRequest;
+import org.mapstruct.factory.Mappers;
+
+import com.api_ecommerce.e_commerce.dto.category.CategoryDTO;
 import com.api_ecommerce.e_commerce.entity.Category;
 
-public class CategoryMapper {
-	public static CategoryRequest toDTO(Category category) {
-		CategoryRequest dto = new CategoryRequest(category.getName());
-		
-		return dto;
-	}
+public interface CategoryMapper {
 	
-	public static List<CategoryRequest> toListDTO(List<Category> categorys){
-		List<CategoryRequest> dtos = new ArrayList<CategoryRequest>();
-		
-		categorys.forEach(category -> {
-						  CategoryRequest categoryRequest = new CategoryRequest(category.getName());
-						  dtos.add(categoryRequest);
-		});
-		
-		return dtos;
-	}
+	CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
+	
+	CategoryDTO categoryToCategoryDTO(Category category);
+	
+	List<CategoryDTO> listCategoryToListCategoryDTO(List<Category> categorys);
 }

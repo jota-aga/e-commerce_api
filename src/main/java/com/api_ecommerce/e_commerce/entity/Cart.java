@@ -35,7 +35,7 @@ public class Cart {
 	@JoinColumn(name="buyer_id", nullable = false)
 	private Buyer buyer;
 	
-	@OneToMany(mappedBy = "cart_id", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cart", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<CartItem> cartItems;
 	
 	@Transient

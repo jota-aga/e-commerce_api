@@ -11,12 +11,30 @@ public class ProductCreator {
 	
 	public static Product productAvaliable() {
 		Category category = CategoryCreator.simpleCategory();
-		return new Product(1L, "Product", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
+		Product product = Product.builder()
+								 .id(1L)
+								 .name("Product")
+								 .description("Description")
+								 .price(new BigDecimal(50))
+								 .quantity(100)
+								 .category(category)
+								 .build();
+		
+		return product;
 	}
 	
 	public static Product productUnavaliable() {
 		Category category = CategoryCreator.simpleCategory();
-		return new Product(1L, "Product", "Description", new BigDecimal(50), 100, ProductStatus.UNAVAILABLE, category);
+		Product product = Product.builder()
+								 .id(2L)
+								 .name("Product")
+								 .description("Description")
+								 .price(new BigDecimal(50))
+								 .quantity(100)
+								 .status(ProductStatus.UNAVAILABLE)
+								 .category(category)
+								 .build();
+		return product;
 	}
 	
 	public static ProductRequest unavailableProductRequest() {

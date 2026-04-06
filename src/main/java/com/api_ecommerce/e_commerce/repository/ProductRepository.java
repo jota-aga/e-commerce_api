@@ -10,5 +10,5 @@ import com.api_ecommerce.e_commerce.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByName(String name);
 	List<Product> findAllByCategoryId(Long categoryId);
-	List<Product> findAllByNameIgnoreCase(String name);
+	List<Product> findAllByNameContainingIgnoreCase(String name);
 } 

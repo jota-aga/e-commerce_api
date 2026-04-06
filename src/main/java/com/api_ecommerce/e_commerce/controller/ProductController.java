@@ -77,7 +77,7 @@ public class ProductController {
 	@PutMapping("/{id}")
 	public ResponseEntity<String> editProductById(@PathVariable Long id,  @Valid @RequestBody ProductRequest productRequest){
 	
-		productService.editProduct(id, productRequest);
+		productService.updateProduct(id, productRequest);
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

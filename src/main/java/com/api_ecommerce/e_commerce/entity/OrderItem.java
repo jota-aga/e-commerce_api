@@ -42,7 +42,6 @@ public class OrderItem {
 	@Column
 	private int quantity;
 	
-	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
 	

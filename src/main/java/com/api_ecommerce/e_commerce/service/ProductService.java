@@ -8,22 +8,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
+import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Category;
+import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.mapper.ProductMapper;
+import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
+import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
 @Service
 public class ProductService {
 	@Autowired
-	ProductRepository productRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
-	CategoryRepository categoryRepository;
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private CartItemRepository cartItemRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 	
 	@Transactional
 	public void createProduct(ProductRequest productRequest) {
@@ -46,7 +56,7 @@ public class ProductService {
 	
 	
 	@Transactional
-	public void editProduct(Long id, ProductRequest productRequest) {
+	public void updateProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
 		
 		ProductMapper.INSTANCE.updateProduct(productRequest, product);
@@ -73,8 +83,8 @@ public class ProductService {
 	}
 	
 	public List<Product> findAllByName(String name){
-		List<Product> products = productRepository.findAllByNameIgnoreCase(name);
-		
+		List<Product> products = productRepository.findAllByNameContainingIgnoreCase(name);
+
 		return products;
 	}
 	
@@ -89,8 +99,25 @@ public class ProductService {
 	@Transactional
 	public void deleteProduct(Long id){
 		Product product = this.findProductById(id);
+		deleteAllCartItemOfProduct(product);
+		removeProductOfOrderItems(product);
 		
 		productRepository.delete(product);
+	}
+	
+	private void deleteAllCartItemOfProduct(Product product) {
+		List<CartItem> cartItems = product.getCartItems();
+		cartItemRepository.deleteAll(cartItems);
+	}
+	
+	private void removeProductOfOrderItems(Product product) {
+		List<OrderItem> orderItems = product.getOrderItems();
+		
+		if(orderItems != null && !orderItems.isEmpty()) {
+			orderItems.forEach(orderItem -> orderItem.setProduct(null));		  
+		}
+		
+		orderItemRepository.saveAll(orderItems);
 	}
 	
 	private Category findCategoryById(Long categoryId) {

@@ -2,9 +2,11 @@
 package com.api_ecommerce.e_commerce.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,4 +53,10 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name="category_id")
 	private Category category;
+	
+	@OneToMany(mappedBy = "product")
+	private List<CartItem> cartItems;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	private List<OrderItem> orderItems;
 }

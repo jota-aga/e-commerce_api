@@ -80,7 +80,15 @@ public class ProductServiceTest {
 	public void updateProductSucess() {
 		ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
 		
-		Product productBeforeUpdate = new Product(5L, "Product Before", "Description Before", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
+		Product productBeforeUpdate = Product.builder()
+											 .id(2L)
+											 .name("Product Before")
+											 .description("Description Before")
+											 .price(new BigDecimal(50))
+											 .quantity(100)
+											 .status(ProductStatus.AVAILABLE)
+											 .category(category)
+											 .build();
 		Category newCategory = Category.builder()
 									   .id(1L)
 									   .name("New Category")
@@ -90,7 +98,7 @@ public class ProductServiceTest {
 		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(newCategory));
 		when(productRepository.findByName(any())).thenReturn(Optional.empty());
 		
-		productService.editProduct(1L,dto);
+		productService.updateProduct(1L,dto);
 		
 		verify(productRepository).save(productCaptor.capture());
 		
@@ -105,7 +113,15 @@ public class ProductServiceTest {
 	
 	@Test
 	public void updateProductWithNameRepeated() {		
-		Product productBeforeUpdate = new Product(2L, "Product", "Description", new BigDecimal(50), 100, ProductStatus.AVAILABLE, category);
+		Product productBeforeUpdate = Product.builder()
+											 .id(2L)
+											 .name("Product Before")
+											 .description("Description Before")
+											 .price(new BigDecimal(50))
+											 .quantity(100)
+											 .status(ProductStatus.AVAILABLE)
+											 .category(category)
+											 .build();
 				
 		Product productRepeated = Product.builder()
 										 .id(Long.MAX_VALUE)
@@ -114,6 +130,6 @@ public class ProductServiceTest {
 		when(productRepository.findById(productBeforeUpdate.getId())).thenReturn(Optional.of(productBeforeUpdate));
 		when(productRepository.findByName(dto.name())).thenReturn(Optional.of(productRepeated));
 		
-		assertThrows(ConflictException.class, () -> productService.editProduct(productBeforeUpdate.getId(),dto));
+		assertThrows(ConflictException.class, () -> productService.updateProduct(productBeforeUpdate.getId(),dto));
 	}
 }

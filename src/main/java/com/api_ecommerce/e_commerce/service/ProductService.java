@@ -107,17 +107,17 @@ public class ProductService {
 	
 	private void deleteAllCartItemOfProduct(Product product) {
 		List<CartItem> cartItems = product.getCartItems();
-		cartItemRepository.deleteAll(cartItems);
+		
+		if(cartItems != null && !cartItems.isEmpty()) cartItemRepository.deleteAll(cartItems);
 	}
 	
 	private void removeProductOfOrderItems(Product product) {
 		List<OrderItem> orderItems = product.getOrderItems();
 		
 		if(orderItems != null && !orderItems.isEmpty()) {
-			orderItems.forEach(orderItem -> orderItem.setProduct(null));		  
+			orderItems.forEach(orderItem -> orderItem.setProduct(null));
+			orderItemRepository.saveAll(orderItems);
 		}
-		
-		orderItemRepository.saveAll(orderItems);
 	}
 	
 	private Category findCategoryById(Long categoryId) {

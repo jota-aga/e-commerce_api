@@ -3,11 +3,15 @@ package com.api_ecommerce.e_commerce.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,14 +24,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import com.api_ecommerce.e_commerce.creator.CartItemCreator;
 import com.api_ecommerce.e_commerce.creator.CategoryCreator;
+import com.api_ecommerce.e_commerce.creator.OrderItemCreator;
 import com.api_ecommerce.e_commerce.creator.ProductCreator;
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
+import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
+import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
+import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +52,13 @@ public class ProductServiceTest {
 	@Mock
 	private CategoryRepository categoryRepository;
 	
+	@Mock
+	private CartItemRepository cartItemRespositoy;
+	
+	@Mock
+	private OrderItemRepository orderItemRepository;
+	
+	
 	private Category category;
 	private ProductRequest dto;
 	
@@ -53,11 +69,11 @@ public class ProductServiceTest {
 	}
 	
 	@Test
-	public void createProductSucess() {
+	public void createProductSuccess() {
 		ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
 				
-		when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
-		when(productRepository.findByName(any())).thenReturn(Optional.empty());
+		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
+		when(productRepository.findByName(dto.name())).thenReturn(Optional.empty());
 		
 		productService.createProduct(dto);
 		
@@ -70,14 +86,16 @@ public class ProductServiceTest {
 	@Test
 	public void createProductWithNameRepeated() {		
 		
-		when(categoryRepository.findById(any())).thenReturn(Optional.of(category));
+		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
 		when(productRepository.findByName(dto.name())).thenReturn(Optional.of(new Product()));
 		
 		assertThrows(ConflictException.class, () -> productService.createProduct(dto));
+		
+		verify(productRepository, never()).save(any());
 	}
 	
 	@Test
-	public void updateProductSucess() {
+	public void updateProductSuccess() {
 		ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
 		
 		Product productBeforeUpdate = Product.builder()
@@ -96,7 +114,7 @@ public class ProductServiceTest {
 		
 		when(productRepository.findById(1L)).thenReturn(Optional.of(productBeforeUpdate));
 		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(newCategory));
-		when(productRepository.findByName(any())).thenReturn(Optional.empty());
+		when(productRepository.findByName(dto.name())).thenReturn(Optional.empty());
 		
 		productService.updateProduct(1L,dto);
 		
@@ -131,5 +149,102 @@ public class ProductServiceTest {
 		when(productRepository.findByName(dto.name())).thenReturn(Optional.of(productRepeated));
 		
 		assertThrows(ConflictException.class, () -> productService.updateProduct(productBeforeUpdate.getId(),dto));
+		
+		verify(productRepository, never()).save(any());
+	}
+	
+	@Test
+	public void updateProductWhenNotFound() {		
+		Product productBeforeUpdate = Product.builder()
+											 .id(2L)
+											 .name("Product Before")
+											 .description("Description Before")
+											 .price(new BigDecimal(50))
+											 .quantity(100)
+											 .status(ProductStatus.AVAILABLE)
+											 .category(category)
+											 .build();
+				
+		
+		when(productRepository.findById(productBeforeUpdate.getId())).thenReturn(Optional.empty());
+		
+		assertThrows(NotFoundException.class, () -> productService.updateProduct(productBeforeUpdate.getId(),dto));
+		
+		verify(productRepository, never()).save(any());
+	}
+	
+	@Test
+	public void deleteProductSuccess() {
+		Product product = ProductCreator.productAvaliable();
+		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+		
+		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
+		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
+		
+		productService.deleteProduct(1L);
+		
+		assertTrue(product.getOrderItems().stream()
+										  .allMatch(orderItem -> orderItem.getProduct() == null));
+		
+		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
+	}
+	
+	@Test
+	public void deleteProductOrderItemsNullSuccess() {
+		Product product = ProductCreator.productAvaliable();
+		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+		
+		product.setOrderItems(null);
+		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
+		
+		productService.deleteProduct(1L);
+		
+		verify(orderItemRepository, never()).saveAll(product.getOrderItems());
+		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
+	}
+	
+	@Test
+	public void deleteProductOrderItemsEmptySuccess() {
+		Product product = ProductCreator.productAvaliable();
+		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+		
+		product.setOrderItems(List.of());
+		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
+		
+		productService.deleteProduct(1L);
+		
+		verify(orderItemRepository, never()).saveAll(product.getOrderItems());
+		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
+	}
+	
+	@Test
+	public void deleteProductCartItemsNullSuccess() {
+		Product product = ProductCreator.productAvaliable();
+		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+		
+		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
+		
+		productService.deleteProduct(1L);
+		
+		assertTrue(product.getOrderItems().stream()
+										  .allMatch(orderItem -> orderItem.getProduct() == null));
+		
+		verify(cartItemRespositoy, never()).deleteAll();
+	}
+	
+	@Test
+	public void deleteProductCartItemsEmptySuccess() {
+		Product product = ProductCreator.productAvaliable();
+		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+		
+		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
+		product.setCartItems(List.of());
+		
+		productService.deleteProduct(1L);
+		
+		assertTrue(product.getOrderItems().stream()
+										  .allMatch(orderItem -> orderItem.getProduct() == null));
+		
+		verify(cartItemRespositoy, never()).deleteAll();
 	}
 }

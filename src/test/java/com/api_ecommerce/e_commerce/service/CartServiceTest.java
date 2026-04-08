@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ import org.mockito.quality.Strictness;
 import com.api_ecommerce.e_commerce.creator.CartCreator;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
-import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
@@ -59,8 +57,7 @@ public class CartServiceTest {
 	private User user;
 	private Buyer buyer;
 	private Cart cart;
-	private CartItem ci1;
-	private CartItem ci2;
+
 	
 	
 	
@@ -69,8 +66,6 @@ public class CartServiceTest {
 		cart = CartCreator.completeCart();
 		buyer = cart.getBuyer();
 		user = buyer.getUser();
-		ci1 = cart.getCartItems().get(0);
-		ci2 = cart.getCartItems().get(1);
 	}
 	
 	@Test
@@ -125,7 +120,7 @@ public class CartServiceTest {
 	}
 	
 	@Test
-	public void getCartByUserAuthenticatedCartNotFound() {
+	public void getCartByUserAuthenticatedNotFound() {
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(buyerRepository.findByUser(any())).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(1L)).thenReturn(Optional.empty());
@@ -170,11 +165,6 @@ public class CartServiceTest {
 		
 		when(buyerRepository.findById(1L)).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
-		
-		
-		ArrayList<CartItem> itens = new ArrayList();
-		itens.addAll(List.of(ci1, ci2));
-		cart.setCartItems(itens);
 		
 		cartService.checkoutByBuyerId(1L);
 		

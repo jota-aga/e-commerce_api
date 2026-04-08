@@ -18,6 +18,7 @@ public class ProductCreator {
 								 .price(new BigDecimal(50))
 								 .quantity(100)
 								 .category(category)
+								 .status(ProductStatus.AVAILABLE)
 								 .build();
 		
 		return product;

@@ -62,11 +62,6 @@ public class CartItemService {
 	}
 	
 	@Transactional
-	public void deleteAllCartItem(List<CartItem> cartItems) {
-		cartItemRepository.deleteAll(cartItems);
-	}
-	
-	@Transactional
 	public void addItemToCartToCurrentUser(CartItemRequest dto) {
 		Cart cart = findCartByUserAuthenticated();
 		
@@ -89,17 +84,20 @@ public class CartItemService {
 		
 		Product product = findProductById(cartItemDTO.productId());
 		
+		if(product.getStatus() == ProductStatus.UNAVAILABLE) {
+			throw new ConflictException("This Product is unavailable");
+		}
+		
 		cartItem.setProduct(product);
 		cartItem.setQuantity(cartItemDTO.quantity());
 		
 		cartItemRepository.save(cartItem);
 	}
 	
-	@Transactional
 	private void createCartItem(CartItemRequest dto, Cart cart) {
 		Product product = findProductById(dto.productId());
 		
-		if(product.getStatus() != ProductStatus.AVAILABLE) {
+		if(product.getStatus() == ProductStatus.UNAVAILABLE) {
 			throw new ConflictException("This Product is unavailable");
 		}
 		

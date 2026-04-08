@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
@@ -42,6 +43,7 @@ public class AuthService {
 	@Autowired
 	private CartRepository cartRepository;
 	
+	@Transactional
 	public void registerBuyer(RegisterBuyerRequest dto) {
 		User user = createUser(dto.username(), dto.password(), Role.Value.BUYER.name());
 		validateRepeatedUsername(dto.username());

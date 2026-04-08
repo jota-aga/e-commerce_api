@@ -1,5 +1,6 @@
 package com.api_ecommerce.e_commerce.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,12 +22,16 @@ import org.mockito.quality.Strictness;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.api_ecommerce.e_commerce.creator.RoleCreator;
+import com.api_ecommerce.e_commerce.creator.UserCreator;
+import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
+import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
+import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
@@ -106,5 +111,75 @@ public class AuthServiceTest {
 		assertThrows(ConflictException.class, () -> {
 			authService.registerBuyer(dto);
 			});
+	}
+	
+	@Test
+	public void doLoginBuyerSucess() {
+		User user = UserCreator.userBuyer();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(user));
+		when(passwordEncoder.matches(dto.password(), user.getPassword())).thenReturn(true);
+		when(tokenService.generateToken(user)).thenReturn("token");
+		
+		LoginResponse response = authService.doLogin(dto);
+		
+		assertEquals(response.acessToken(), "token");
+	}
+	
+	@Test
+	public void doLoginAdminSucess() {
+		User user = UserCreator.userAdmin();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(user));
+		when(passwordEncoder.matches(dto.password(), user.getPassword())).thenReturn(true);
+		when(tokenService.generateToken(user)).thenReturn("token");
+		
+		LoginResponse response = authService.doLogin(dto);
+		
+		assertEquals(response.acessToken(), "token");
+	}
+	
+	@Test
+	public void doLoginBuyerUsernameNotFound() {
+		User user = UserCreator.userBuyer();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.empty());
+		
+		assertThrows(NotAuthorizedException.class, () -> authService.doLogin(dto));
+	}
+	
+	@Test
+	public void doLoginAdminUsernameNotFound() {
+		User user = UserCreator.userAdmin();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.empty());
+		
+		assertThrows(NotAuthorizedException.class, () -> authService.doLogin(dto));
+	}
+	
+	@Test
+	public void doLoginBuyerPasswordDoesntMatche() {
+		User user = UserCreator.userBuyer();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(user));
+		when(passwordEncoder.matches(dto.password(), user.getPassword())).thenReturn(false);
+		
+		assertThrows(NotAuthorizedException.class, () -> authService.doLogin(dto));
+	}
+	
+	@Test
+	public void doLoginAdminPasswordDoesntMatche() {
+		User user = UserCreator.userAdmin();
+		LoginRequest dto = new LoginRequest(user.getUsername(), user.getPassword());
+		
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(user));
+		when(passwordEncoder.matches(dto.password(), user.getPassword())).thenReturn(false);
+		
+		assertThrows(NotAuthorizedException.class, () -> authService.doLogin(dto));
 	}
 }

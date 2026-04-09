@@ -2,6 +2,7 @@ package com.api_ecommerce.e_commerce.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +34,6 @@ public class Buyer {
 	
 	private String adress;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
 }

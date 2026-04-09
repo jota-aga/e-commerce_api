@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,7 +75,6 @@ public class AuthServiceTest {
 	@Test
 	public void registerBuyerSucesso() {
 		ArgumentCaptor<Buyer> captorBuyer = ArgumentCaptor.forClass(Buyer.class);
-		ArgumentCaptor<User> captorUser = ArgumentCaptor.forClass(User.class);
 		ArgumentCaptor<Cart> captorCart = ArgumentCaptor.forClass(Cart.class);
 		
 		
@@ -82,20 +82,28 @@ public class AuthServiceTest {
 		when(roleRepository.findRoleByName(Role.Value.BUYER.name())).thenReturn(Optional.of(role));
 		
 		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.empty());
-		
-		when(userRepository.save(any())).thenAnswer(Invocation -> Invocation.getArgument(0, User.class));
-		
+				
 		when(buyerRepository.findByCpf(dto.cpf())).thenReturn(Optional.empty());
 		
 		authService.registerBuyer(dto);
 		
-		verify(userRepository).save(captorUser.capture());
 		verify(buyerRepository).save(captorBuyer.capture());
 		verify(cartRepository).save(captorCart.capture());
 		
-		assertNotNull(captorUser.getValue());
 		assertNotNull(captorBuyer.getValue());
 		assertNotNull(captorCart.getValue());
+	}
+	
+	@Test
+	public void registerBuyerUsernameRepetido() {				
+		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.of(new User()));		
+		when(roleRepository.findRoleByName(Role.Value.BUYER.name())).thenReturn(Optional.of(role));
+		
+		assertThrows(ConflictException.class, () -> authService.registerBuyer(dto));
+		
+		verify(userRepository, never()).save(any());
+		verify(cartRepository, never()).save(any());
+		verify(buyerRepository, never()).save(any());
 	}
 	
 	@Test
@@ -103,14 +111,16 @@ public class AuthServiceTest {
 		when(roleRepository.findRoleByName(Role.Value.BUYER.name())).thenReturn(Optional.of(role));
 		
 		when(userRepository.findByUsername(dto.username())).thenReturn(Optional.empty());
-		
-		when(userRepository.save(any())).thenAnswer(Invocation -> Invocation.getArgument(0, User.class));
-		
+				
 		when(buyerRepository.findByCpf(dto.cpf())).thenReturn(Optional.of(new Buyer()));
 		
 		assertThrows(ConflictException.class, () -> {
 			authService.registerBuyer(dto);
 			});
+		
+		verify(userRepository, never()).save(any());
+		verify(cartRepository, never()).save(any());
+		verify(buyerRepository, never()).save(any());
 	}
 	
 	@Test

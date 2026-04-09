@@ -46,7 +46,6 @@ public class AuthService {
 	@Transactional
 	public void registerBuyer(RegisterBuyerRequest dto) {
 		User user = createUser(dto.username(), dto.password(), Role.Value.BUYER.name());
-		validateRepeatedUsername(dto.username());
 		
 		Buyer buyer = Buyer.builder()
 						   .name(dto.name())
@@ -99,11 +98,19 @@ public class AuthService {
 		return role;
 	}
 	
-	private void validateRepeatedUsername(String username) {
-		Optional<User> optionalUser = userRepository.findByUsername(username);
+	private void validateRepeatedUsername(User user) {
+		Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
 		
 		if(optionalUser.isPresent()) {
-			throw new ConflictException("Username already registered");
+			if(user.getId() == null || user.getId() == 0) {
+				throw new ConflictException("Username already registered");
+			}
+			else {
+				User repeatedUser = optionalUser.get();
+				
+				if(user.getId() != repeatedUser.getId()) 
+					throw new ConflictException("Username already registered");
+			}
 		}
 	}
 	
@@ -130,8 +137,7 @@ public class AuthService {
 						.role(role)
 						.build();
 		
-		validateRepeatedUsername(user.getUsername());
-		user = userRepository.save(user);
+		validateRepeatedUsername(user);
 		
 		return user;
 	}

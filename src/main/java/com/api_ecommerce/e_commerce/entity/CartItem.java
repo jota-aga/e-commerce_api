@@ -37,6 +37,6 @@ public class CartItem {
 	private int quantity;
 	
 	@ManyToOne
-	@JoinColumn(name="cart_id", nullable = true)
+	@JoinColumn(name="cart_id")
 	private Cart cart;
 }

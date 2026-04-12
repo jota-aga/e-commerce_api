@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Cart;
+import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
@@ -16,6 +17,7 @@ import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
+import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
 
@@ -31,7 +33,11 @@ public class CartService {
 	private BuyerRepository buyerRepository;
 	
 	@Autowired
+	private CartItemRepository cartItemRepository;
+	
+	@Autowired
 	private SecurityService securityService;
+	
 	
 	public Cart findCartById(Long id) {
 		Optional<Cart> optionalCart = cartRepository.findById(id);
@@ -70,25 +76,24 @@ public class CartService {
 		checkout(buyer);
 	}
 	
-	@Transactional
 	private void checkout(Buyer buyer) {
 		Cart cart = findCartByBuyerId(buyer.getId());
 		
-		if(cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
-			throw new ConflictException("The cart is empty");
-		}
+		boolean cartIsEmpty = !cartItemRepository.existsByCart(cart);
 		
-		createOrderByCart(buyer, cart);
+		if(cartIsEmpty) throw new ConflictException("Cart is empty");
 		
-		cart.getCartItems().clear();
+		List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
 		
-		cartRepository.save(cart);
+		createOrderByCart(buyer, cartItems);
+		
+		cartItemRepository.deleteAll(cartItems);
 	}
 	
 	@Transactional
-	private void createOrderByCart(Buyer buyer, Cart cart) {
-		List<OrderItem> orderItems = cart
-				.getCartItems().stream().map(cartItem -> OrderItemMapper.INSTANCE.cartItemToOrderItem(cartItem))
+	private void createOrderByCart(Buyer buyer, List<CartItem> cartItems) {
+		List<OrderItem> orderItems = cartItems.stream()
+				.map(cartItem -> OrderItemMapper.INSTANCE.cartItemToOrderItem(cartItem))
 				.toList();
 		
 		if(orderItems == null || orderItems.isEmpty()) {

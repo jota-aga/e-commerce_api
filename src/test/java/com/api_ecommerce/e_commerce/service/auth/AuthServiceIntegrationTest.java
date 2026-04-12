@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.service;
+package com.api_ecommerce.e_commerce.service.auth;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -23,6 +23,7 @@ import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.RoleRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
+import com.api_ecommerce.e_commerce.service.AuthService;
 
 @SpringBootTest
 @Transactional

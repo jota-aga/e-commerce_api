@@ -1,9 +1,10 @@
-package com.api_ecommerce.e_commerce.service;
+package com.api_ecommerce.e_commerce.service.cart;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,8 +30,11 @@ import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
+import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
+import com.api_ecommerce.e_commerce.service.CartService;
+import com.api_ecommerce.e_commerce.service.SecurityService;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -47,6 +51,9 @@ public class CartServiceTest {
 	
 	@Mock
 	private BuyerRepository buyerRepository;
+	
+	@Mock
+	private CartItemRepository cartItemRepository;
 	
 	@Mock
 	private SecurityService securityService;
@@ -131,20 +138,20 @@ public class CartServiceTest {
 	@Test
 	public void checkoutForUserAuthenticatedSucess() {
 		ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
-		ArgumentCaptor<Cart> cartCaptor = ArgumentCaptor.forClass(Cart.class);
 		
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(buyerRepository.findByUser(user)).thenReturn(Optional.of(buyer));
-		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
+		when(cartRepository.findByBuyerId(buyer.getId())).thenReturn(Optional.of(cart));
+		when(cartItemRepository.existsByCart(cart)).thenReturn(true);
+		when(cartItemRepository.findAllByCartId(cart.getId())).thenReturn(cart.getCartItems());
 		
 		cartService.checkoutForUserAuthenticated();
 		
 		verify(orderRepository).save(orderCaptor.capture());
-		verify(cartRepository).save(cartCaptor.capture());
+		verify(cartItemRepository, atLeastOnce()).deleteAll(cart.getCartItems());
 		
 		assertNotNull(orderCaptor.getValue());
 		assertEquals(orderCaptor.getValue().getOrderItems().size(), 2);
-		assertEquals(cartCaptor.getValue().getCartItems().size(), 0);
 	}
 	
 	@Test
@@ -153,7 +160,8 @@ public class CartServiceTest {
 		
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(buyerRepository.findByUser(user)).thenReturn(Optional.of(buyer));
-		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
+		when(cartRepository.findByBuyerId(cart.getId())).thenReturn(Optional.of(cart));
+		when(cartItemRepository.existsByCart(cart)).thenReturn(false);
 		
 		assertThrows(ConflictException.class, () -> cartService.checkoutForUserAuthenticated());
 	}
@@ -161,19 +169,20 @@ public class CartServiceTest {
 	@Test
 	public void checkoutByBuyerIdSucess() {
 		ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
-		ArgumentCaptor<Cart> cartCaptor = ArgumentCaptor.forClass(Cart.class);
 		
 		when(buyerRepository.findById(1L)).thenReturn(Optional.of(buyer));
 		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
+		when(cartItemRepository.existsByCart(cart)).thenReturn(true);
+		when(cartItemRepository.findAllByCartId(cart.getId())).thenReturn(cart.getCartItems());
+
 		
 		cartService.checkoutByBuyerId(1L);
 		
 		verify(orderRepository).save(orderCaptor.capture());
-		verify(cartRepository).save(cartCaptor.capture());
+		verify(cartItemRepository, atLeastOnce()).deleteAll(cart.getCartItems());
 		
 		assertNotNull(orderCaptor.getValue());
 		assertEquals(orderCaptor.getValue().getOrderItems().size(), 2);
-		assertEquals(cartCaptor.getValue().getCartItems().size(), 0);
 	}
 	
 	@Test
@@ -181,7 +190,8 @@ public class CartServiceTest {
 		cart.setCartItems(List.of());
 		
 		when(buyerRepository.findById(1L)).thenReturn(Optional.of(buyer));
-		when(cartRepository.findByBuyerId(any())).thenReturn(Optional.of(cart));
+		when(cartRepository.findByBuyerId(cart.getBuyer().getId())).thenReturn(Optional.of(cart));
+		when(cartItemRepository.existsByCart(cart)).thenReturn(false);
 		
 		assertThrows(ConflictException.class, () -> cartService.checkoutByBuyerId(1L));
 	}

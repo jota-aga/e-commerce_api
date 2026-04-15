@@ -56,7 +56,7 @@ public class CartItemService {
 	public void deleteCartItem(Long id) {
 		CartItem cartItem = findCartItemById(id);
 		
-		validateCartItemId(cartItem);
+		validateAcessToCartItemId(cartItem);
 		
 		cartItemRepository.delete(cartItem);
 	}
@@ -80,7 +80,7 @@ public class CartItemService {
 	public void editCartItem(Long id, CartItemRequest cartItemDTO) {
 		CartItem cartItem = findCartItemById(id);
 		
-		validateCartItemId(cartItem);
+		validateAcessToCartItemId(cartItem);
 		
 		Product product = findProductById(cartItemDTO.productId());
 		
@@ -110,7 +110,7 @@ public class CartItemService {
 		cartItemRepository.save(cartItem);
 	}
 	
-	private void validateCartItemId(CartItem cartItem) {
+	private void validateAcessToCartItemId(CartItem cartItem) {
 		User user = securityService.getCurrentUser();
 		
 		if(user.getRole().getName().equals(Role.Value.ADMIN.name())) return;

@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,19 +26,19 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<List<OrderAdminResponse>> findOrdersByBuyerId(@PathVariable Long id){
-		List<Order> orders = orderService.findOrdersByBuyerId(id);
+	public ResponseEntity<?> findOrdersByBuyerId(@PathVariable Long id, Pageable pageable){
+		Page<Order> orders = orderService.findOrdersByBuyerId(id, pageable);
 		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders);
+		Page<OrderAdminResponse> orderAdminResponse = orders.map(order -> OrderMapper.INSTANCE.orderToOrderAdminResponse(order));
 	
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
 	
 	@GetMapping("/date")
-	public ResponseEntity<List<OrderAdminResponse>> findOrdersByPeriod(@RequestParam LocalDate start, @RequestParam LocalDate end){
-		List<Order> orders = orderService.findOrdersByPeriod(start, end);
+	public ResponseEntity<?> findOrdersByPeriod(@RequestParam LocalDate start, @RequestParam LocalDate end, Pageable pageable){
+		Page<Order> orders = orderService.findOrdersByPeriod(start, end, pageable);
 		
-		List<OrderAdminResponse> orderAdminResponse = OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders);
+		Page<OrderAdminResponse> orderAdminResponse = orders.map(order -> OrderMapper.INSTANCE.orderToOrderAdminResponse(order));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(orderAdminResponse);
 	}
@@ -51,9 +53,11 @@ public class OrderController {
 	}
 	
 	@GetMapping("/product/{productId}")
-	public ResponseEntity<?> findOrdersByProduct(@PathVariable Long productId){
-		List<Order> orders = orderService.findOrdersByProduct(productId);
+	public ResponseEntity<?> findOrdersByProduct(@PathVariable Long productId, Pageable pageable){
+		Page<Order> orders = orderService.findOrdersByProduct(productId, pageable);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(OrderMapper.INSTANCE.listOrderToListOrderAdminResponse(orders));
+		Page<OrderAdminResponse> ordersResponse = orders.map(order -> OrderMapper.INSTANCE.orderToOrderAdminResponse(order));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(ordersResponse);
 	}
 }

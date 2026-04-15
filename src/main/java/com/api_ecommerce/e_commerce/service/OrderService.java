@@ -1,21 +1,22 @@
 package com.api_ecommerce.e_commerce.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.api_ecommerce.e_commerce.entity.Buyer;
 import com.api_ecommerce.e_commerce.entity.Order;
-import com.api_ecommerce.e_commerce.entity.OrderItem;
+import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
-import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.OrderRepository;
+import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
 @Service
 public class OrderService {
@@ -24,24 +25,24 @@ public class OrderService {
 	private OrderRepository orderRepository;
 	
 	@Autowired
-	private OrderItemRepository orderItemRepository;
+	private BuyerRepository buyerRepository;
 	
 	@Autowired
-	private BuyerRepository buyerRepository;
+	private ProductRepository productRepository;
 	
 	@Autowired
 	private SecurityService securityService;
 	
-	public List<Order> findOrdersByBuyerId(Long id) {
-		List<Order> orders = orderRepository.findAllOrderByBuyerId(id);
+	public Page<Order> findOrdersByBuyerId(Long id, Pageable pageable) {
+		Page<Order> orders = orderRepository.findAllOrderByBuyerId(id, pageable);
 				
 		return orders;
 	}
 	
-	public List<Order> findOrdersByUserAuthenticated(){
+	public Page<Order> findOrdersByUserAuthenticated(Pageable pageable){
 		Buyer buyer = findBuyerByUserAuthenticated();
 		
-		return findOrdersByBuyerId(buyer.getId());
+		return findOrdersByBuyerId(buyer.getId(), pageable);
 	}
 	
 	public Order findOrderById(Long id) {
@@ -50,8 +51,8 @@ public class OrderService {
 		return order.orElseThrow(() -> new NotFoundException("Order's id"));
 	}
 	
-	public List<Order> findOrdersByPeriod(LocalDate start, LocalDate end){
-		List<Order> orders = orderRepository.findAllByCreatedAtBetween(start, end);
+	public Page<Order> findOrdersByPeriod(LocalDate start, LocalDate end, Pageable pageable){
+		Page<Order> orders = orderRepository.findAllByCreatedAtBetween(start, end, pageable);
 		
 		return orders;
 	}
@@ -62,11 +63,10 @@ public class OrderService {
 		return orders;
 	}
 	
-	public List<Order> findOrdersByProduct(Long productId){
-		List<OrderItem> orderItems = orderItemRepository.findAllByProductId(productId);
+	public Page<Order> findOrdersByProduct(Long productId, Pageable pageable){
+		Product product = productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Proudct id"));
 		
-		List<Order> orders = new ArrayList<>();
-		orderItems.forEach(orderItem -> orders.add(orderItem.getOrder()));
+		Page<Order> orders = orderRepository.findDistinctByOrderItemsProduct(product, pageable);
 		
 		return orders;
 	}

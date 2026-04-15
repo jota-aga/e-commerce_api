@@ -7,13 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -106,10 +107,10 @@ public class CartServiceIntegrationTest {
 		List<CartItem> items = cartItemRepository.findAllByCartId(cart.getId());
 		assertTrue(items.isEmpty());
 
-		List<Order> order = orderRepository.findAllOrderByBuyerId(buyer.getId());
-		List<OrderItem> itemsOfFirstOrder = order.getFirst().getOrderItems();
+		Page<Order> orders = orderRepository.findAllOrderByBuyerId(buyer.getId(), Pageable.unpaged());
+		List<OrderItem> itemsOfFirstOrder = orders.toList().getFirst().getOrderItems();
 
-		assertFalse(order.isEmpty());
+		assertFalse(orders.isEmpty());
 		assertEquals(2, itemsOfFirstOrder.size());
 	}
 
@@ -134,10 +135,10 @@ public class CartServiceIntegrationTest {
 		List<CartItem> items = cartItemRepository.findAllByCartId(cart.getId());
 		assertTrue(items.isEmpty());
 
-		List<Order> order = orderRepository.findAllOrderByBuyerId(buyer.getId());
-		List<OrderItem> itemsOfFirstOrder = order.getFirst().getOrderItems();
+		Page<Order> orders = orderRepository.findAllOrderByBuyerId(buyer.getId(), Pageable.unpaged());
+		List<OrderItem> itemsOfFirstOrder = orders.toList().getFirst().getOrderItems();
 
-		assertFalse(order.isEmpty());
+		assertFalse(orders.isEmpty());
 		assertEquals(2, itemsOfFirstOrder.size());
 	}
 

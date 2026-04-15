@@ -28,7 +28,6 @@ import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
-import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
@@ -58,15 +57,9 @@ public class CartServiceTest {
 	@Mock
 	private SecurityService securityService;
 	
-	@Mock
-	private OrderItemMapper orderItemMapper;
-	
 	private User user;
 	private Buyer buyer;
 	private Cart cart;
-
-	
-	
 	
 	@BeforeEach
 	public void setUp() {
@@ -181,8 +174,10 @@ public class CartServiceTest {
 		verify(orderRepository).save(orderCaptor.capture());
 		verify(cartItemRepository, atLeastOnce()).deleteAll(cart.getCartItems());
 		
-		assertNotNull(orderCaptor.getValue());
-		assertEquals(orderCaptor.getValue().getOrderItems().size(), 2);
+		Order order = orderCaptor.getValue();
+		
+		assertNotNull(order);
+		assertEquals(order.getOrderItems().size(), 2);
 	}
 	
 	@Test

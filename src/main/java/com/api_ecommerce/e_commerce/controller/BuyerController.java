@@ -3,6 +3,8 @@ package com.api_ecommerce.e_commerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,10 +55,10 @@ public class BuyerController {
 	TokenService tokenService;
 	
 	@GetMapping("/orders")
-	public ResponseEntity<List<OrderBuyerResponse>> getAllOrderOfBuyer(){		
-		List<Order> orders = orderService.findOrdersByUserAuthenticated();
+	public ResponseEntity<?> getAllOrderOfBuyer(Pageable pageable){		
+		Page<Order> orders = orderService.findOrdersByUserAuthenticated(pageable);
 		
-		List<OrderBuyerResponse> ordersResponse = OrderMapper.INSTANCE.listOrderToListOrderBuyerResponse(orders);
+		Page<OrderBuyerResponse> ordersResponse = orders.map(order -> OrderMapper.INSTANCE.orderToOrderBuyerResponse(order));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(ordersResponse);
 	}

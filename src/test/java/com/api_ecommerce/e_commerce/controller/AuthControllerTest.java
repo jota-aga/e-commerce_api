@@ -3,8 +3,11 @@ package com.api_ecommerce.e_commerce.controller;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 
 import java.time.LocalDate;
 
@@ -19,10 +22,11 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.api_ecommerce.e_commerce.creator.RoleCreator;
+import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
+import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
-import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
+import com.api_ecommerce.e_commerce.exceptions.NotAuthorizedException;
 import com.api_ecommerce.e_commerce.infra.SecurityConfiguration;
 import com.api_ecommerce.e_commerce.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,10 +45,12 @@ public class AuthControllerTest {
 	private AuthService authService;
 	
 	private RegisterBuyerRequest dto;
+	private LoginRequest login;
 	
 	@BeforeEach
 	public void setUp() {
 		dto = new RegisterBuyerRequest("username", "senha", "nome", "11237419484", LocalDate.now().minusYears(20), "endereço");
+		login = new LoginRequest("username", "password");
 	}
 	
 	@Test
@@ -68,5 +74,26 @@ public class AuthControllerTest {
 				.content(objectMapper.writeValueAsString(dto)))
 				.andExpect(status().isConflict());
 		
+	}
+	
+	@Test
+	public void doLogin_Sucess() throws Exception {
+		when(authService.doLogin(login)).thenReturn(new LoginResponse("token"));
+		
+		mockMvc.perform(post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(login)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.acessToken").value("token"));
+	}
+	
+	@Test
+	public void doLogin_whenThrowsNotAuthorizedException() throws Exception {
+		when(authService.doLogin(login)).thenThrow(new NotAuthorizedException("Username or Password Incorrect"));
+		
+		mockMvc.perform(post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(login)))
+				.andExpect(status().isUnauthorized());
 	}
 }

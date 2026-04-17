@@ -28,10 +28,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/product")
 public class ProductController {
 	@Autowired
-	ProductService productService;
-	
-	@Autowired
-	CategoryService categoryService;
+	private ProductService productService;
 	
 	@PostMapping
 	public ResponseEntity<String> saveProduct(@Valid @RequestBody ProductRequest productRequest){

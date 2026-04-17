@@ -1,7 +1,6 @@
 package com.api_ecommerce.e_commerce.service.auth;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,7 +20,6 @@ import com.api_ecommerce.e_commerce.entity.User;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.repository.BuyerRepository;
 import com.api_ecommerce.e_commerce.repository.CartRepository;
-import com.api_ecommerce.e_commerce.repository.RoleRepository;
 import com.api_ecommerce.e_commerce.repository.UserRepository;
 import com.api_ecommerce.e_commerce.service.AuthService;
 
@@ -36,9 +34,6 @@ public class AuthServiceIntegrationTest {
 	
 	@Autowired
 	private BuyerRepository buyerRepository;
-	
-	@Autowired
-	private RoleRepository roleRepository;
 	
 	@Autowired
 	private UserRepository userRepository;

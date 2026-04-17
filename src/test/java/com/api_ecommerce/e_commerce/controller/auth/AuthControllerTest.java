@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.controller;
+package com.api_ecommerce.e_commerce.controller.auth;
 
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
@@ -22,6 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.api_ecommerce.e_commerce.controller.AuthController;
 import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.LoginResponse;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;

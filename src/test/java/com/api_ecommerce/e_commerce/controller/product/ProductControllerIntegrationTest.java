@@ -76,7 +76,7 @@ public class ProductControllerIntegrationTest {
 	}
 	
 	@Test
-	public void whenNameIsRepeated() throws Exception {
+	public void createProduct_whenNameIsRepeated() throws Exception {
 		mockMvc.perform(post(BASE_URL)
 				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
 				.contentType(MediaType.APPLICATION_JSON)

@@ -133,7 +133,7 @@ public class AuthService {
 		Role role = findRoleByName(roleName);
 		User user = User.builder()
 						.username(username)
-						.password(password)
+						.password(passwordEncoder.encode(password))
 						.role(role)
 						.build();
 		

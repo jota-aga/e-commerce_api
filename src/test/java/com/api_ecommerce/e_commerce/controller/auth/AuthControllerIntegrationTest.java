@@ -103,4 +103,45 @@ public class AuthControllerIntegrationTest {
 				.andExpect(status().isConflict())
 				.andExpect(content().string("CPF already registered"));
 	}
+	
+	@Test
+	public void doLogin_Sucess() throws JsonProcessingException, Exception {
+		mockMvc.perform(post("/auth/register")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(buyerRequest)));
+		
+		mockMvc.perform(post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.acessToken").exists());			
+	}
+	
+	@Test
+	public void doLogin_WhenUsernameIsIncorrect() throws JsonProcessingException, Exception {
+		mockMvc.perform(post("/auth/register")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(buyerRequest)));
+		
+		LoginRequest wrongLogin = new LoginRequest("different username", buyerRequest.password());
+		
+		mockMvc.perform(post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(wrongLogin)))
+				.andExpect(status().isUnauthorized());
+	}
+	
+	@Test
+	public void doLogin_WhenPasswordIsIncorrect() throws JsonProcessingException, Exception {
+		mockMvc.perform(post("/auth/register")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(buyerRequest)));
+		
+		LoginRequest wrongLogin = new LoginRequest(buyerRequest.username(), "wrong password");
+		
+		mockMvc.perform(post("/auth/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(wrongLogin)))
+				.andExpect(status().isUnauthorized());
+	}
 }

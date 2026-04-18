@@ -3,15 +3,12 @@ package com.api_ecommerce.e_commerce.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,9 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.api_ecommerce.e_commerce.creator.CartItemCreator;
 import com.api_ecommerce.e_commerce.creator.CategoryCreator;
-import com.api_ecommerce.e_commerce.creator.OrderItemCreator;
 import com.api_ecommerce.e_commerce.creator.ProductCreator;
 import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.entity.Category;
@@ -171,80 +166,5 @@ public class ProductServiceTest {
 		assertThrows(NotFoundException.class, () -> productService.updateProduct(productBeforeUpdate.getId(),dto));
 		
 		verify(productRepository, never()).save(any());
-	}
-	
-	@Test
-	public void deleteProductSuccess() {
-		Product product = ProductCreator.productAvaliable();
-		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-		
-		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
-		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
-		
-		productService.deleteProduct(1L);
-		
-		assertTrue(product.getOrderItems().stream()
-										  .allMatch(orderItem -> orderItem.getProduct() == null));
-		
-		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
-	}
-	
-	@Test
-	public void deleteProductOrderItemsNullSuccess() {
-		Product product = ProductCreator.productAvaliable();
-		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-		
-		product.setOrderItems(null);
-		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
-		
-		productService.deleteProduct(1L);
-		
-		verify(orderItemRepository, never()).saveAll(product.getOrderItems());
-		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
-	}
-	
-	@Test
-	public void deleteProductOrderItemsEmptySuccess() {
-		Product product = ProductCreator.productAvaliable();
-		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-		
-		product.setOrderItems(List.of());
-		product.setCartItems(List.of(CartItemCreator.cartItemWithProductAvailable()));
-		
-		productService.deleteProduct(1L);
-		
-		verify(orderItemRepository, never()).saveAll(product.getOrderItems());
-		verify(cartItemRespositoy, atLeastOnce()).deleteAll(product.getCartItems());
-	}
-	
-	@Test
-	public void deleteProductCartItemsNullSuccess() {
-		Product product = ProductCreator.productAvaliable();
-		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-		
-		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
-		
-		productService.deleteProduct(1L);
-		
-		assertTrue(product.getOrderItems().stream()
-										  .allMatch(orderItem -> orderItem.getProduct() == null));
-		
-		verify(cartItemRespositoy, never()).deleteAll();
-	}
-	
-	@Test
-	public void deleteProductCartItemsEmptySuccess() {
-		Product product = ProductCreator.productAvaliable();
-		when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-		
-		product.setOrderItems(List.of(OrderItemCreator.orderItem()));
-		product.setCartItems(List.of());
-		
-		productService.deleteProduct(1L);
-		
-		assertTrue(product.getOrderItems().stream()
-										  .allMatch(orderItem -> orderItem.getProduct() == null));
-		
-		verify(cartItemRespositoy, never()).deleteAll();
 	}
 }

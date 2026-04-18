@@ -97,7 +97,7 @@ public class CartItemService {
 	private void createCartItem(CartItemRequest dto, Cart cart) {
 		Product product = findProductById(dto.productId());
 		
-		if(product.getStatus() == ProductStatus.UNAVAILABLE) {
+		if(product.getStatus() != ProductStatus.AVAILABLE) {
 			throw new ConflictException("This Product is unavailable");
 		}
 		

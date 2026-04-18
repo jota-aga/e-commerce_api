@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import com.api_ecommerce.e_commerce.dto.product.ProductRequest;
 import com.api_ecommerce.e_commerce.dto.product.ProductResponse;
 import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.mapper.ProductMapper;
-import com.api_ecommerce.e_commerce.service.CategoryService;
 import com.api_ecommerce.e_commerce.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -62,13 +60,6 @@ public class ProductController {
 		List<ProductResponse> productsResponse = ProductMapper.INSTANCE.listProductToListProductResponse(products);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(productsResponse);
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteProductById(@PathVariable Long id){
-		productService.deleteProduct(id);
-		
-		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
 	@PutMapping("/{id}")

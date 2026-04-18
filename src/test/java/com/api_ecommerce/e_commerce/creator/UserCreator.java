@@ -2,7 +2,6 @@ package com.api_ecommerce.e_commerce.creator;
 
 import java.time.LocalDate;
 
-import com.api_ecommerce.e_commerce.dto.user.LoginRequest;
 import com.api_ecommerce.e_commerce.dto.user.RegisterBuyerRequest;
 import com.api_ecommerce.e_commerce.entity.Role;
 import com.api_ecommerce.e_commerce.entity.User;

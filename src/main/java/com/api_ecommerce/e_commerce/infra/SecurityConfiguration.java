@@ -48,7 +48,6 @@ public class SecurityConfiguration {
 															 .requestMatchers("/order/**").hasAuthority("SCOPE_ADMIN")
 															 .requestMatchers(HttpMethod.POST , "/product/**").hasAuthority("SCOPE_ADMIN")
 															 .requestMatchers(HttpMethod.PUT , "/product/**").hasAuthority("SCOPE_ADMIN")
-															 .requestMatchers(HttpMethod.DELETE , "/product/**").hasAuthority("SCOPE_ADMIN")
 															 .requestMatchers(HttpMethod.GET, "/product/**").permitAll()
 															 .anyRequest().authenticated()
 															 )

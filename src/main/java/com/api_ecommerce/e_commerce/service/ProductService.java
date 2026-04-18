@@ -38,7 +38,7 @@ public class ProductService {
 								 .status(ProductStatus.AVAILABLE)
 								 .build();
 
-		validateNameOfProduct(product);
+		validateNameOfProduct(product, productRequest.name());
 		
 		productRepository.save(product);
 	}
@@ -48,9 +48,9 @@ public class ProductService {
 	public void updateProduct(Long id, ProductRequest productRequest) {
 		Product product = findProductById(id);
 		
-		ProductMapper.INSTANCE.updateProduct(productRequest, product);
+		validateNameOfProduct(product, productRequest.name());
 		
-		validateNameOfProduct(product);
+		ProductMapper.INSTANCE.updateProduct(productRequest, product);
 		
 		Category category = findCategoryById(productRequest.categoryId());
 		
@@ -101,8 +101,8 @@ public class ProductService {
 		return category;
 	}
 	
-	private void validateNameOfProduct(Product product) {
-		Optional<Product> optionalProduct = productRepository.findByName(product.getName());
+	private void validateNameOfProduct(Product product, String newName) {
+		Optional<Product> optionalProduct = productRepository.findByName(newName);
 		
 		if(optionalProduct.isPresent()) {
 			Product repeatedProduct = optionalProduct.get();

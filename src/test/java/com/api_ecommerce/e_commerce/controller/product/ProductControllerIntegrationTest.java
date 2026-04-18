@@ -3,6 +3,7 @@ package com.api_ecommerce.e_commerce.controller.product;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -54,7 +56,7 @@ public class ProductControllerIntegrationTest {
 	public void setUp() {
 		category = RealDataCreator.createCategory(categoryRepository);
 		
-		productRequest = new ProductRequest("name", "description", new BigDecimal(100), category.getId(), 100, ProductStatus.UNAVAILABLE);
+		productRequest = new ProductRequest("product", "description", new BigDecimal(100), category.getId(), 100, ProductStatus.UNAVAILABLE);
 	}
 	
 	@Test
@@ -72,10 +74,7 @@ public class ProductControllerIntegrationTest {
 	
 	@Test
 	public void createProduct_whenNameIsRepeated() throws Exception {
-		mockMvc.perform(post(BASE_URL)
-				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(productRequest)));
+		RealDataCreator.createProduct(category, productRepository);
 		
 		mockMvc.perform(post(BASE_URL)
 				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
@@ -83,4 +82,37 @@ public class ProductControllerIntegrationTest {
 				.content(objectMapper.writeValueAsString(productRequest)))
 				.andExpect(status().isConflict());
 	}
+	
+	@Test
+	public void editProduct_Sucess() throws JsonProcessingException, Exception {
+		Product product = RealDataCreator.createProduct(category, productRepository);
+		
+		mockMvc.perform(put(BASE_URL+"/"+product.getId())
+				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .content(objectMapper.writeValueAsString(productRequest)))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void editProduct_whenNameAlreadyExists() throws JsonProcessingException, Exception {
+		Product productToBeUpdated = RealDataCreator.createProduct(category, productRepository);
+		
+		ProductRequest requestWithRepeatedName = new ProductRequest("product different", "description", new BigDecimal(100), 
+				category.getId(), 100, ProductStatus.UNAVAILABLE);
+		
+		mockMvc.perform(post(BASE_URL)
+				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestWithRepeatedName)))
+				.andExpect(status().isCreated());
+		
+		mockMvc.perform(put(BASE_URL+"/"+productToBeUpdated.getId())
+				.with(jwt().authorities(new SimpleGrantedAuthority("SCOPE_ADMIN")))
+			   .contentType(MediaType.APPLICATION_JSON)
+			   .content(objectMapper.writeValueAsString(requestWithRepeatedName)))
+				.andExpect(status().isConflict());
+	}
+	
+	
 }

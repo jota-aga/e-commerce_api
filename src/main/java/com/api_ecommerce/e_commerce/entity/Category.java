@@ -2,7 +2,6 @@ package com.api_ecommerce.e_commerce.entity;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +29,6 @@ public class Category {
 	@Column
 	private String name;
 	
-	@OneToMany(mappedBy="category", cascade = CascadeType.MERGE, orphanRemoval = false)
+	@OneToMany(mappedBy="category")
 	private List<Product> products;
 }

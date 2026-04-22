@@ -13,24 +13,23 @@ import com.api_ecommerce.e_commerce.entity.Product;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
+import com.api_ecommerce.e_commerce.repository.ProductRepository;
 
 @Service
 public class CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-
-	@Transactional
-	public void saveCategory(Category category) {
-		validateNameRepeated(category);
-
-		categoryRepository.save(category);
-	}
+	
+	@Autowired
+	private ProductRepository productRepository;
 
 	public void createCategory(CategoryDTO dto) {
 		Category category = Category.builder().name(dto.name()).build();
 
-		saveCategory(category);
+		validateNameRepeated(category, dto);	
+		
+		categoryRepository.save(category);
 	}
 
 	public Category findCategoryById(Long id) {
@@ -61,28 +60,30 @@ public class CategoryService {
 	}
 	
 	@Transactional
-	public void editCategory(Long id, CategoryDTO CategoryDTO) {
+	public void editCategory(Long id, CategoryDTO categoryDTO) {
 		Category category = findCategoryById(id);
+		
+		validateNameRepeated(category, categoryDTO);
+		
+		category.setName(categoryDTO.name());
 
-		category.setName(CategoryDTO.name());
-
-		saveCategory(category);
+		categoryRepository.save(category);
 	}
 
 	private void removeCategoryOfProducts(Category category) {
-		List<Product> products = category.getProducts();
+		List<Product> products = productRepository.findAllByCategoryId(category.getId());
 		
 		if (products != null && !products.isEmpty()) {
 			products.forEach(product -> {
 				product.setCategory(null);
 			});
+			
+			products.clear();
 		}
-		
-		category.setProducts(products);
 	}
 
-	private void validateNameRepeated(Category category) {
-		Optional<Category> optionalRepeatedCategory = categoryRepository.findByName(category.getName());
+	private void validateNameRepeated(Category category, CategoryDTO dto) {
+		Optional<Category> optionalRepeatedCategory = categoryRepository.findByName(dto.name());
 
 		if (optionalRepeatedCategory.isPresent()) {
 			if (category.getId() == null || category.getId() == 0) {

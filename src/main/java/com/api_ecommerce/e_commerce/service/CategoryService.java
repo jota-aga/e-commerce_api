@@ -59,7 +59,8 @@ public class CategoryService {
 
 		categoryRepository.delete(category);
 	}
-
+	
+	@Transactional
 	public void editCategory(Long id, CategoryDTO CategoryDTO) {
 		Category category = findCategoryById(id);
 

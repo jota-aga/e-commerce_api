@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.service;
+package com.api_ecommerce.e_commerce.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +24,7 @@ import com.api_ecommerce.e_commerce.entity.Category;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
+import com.api_ecommerce.e_commerce.service.CategoryService;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)

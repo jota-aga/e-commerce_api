@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.service.auth;
+package com.api_ecommerce.e_commerce.integration.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

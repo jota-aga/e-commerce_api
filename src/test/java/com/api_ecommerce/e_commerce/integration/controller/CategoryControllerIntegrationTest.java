@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.controller.category;
+package com.api_ecommerce.e_commerce.integration.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

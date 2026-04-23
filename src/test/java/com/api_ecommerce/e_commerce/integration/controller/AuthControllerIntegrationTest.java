@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.controller.auth;
+package com.api_ecommerce.e_commerce.integration.controller;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

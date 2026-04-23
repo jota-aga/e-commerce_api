@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.controller.product;
+package com.api_ecommerce.e_commerce.unit.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.doThrow;

@@ -1,4 +1,4 @@
-package com.api_ecommerce.e_commerce.service;
+package com.api_ecommerce.e_commerce.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,6 +33,7 @@ import com.api_ecommerce.e_commerce.repository.CartItemRepository;
 import com.api_ecommerce.e_commerce.repository.CategoryRepository;
 import com.api_ecommerce.e_commerce.repository.OrderItemRepository;
 import com.api_ecommerce.e_commerce.repository.ProductRepository;
+import com.api_ecommerce.e_commerce.service.ProductService;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)

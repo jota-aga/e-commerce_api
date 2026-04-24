@@ -10,5 +10,6 @@ import com.api_ecommerce.e_commerce.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
+	Optional<User> findByRoleName(String roleName);
 
 }

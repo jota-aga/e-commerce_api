@@ -206,7 +206,7 @@ public class CartItemServiceTest {
 	}
 	
 	@Test
-	public void editCartItemSucess() {
+	public void updateCartItemSucess() {
 		ArgumentCaptor<CartItem> captorCartItem = ArgumentCaptor.forClass(CartItem.class);
 		CartItemRequest dto = new CartItemRequest(1L, 50);
 		
@@ -214,7 +214,7 @@ public class CartItemServiceTest {
 		when(securityService.getCurrentUser()).thenReturn(user);
 		when(productRepository.findById(any())).thenReturn(Optional.of(product));
 		
-		cartItemService.editCartItem(cartItem.getId(), dto);
+		cartItemService.updateCartItem(cartItem.getId(), dto);
 		
 		verify(cartItemRepository).save(captorCartItem.capture());
 		
@@ -222,7 +222,7 @@ public class CartItemServiceTest {
 	}
 	
 	@Test
-	public void editCartItemWithAnotherUser() {
+	public void updateCartItemWithAnotherUser() {
 		CartItemRequest dto = new CartItemRequest(1L, 50);
 		CartItem cartItem = new CartItem(1L, product, 1, cart);
 		User anotherUser = new User(5L, "username", "password", roleBuyer);
@@ -230,11 +230,11 @@ public class CartItemServiceTest {
 		when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
 		when(securityService.getCurrentUser()).thenReturn(anotherUser);
 		
-		assertThrows(NotAuthorizedException.class, () -> cartItemService.editCartItem(1L, dto));
+		assertThrows(NotAuthorizedException.class, () -> cartItemService.updateCartItem(1L, dto));
 	}
 	
 	@Test
-	public void editCartItemProductNotFound() {
+	public void updateCartItemProductNotFound() {
 		CartItemRequest dto = new CartItemRequest(1L, 50);
 		
 		when(cartItemRepository.findById(cartItem.getId())).thenReturn(Optional.of(cartItem));
@@ -242,7 +242,7 @@ public class CartItemServiceTest {
 		when(productRepository.findById(any())).thenReturn(Optional.empty());
 		
 		
-		assertThrows(NotFoundException.class, () -> cartItemService.editCartItem(cartItem.getId(), dto));
+		assertThrows(NotFoundException.class, () -> cartItemService.updateCartItem(cartItem.getId(), dto));
 	}
 	
 }

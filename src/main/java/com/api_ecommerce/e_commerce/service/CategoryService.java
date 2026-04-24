@@ -60,7 +60,7 @@ public class CategoryService {
 	}
 	
 	@Transactional
-	public void editCategory(Long id, CategoryDTO categoryDTO) {
+	public void updateCategory(Long id, CategoryDTO categoryDTO) {
 		Category category = findCategoryById(id);
 		
 		validateNameRepeated(category, categoryDTO);
@@ -77,8 +77,6 @@ public class CategoryService {
 			products.forEach(product -> {
 				product.setCategory(null);
 			});
-			
-			products.clear();
 		}
 	}
 

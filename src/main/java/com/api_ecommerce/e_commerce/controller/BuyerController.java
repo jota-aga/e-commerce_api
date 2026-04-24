@@ -79,8 +79,8 @@ public class BuyerController {
 	}
 	
 	@PutMapping("/cart-item/{cartItemId}")
-	public ResponseEntity<?> editCartItem(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){		
-		cartItemService.editCartItem(cartItemId, request);
+	public ResponseEntity<?> updateCartItem(@PathVariable Long cartItemId, @Valid @RequestBody CartItemRequest request){		
+		cartItemService.updateCartItem(cartItemId, request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}

@@ -77,7 +77,7 @@ public class CartItemService {
 	}
 	
 	@Transactional
-	public void editCartItem(Long id, CartItemRequest cartItemDTO) {
+	public void updateCartItem(Long id, CartItemRequest cartItemDTO) {
 		CartItem cartItem = findCartItemById(id);
 		
 		validateAcessToCartItemId(cartItem);

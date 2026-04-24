@@ -194,7 +194,7 @@ public class CartItemControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCartItem_Sucess() throws JsonProcessingException, Exception {
+	public void updateCartItem_Sucess() throws JsonProcessingException, Exception {
 		cartItem = RealDataCreator.createCartItem(cartItemRepository, cart, product);
 		when(securityService.getCurrentUser()).thenReturn(userAdmin);
 
@@ -223,7 +223,7 @@ public class CartItemControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCartItem_WhenItemNotFound() throws JsonProcessingException, Exception {
+	public void updateCartItem_WhenItemNotFound() throws JsonProcessingException, Exception {
 		cartItem = RealDataCreator.createCartItem(cartItemRepository, cart, product);
 		when(securityService.getCurrentUser()).thenReturn(userAdmin);
 				
@@ -240,7 +240,7 @@ public class CartItemControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCartItem_WhenProductNotFound() throws JsonProcessingException, Exception {
+	public void updateCartItem_WhenProductNotFound() throws JsonProcessingException, Exception {
 		cartItem = RealDataCreator.createCartItem(cartItemRepository, cart, product);
 		when(securityService.getCurrentUser()).thenReturn(userAdmin);
 		
@@ -259,7 +259,7 @@ public class CartItemControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCartItem_WhenProductIsUnavailable() throws JsonProcessingException, Exception {
+	public void updateCartItem_WhenProductIsUnavailable() throws JsonProcessingException, Exception {
 		cartItem = RealDataCreator.createCartItem(cartItemRepository, cart, product);
 		when(securityService.getCurrentUser()).thenReturn(userAdmin);
 

@@ -84,7 +84,7 @@ public class CategoryControllerTest {
 	}
 	
 	@Test
-	public void editCategory_Sucess() throws JsonProcessingException, Exception {
+	public void updateCategory_Sucess() throws JsonProcessingException, Exception {
 		when(categoryService.findCategoryById(category.getId())).thenReturn(category);
 		
 		mockMvc.perform(put(BASE_URL + "/" + category.getId())
@@ -93,12 +93,12 @@ public class CategoryControllerTest {
 						.content(objectMapper.writeValueAsString(categoryDTO)))
 						.andExpect(status().isOk());
 		
-		verify(categoryService, atLeastOnce()).editCategory(category.getId(), categoryDTO);
+		verify(categoryService, atLeastOnce()).updateCategory(category.getId(), categoryDTO);
 	}
 	
 	@Test
-	public void editCategory_whenNotFound() throws JsonProcessingException, Exception {
-		doThrow(new NotFoundException("category id")).when(categoryService).editCategory(category.getId(), categoryDTO);
+	public void updateCategory_whenNotFound() throws JsonProcessingException, Exception {
+		doThrow(new NotFoundException("category id")).when(categoryService).updateCategory(category.getId(), categoryDTO);
 		
 		mockMvc.perform(put(BASE_URL + "/" + category.getId())
 						.with(jwt().authorities(new SimpleGrantedAuthority(role)))
@@ -108,8 +108,8 @@ public class CategoryControllerTest {
 	}
 	
 	@Test
-	public void editCategory_whenNameAlreadyExists() throws JsonProcessingException, Exception {
-		doThrow(new ConflictException("name already exists")).when(categoryService).editCategory(category.getId(), categoryDTO);
+	public void updateCategory_whenNameAlreadyExists() throws JsonProcessingException, Exception {
+		doThrow(new ConflictException("name already exists")).when(categoryService).updateCategory(category.getId(), categoryDTO);
 		
 		mockMvc.perform(put(BASE_URL + "/" + category.getId())
 						.with(jwt().authorities(new SimpleGrantedAuthority(role)))

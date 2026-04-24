@@ -96,7 +96,7 @@ public class CartItemControllerTest {
 	}
 	
 	@Test
-	public void editCartItem_Sucess() throws JsonProcessingException, Exception {
+	public void updateCartItem_Sucess() throws JsonProcessingException, Exception {
 		
 		mockMvc.perform(put(BASE_URL +"/"+ Long.MAX_VALUE)
 			   .with(jwt().authorities(new SimpleGrantedAuthority(ROLE)))
@@ -104,12 +104,12 @@ public class CartItemControllerTest {
 			   .content(objectMapper.writeValueAsString(cartItemRequest)))
 			   .andExpect(status().isOk());
 		
-		verify(cartItemService, atLeastOnce()).editCartItem(Long.MAX_VALUE, cartItemRequest);
+		verify(cartItemService, atLeastOnce()).updateCartItem(Long.MAX_VALUE, cartItemRequest);
 	}
 	
 	@Test
-	public void editCartItem_WhenNotFound() throws JsonProcessingException, Exception {
-		doThrow(new NotFoundException("not found")).when(cartItemService).editCartItem(Long.MAX_VALUE, cartItemRequest);
+	public void updateCartItem_WhenNotFound() throws JsonProcessingException, Exception {
+		doThrow(new NotFoundException("not found")).when(cartItemService).updateCartItem(Long.MAX_VALUE, cartItemRequest);
 
 		
 		mockMvc.perform(put(BASE_URL +"/"+ Long.MAX_VALUE)
@@ -120,8 +120,8 @@ public class CartItemControllerTest {
 	}
 	
 	@Test
-	public void editCartItem_WhenNotAuthorized() throws JsonProcessingException, Exception {
-		doThrow(new NotAuthorizedException("not authorized")).when(cartItemService).editCartItem(Long.MAX_VALUE, cartItemRequest);
+	public void updateCartItem_WhenNotAuthorized() throws JsonProcessingException, Exception {
+		doThrow(new NotAuthorizedException("not authorized")).when(cartItemService).updateCartItem(Long.MAX_VALUE, cartItemRequest);
 
 		
 		mockMvc.perform(put(BASE_URL +"/"+ Long.MAX_VALUE)

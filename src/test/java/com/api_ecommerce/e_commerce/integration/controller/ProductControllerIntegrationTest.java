@@ -84,7 +84,7 @@ public class ProductControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editProduct_Sucess() throws JsonProcessingException, Exception {
+	public void updateProduct_Sucess() throws JsonProcessingException, Exception {
 		Product product = RealDataCreator.createProduct(category, productRepository);
 		
 		mockMvc.perform(put(BASE_URL+"/"+product.getId())
@@ -95,7 +95,7 @@ public class ProductControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editProduct_whenNameAlreadyExists() throws JsonProcessingException, Exception {
+	public void updateProduct_whenNameAlreadyExists() throws JsonProcessingException, Exception {
 		Product productToBeUpdated = RealDataCreator.createProduct(category, productRepository);
 		
 		ProductRequest requestWithRepeatedName = new ProductRequest("product different", "description", new BigDecimal(100), 

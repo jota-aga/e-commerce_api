@@ -91,7 +91,7 @@ public class CategoryControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCategory_Sucess() throws JsonProcessingException, Exception {
+	public void updateCategory_Sucess() throws JsonProcessingException, Exception {
 		Category category = RealDataCreator.createCategory(categoryRepository);
 		
 		dto = new CategoryDTO("new name");
@@ -108,7 +108,7 @@ public class CategoryControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCategory_WhenNameAlreadyExists() throws JsonProcessingException, Exception {
+	public void updateCategory_WhenNameAlreadyExists() throws JsonProcessingException, Exception {
 		Category category = RealDataCreator.createCategory(categoryRepository);
 		
 		dto = new CategoryDTO("repeated name");
@@ -127,7 +127,7 @@ public class CategoryControllerIntegrationTest {
 	}
 	
 	@Test
-	public void editCategory_WhenNotFound() throws JsonProcessingException, Exception {		
+	public void updateCategory_WhenNotFound() throws JsonProcessingException, Exception {		
 		mockMvc.perform(put(BASE_URL+"/"+Long.MAX_VALUE)
 				.with(jwt().authorities(new SimpleGrantedAuthority(ROLE)))
 				.contentType(MediaType.APPLICATION_JSON)

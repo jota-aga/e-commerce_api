@@ -3,6 +3,7 @@ package com.api_ecommerce.e_commerce.unit.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -67,14 +68,14 @@ public class CategoryServiceTest {
 	}
 	
 	@Test
-	public void editCategorySucess() {
+	public void updateCategorySucess() {
 		ArgumentCaptor<Category> categoryArgumentCaptor = ArgumentCaptor.forClass(Category.class);
 		CategoryDTO dto = new CategoryDTO("New Name");
 		
 		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
 		when(categoryRepository.findByName(dto.name())).thenReturn(Optional.empty());
 		
-		categoryService.editCategory(category.getId(), dto);
+		categoryService.updateCategory(category.getId(), dto);
 		
 		verify(categoryRepository).save(categoryArgumentCaptor.capture());
 		
@@ -82,7 +83,7 @@ public class CategoryServiceTest {
 	}
 	
 	@Test
-	public void editCategoryRepeatedName() {		
+	public void updateCategoryRepeatedName() {		
 		CategoryDTO dto = new CategoryDTO("New Name");
 		Category repeatedCategory = Category.builder()
 										.id(Long.MAX_VALUE)
@@ -92,7 +93,7 @@ public class CategoryServiceTest {
 		when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
 		when(categoryRepository.findByName(dto.name())).thenReturn(Optional.of(repeatedCategory));		
 		
-		assertThrows(ConflictException.class, () -> categoryService.editCategory(category.getId(),dto));
+		assertThrows(ConflictException.class, () -> categoryService.updateCategory(category.getId(),dto));
 	}
 	
 	@Test
@@ -101,7 +102,6 @@ public class CategoryServiceTest {
 		
 		categoryService.deleteCategory(categoryWithProducts.getId());
 		
-		assertTrue(categoryWithProducts.getProducts().stream()
-										 .allMatch(product -> product.getCategory() == null));
+		verify(categoryRepository, atLeastOnce()).delete(categoryWithProducts);
 	}
 }

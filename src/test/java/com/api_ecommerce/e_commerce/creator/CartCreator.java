@@ -13,6 +13,7 @@ public class CartCreator {
 	public static Cart cartWithBuyer() {
 		Buyer buyer = BuyerCreator.simpleBuyer();
 		return Cart.builder()
+				   .id(2L)
 				   .buyer(buyer)
 				   .build();
 	}

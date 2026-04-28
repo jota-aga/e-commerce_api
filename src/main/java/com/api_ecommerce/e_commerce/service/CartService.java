@@ -1,5 +1,6 @@
 package com.api_ecommerce.e_commerce.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import com.api_ecommerce.e_commerce.entity.CartItem;
 import com.api_ecommerce.e_commerce.entity.Order;
 import com.api_ecommerce.e_commerce.entity.OrderItem;
 import com.api_ecommerce.e_commerce.entity.User;
+import com.api_ecommerce.e_commerce.enums.ProductStatus;
 import com.api_ecommerce.e_commerce.exceptions.ConflictException;
 import com.api_ecommerce.e_commerce.exceptions.NotFoundException;
 import com.api_ecommerce.e_commerce.mapper.OrderItemMapper;
@@ -92,9 +94,13 @@ public class CartService {
 	
 	@Transactional
 	private void createOrderByCart(Buyer buyer, List<CartItem> cartItems) {
-		List<OrderItem> orderItems = cartItems.stream()
-				.map(cartItem -> OrderItemMapper.INSTANCE.cartItemToOrderItem(cartItem))
-				.toList();
+		List<OrderItem> orderItems = new ArrayList<>();
+		
+		for(CartItem cartItem : cartItems) {
+			if(cartItem.getProduct().getStatus() == ProductStatus.UNAVAILABLE) throw new ConflictException("Product is Unavailable");
+			
+			orderItems.add(OrderItemMapper.INSTANCE.cartItemToOrderItem(cartItem));
+		}
 		
 		if(orderItems == null || orderItems.isEmpty()) {
 			throw new ConflictException("Order items is empty!");
